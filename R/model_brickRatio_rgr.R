@@ -1,4 +1,4 @@
-# Model for experiment brick ratio ####
+# Model for experiment brick ratio and relative growth rate ####
 
 
 
@@ -24,19 +24,25 @@ library(ggeffects)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_for_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
-edata <- read_table2("data_brickRatio_processed.txt", col_names = T, na = "na", col_types = 
-                       cols(
-                         .default = col_double(),
-                         pot = col_factor(),
-                         block = col_factor(),
-                         brickRatio = col_factor(levels = c("5","30")),
-                         acid = col_factor(levels = c("Control","Acid")),
-                         mycorrhiza = col_factor(levels = c("Control","Mycorrhiza"))
-                       )        
-)
+(edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
+                        cols(
+                          .default = col_double(),
+                          date1 = col_date(),
+                          date2 = col_date(),
+                          date3 = col_date(),
+                          replanted = col_factor(),
+                          plot = col_factor(),
+                          block = col_factor(),
+                          species = col_factor(),
+                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(),
+                          acid = col_factor(levels = c("Control","Acid")),
+                          mycorrhiza = col_factor(levels = c("Control","Mycorrhiza"))
+                        )        
+))
 
 
 
@@ -50,73 +56,65 @@ edata <- read_table2("data_brickRatio_processed.txt", col_names = T, na = "na", 
 #### a Graphs ---------------------------------------------------------------------------------------------
 #simple effects:
 par(mfrow = c(2,2))
-plot(biomass ~ brickRatio, edata)
-plot(biomass ~ acid, edata)
-plot(biomass ~ f.watering, edata)
-plot(biomass ~ seedmix, edata)
-par(mfrow = c(2,2))
-plot(biomass ~ vegCov13, edata)
-plot(biomass ~ grassRatio, edata)
-par(mfrow = c(2,2))
-plot(biomass ~ position, edata)
-plot(biomass ~ pump, edata)
-plot(biomass ~ block, edata)
-#2way (brickRatio:acid):
-ggplot(edata,aes(brickRatio, biomass, color = acid)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (brickRatio:watering):
-ggplot(edata,aes(f.watering, biomass,color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (brickRatio:seedmix):
-ggplot(edata,aes(seedmix, biomass, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (seedmix:watering):
-ggplot(edata,aes(f.watering, biomass,color = seedmix)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (acid:watering):
-ggplot(edata,aes(f.watering, biomass, color = acid)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#3way (brickRatio:acid:seedmix):
-ggplot(edata,aes(brickRatio, biomass, color = acid)) + facet_grid(~seedmix) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#3way (brickRatio:watering:seedmix):
-ggplot(edata,aes(f.watering, biomass, color = brickRatio)) + facet_grid(~seedmix) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#3way (brickRatio:acid:watering):
-ggplot(edata,aes(brickRatio, biomass, color = acid)) + facet_grid(~f.watering) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#4way (focus only on standard and intermediate): --> no effect under dry conditions
-ggplot(edata,aes(f.watering, biomass, color = brickRatio, shape = acid)) + facet_grid(~seedmix) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+plot(rgr13 ~ species, edata)
+plot(rgr13 ~ brickRatio, edata)
+plot(rgr13 ~ soilType, edata)
+plot(rgr13 ~ mycorrhiza, edata)
+plot(rgr13 ~ block, edata)
+#2way (brickRatio:species):
+ggplot(edata,aes(species, rgr13, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (brickRatio:soilType):
+ggplot(edata,aes(soilType, rgr13, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (brickRatio:mycorrhiza):
+ggplot(edata,aes(mycorrhiza, rgr13, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (species:soilType):
+ggplot(edata,aes(species, rgr13, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (species:mycorrhiza):
+ggplot(edata,aes(species, rgr13, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (soilType:mycorrhiza):
+ggplot(edata,aes(soilType, rgr13, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#3way (brickRatio:species:soilType):
+ggplot(edata,aes(soilType, rgr13, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#3way (brickRatio:species:mycorrhiza):
+ggplot(edata,aes(mycorrhiza, rgr13, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#3way (species:soilType:mycorrhiza):
+ggplot(edata,aes(soilType, rgr13, color = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#4way
+ggplot(edata,aes(soilType, rgr13, color = brickRatio, shape = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(edata,aes(brickRatio, biomass, color = acid)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, biomass, color = f.watering)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, biomass, color = seedmix)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(brickRatio, rgr13, color = species)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(block, rgr13, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(block, rgr13, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(block, rgr13, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(block, rgr13, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
 par(mfrow = c(2,2))
-dotchart((edata$biomass), groups = factor(edata$brickRatio), main = "Cleveland dotplot")
-dotchart((edata$biomass), groups = factor(edata$acid), main = "Cleveland dotplot")
-dotchart((edata$biomass), groups = factor(edata$watering), main = "Cleveland dotplot")
-dotchart((edata$biomass), groups = factor(edata$seedmix), main = "Cleveland dotplot")
-dotchart((edata$biomass), groups = factor(edata$grassRatio), main = "Cleveland dotplot")
+dotchart((edata$rgr13), groups = factor(edata$species), main = "Cleveland dotplot")
+dotchart((edata$rgr13), groups = factor(edata$brickRatio), main = "Cleveland dotplot")
+dotchart((edata$rgr13), groups = factor(edata$soilType), main = "Cleveland dotplot")
+dotchart((edata$rgr13), groups = factor(edata$mycorrhiza), main = "Cleveland dotplot")
 par(mfrow=c(1,1));
-boxplot(edata$biomass, ylim = c(0,45));#identify(rep(1,length(edata$biomass)),edata$biomass, labels = c(edata$no))
+boxplot(edata$rgr13, ylim = c(0,0.004));#identify(rep(1,length(edata$biomass)),edata$biomass, labels = c(edata$no))
 par(mfrow = c(2,2));
-plot(table((edata$biomass)),type = "h", xlab = "Observed values", ylab = "Frequency")
-plot(table(log(edata$biomass)), type = "h", xlab = "Observed values", ylab = "Frequency");
-ggplot(edata, aes(biomass)) + geom_density()
+plot(table((edata$rgr13)),type = "h", xlab = "Observed values", ylab = "Frequency")
+plot(table(log(edata$rgr13)), type = "h", xlab = "Observed values", ylab = "Frequency");
+ggplot(edata, aes(rgr13)) + geom_density()
 
 
 ## 2 Model building ################################################################################
 
 #### a models ----------------------------------------------------------------------------------------
 #random structure
-m1 <- lmer((biomass) ~ f.watering * seedmix + (1|block), edata, REML = F)
+m1 <- lmer(rgr13 ~ species * brickRatio + (1|block), edata, REML = F)
 VarCorr(m1)
 #4w-model
-m2 <- lmer(log(biomass) ~ (brickRatio + acid + f.watering + seedmix)^2 +  
-             brickRatio:f.watering:seedmix + brickRatio:acid:seedmix + 
-             brickRatio:acid:f.watering:seedmix + 
+m2 <- lmer(rgr13 ~ species * brickRatio * soilType * mycorrhiza +
              (1|block), edata, REML = F)
 isSingular(m2)
 simulationOutput <- simulateResiduals(m2, plot = T)
 #full 3w-model
-m3 <- lmer(log(biomass) ~ (brickRatio + acid + f.watering + seedmix) +
-             brickRatio:acid + brickRatio:f.watering + brickRatio:seedmix + 
-             f.watering:seedmix + acid:seedmix +
-             brickRatio:f.watering:seedmix + brickRatio:acid:seedmix + 
+m3 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^3 +
              (1|block), edata, REML = F)
 isSingular(m3)
 simulationOutput <- simulateResiduals(m3, plot = T)
