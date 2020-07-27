@@ -30,17 +30,17 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
 (edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
                         cols(
                           .default = col_double(),
+                          plot = col_factor(),
+                          block = col_factor(),
+                          replanted = col_factor(),
                           date1 = col_date(),
                           date2 = col_date(),
                           date3 = col_date(),
-                          replanted = col_factor(),
-                          plot = col_factor(),
-                          block = col_factor(),
                           species = col_factor(),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          mycorrhiza = col_factor(levels = c("Control","Mycorrhiza")),
                           soilType = col_factor(),
-                          acid = col_factor(levels = c("Control","Acid")),
-                          mycorrhiza = col_factor(levels = c("Control","Mycorrhiza"))
+                          brickRatio = col_factor(levels = c("5","30")),
+                          acid = col_factor(levels = c("Acid_5","Acid_30"))
                         )        
 ))
 
