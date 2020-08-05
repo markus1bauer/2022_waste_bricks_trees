@@ -41,12 +41,12 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           substrate = col_factor(),
                           soilType = col_factor(),
                           brickRatio = col_factor(levels = c("5","30")),
-                          acid = col_factor(levels = c("Acid_5","Acid_30")),
-                          leaf = col_factor()
+                          acid = col_factor(levels = c("Acid_5","Acid_30"))
                         )        
 ))
 
-
+edata <- gather(edata, "leaf", "sla", 46:48)
+edata$subplot <- c(1:300)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # B Statistics ################################################################################################################
@@ -65,31 +65,31 @@ plot(sla ~ mycorrhiza, edata)
 plot(sla ~ block, edata)
 plot(sla ~ plot, edata)
 #2way (brickRatio:species):
-ggplot(edata,aes(species, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(species, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (brickRatio:soilType):
-ggplot(edata,aes(soilType, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(soilType, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (brickRatio:mycorrhiza):
-ggplot(edata,aes(mycorrhiza, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(mycorrhiza, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (species:soilType):
-ggplot(edata,aes(species, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(species, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (species:mycorrhiza):
-ggplot(edata,aes(species, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(species, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (soilType:mycorrhiza):
-ggplot(edata,aes(soilType, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(soilType, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:species:soilType):
-ggplot(edata,aes(soilType, sla, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(soilType, sla, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:species:mycorrhiza):
-ggplot(edata,aes(mycorrhiza, sla, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(mycorrhiza, sla, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (species:soilType:mycorrhiza):
-ggplot(edata,aes(soilType, sla, color = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(soilType, sla, color = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(edata,aes(soilType, sla, color = brickRatio, shape = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(soilType, sla, color = brickRatio, shape = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(edata,aes(brickRatio, sla, color = species)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, sla, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(brickRatio, sla, color = species)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(block, sla, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(block, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(block, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(block, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
 par(mfrow = c(2,2))

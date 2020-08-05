@@ -143,7 +143,7 @@ isSingular(m6)
 simulationOutput <- simulateResiduals(m6, plot = T);
 
 #### b comparison -----------------------------------------------------------------------------------------
-AIC(m2,m3,m4,m5,m6) # --> m5
+anova(m2,m3,m4,m5,m6) # --> m5
 (re.effects <- plot_model(m5, type = "re", show.values = TRUE))
 rm(m1,m2,m3,m4,m6)
 

@@ -49,7 +49,7 @@ themeMB <- function(){
 ggplot(edata, aes(x = grainSize, y = grainSizeCum, color = substrateAbb, linetype = substrateAbb)) +
   geom_line(size = .8) +
   scale_color_manual(values = c("red4","green4","red","green","black","black")) +
-  scale_linetype_manual(values = c("solid","solid","solid","solid","dashed","dashed")) +
+  scale_linetype_manual(values = c("solid","solid","solid","solid","dotted","dotted")) +
   scale_x_log10(breaks = c(0.002,0.063,0.2,0.63,2,4,8,16,25,31.5)) +
   labs(x = "Grain size [mm]", y = "Cumulative ratio [wt%]", linetype = "", color = "") +
   themeMB()

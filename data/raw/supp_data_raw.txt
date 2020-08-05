@@ -1,4 +1,4 @@
-grainSize	substrate_1	substrate_2	substrate_3	substrate_4	substrate_5	substrate_6	top	down
+grainSize	substrate_1	substrate_2	substrate_3	substrate_4	substrate_5	substrate_6	max	min
 0.002	3.2	3.9	3.2	1.2	1.1	1.0	8.0	2.0
 0.063	10.6	13.6	11.1	4.5	4.3	3.7	17.0	3.0
 0.2	8.2	12.4	7.8	7.2	5.8	4.0	20.0	8.0

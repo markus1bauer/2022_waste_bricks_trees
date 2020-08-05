@@ -24,11 +24,12 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                          substrate = col_factor(),
                          soilType = col_factor(),
                          brickRatio = col_factor(levels = c("5","30")),
-                         acid = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
+                         acid = col_factor(levels = c("Control","Acid"))
                          )        
 ))
 
 ### Create variables ----------------------------------------------------------------------------------
+edata <- unite(edata, "acidbrickRatioTreat", acid, brickRatio, sep = "_", remove = F)
 edata$conf.low <- c(1:100);
 edata$conf.high <- c(1:100)
 edata$dateDiff13 <- as.numeric(edata$date3 - edata$date1)
@@ -40,14 +41,16 @@ edata$rgr23 <- (log(edata$diameter3 * edata$height3) - log(edata$diameter1 * eda
 edata <- edata %>%
   mutate(stemMass = stemMassTotal - bagWeightStem) %>%
   mutate(leafMass = leafMassTotal - bagWeightLeaf + leaf1Weight + leaf2Weight + leaf3Weight) %>%
+  mutate(rootMass = rootMassTotal - bagWeightRoot) %>%
   mutate(sla1 = leaf1Area / leaf1Weight) %>%
   mutate(sla2 = leaf2Area / leaf2Weight) %>%
   mutate(sla3 = leaf3Area / leaf3Weight)
 edata <- edata %>%
-  mutate(sla = (sla1 + sla2 + sla3) / 3) %>%
-  mutate(shootMass = stemMass + leafMass)
-edata <- gather(edata, "leaf", "sla", 46:48)
-edata$subplot <- c(1:300)
+  mutate(rmf = rootMass / (rootMass + leafMass + stemMass)) %>%
+  mutate(lmf = leafMass / (rootMass + leafMass + stemMass)) %>%
+  mutate(rootshootRatio = rootMass / (leafMass + stemMass))
+edata <- select(edata, -(diameter1:stemMassTotal), -(dateDiff13:dateDiff23), -(bagWeightLeaf:rootMassTotal))
+
 
 ### Create data frame for mycorrhiza:soilType:brickRatio ----------------------------------------------------------------
 edata1 <- filter(edata, acid != "Control")

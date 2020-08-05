@@ -46,6 +46,8 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                        )        
 ))
 
+edata <- gather(edata, "leaf", "sla", 46:48)
+edata$subplot <- c(1:300)
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -132,7 +134,7 @@ isSingular(m6)
 simulationOutput <- simulateResiduals(m6, plot = T);
 
 #### b comparison -----------------------------------------------------------------------------------------
-AIC(m2,m3,m4,m5,m6) # --> m5
+anova(m2,m3,m4,m5,m6) # --> m5
 (re.effects <- plot_model(m5, type = "re", show.values = TRUE))
 rm(m1,m2,m3,m4,m6)
 
