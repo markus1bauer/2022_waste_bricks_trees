@@ -1,4 +1,4 @@
-# Show Figure 1 ####
+# Show Figure root mass fraction ~ acid:brickRatio:species ####
 
 
 
@@ -16,26 +16,34 @@ library(ggeffects)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_for_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
-edata <- read_table2("data_acid_processed.txt", col_names = T, na = "na", col_types = 
-                       cols(
-                         .default = col_double(),
-                         pot = col_factor(),
-                         block = col_factor(),
-                         brickRatio = col_factor(levels = c("5","30")),
-                         acid = col_factor(levels = c("Control","Acid")),
-                         mycorrhiza = col_factor(levels = c("Control","Mycorrhiza"))
-                       )        
-)
+(edata <- read_table2("data_processed_acid.txt", col_names = T, na = "na", col_types = 
+                        cols(
+                          .default = col_double(),
+                          plot = col_factor(),
+                          block = col_factor(),
+                          date1 = col_date(),
+                          date2 = col_date(),
+                          date3 = col_date(),
+                          replanted = col_factor(),
+                          species = col_factor(),
+                          mycorrhiza = col_factor(),
+                          substrate = col_factor(),
+                          soilType = col_factor(levels = c("poor","rich")),
+                          brickRatio = col_factor(levels = c("5","30")),
+                          acid = col_factor(levels = c("Control","Acid")),
+                          acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
+                        )        
+))
+edata <- select(edata, rmf, plot, block, replanted, species, acidbrickRatioTreat, soilType, conf.low, conf.high)
+edata$acidbrickRatioTreat <- dplyr::recode(edata$acidbrickRatioTreat,
+                               "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
 
 #### Chosen model ###
-m5 <- lmer(log(biomass) ~ (brickRatio + acid + f.watering + seedmix) +  
-             brickRatio:acid + brickRatio:f.watering + brickRatio:seedmix + 
-             f.watering:seedmix + acid:seedmix + 
-             brickRatio:acid:seedmix + 
-             (1|block), edata, REML = F)
+m4 <- lm(rmf ~ species + soilType + acidbrickRatioTreat +
+           acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
 
 
 
@@ -56,25 +64,26 @@ themeMB <- function(){
   )
 }
 
-### acid:soilType ###
-pdata <- ggemmeans(m5, terms = c("seedmix", "f.watering"), type = "fe")
-pdata <- rename(pdata, biomass = predicted, seedmix = x, f.watering = group)
-meandata <- filter(pdata, seedmix == "Standard")
+### interaction: acid x brickRatio x species ###
+pdata <- ggemmeans(m4, terms = c("acidbrickRatioTreat", "species"), type = "fe")
+pdata <- rename(pdata, rmf = predicted, acidbrickRatioTreat = x, species = group)
+meandata <- filter(pdata, acidbrickRatioTreat == "Control 30% bricks")
 pd <- position_dodge(.6)
-ggplot(pdata, aes(seedmix, biomass, shape = seedmix, ymin = conf.low, ymax = conf.high))+
-  geom_quasirandom(data = edata, aes(seedmix, biomass), 
+ggplot(pdata, aes(acidbrickRatioTreat, rmf, shape = acidbrickRatioTreat, ymin = conf.low, ymax = conf.high))+
+  geom_quasirandom(data = edata, aes(acidbrickRatioTreat, rmf), 
                    color = "grey70", dodge.width = .6, size = 0.7)+
-  geom_hline(aes(yintercept = biomass), meandata, color = "grey70") +
+  geom_hline(aes(yintercept = rmf), meandata, color = "grey70") +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
-  facet_grid(~ f.watering) +
-  scale_y_continuous(limits = c(0,33), breaks = seq(-100,100,5)) +
-  scale_shape_manual(values = c(1,16,16,16)) +
-  labs(x = "", y = expression(paste("Biomass [g]")), shape = "", color = "") +
+  facet_grid(~ species) +
+  annotate("text", label = "n.s.", x = 3.2, y = 0.7) +
+  scale_y_continuous(limits = c(0.35,0.7), breaks = seq(-100,100,0.05)) +
+  scale_shape_manual(values = c(1,16,16)) +
+  labs(x = "", y = expression(Root~mass~fraction~"("*RMF*")"~"["*g~g^-1*"]"), shape = "", color = "") +
   guides(x = guide_axis(angle = 45), shape = F)+
   themeMB()
-#ggsave("figure_1_(800dpi_16x6cm).tiff",
-#      dpi = 800, width = 16, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_for_restoration/outputs/figures/raw")
+ggsave("figure_acid_rmf_(800dpi_8x7cm).tiff",
+      dpi = 800, width = 8, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
 #visreg(m5, "seedmix", by = "f.watering", ylab = expression(paste(Delta,"biomass [g g"^"-1"*"]")), xlab = "", data = edata,
 #       type = "contrast", partial = T, rug = F, gg = T, overlay = F, band = T, points = list(cex = 0.5, pch = 16), line = list(col = "black"), whitespace = .2) +
 #  themeMB()

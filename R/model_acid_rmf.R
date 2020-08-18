@@ -1,11 +1,10 @@
-# Model for experiment brick ratio ####
+# Model for experiment acid and root mass fraction ####
 
 
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # A Preparation ################################################################################################################
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#library(installr);updateR(browse_news=F, install_R=T, copy_packages = T,copy_Rprofile.site = T,keep_old_packages = T, update_packages = T)
 
 ### Packages ###
 library(tidyverse)
@@ -32,19 +31,21 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
-                          replanted = col_factor(),
                           date1 = col_date(),
                           date2 = col_date(),
                           date3 = col_date(),
+                          replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza = col_factor(),
                           substrate = col_factor(),
-                          soilType = col_factor(),
+                          soilType = col_factor(levels = c("poor","rich")),
                           brickRatio = col_factor(levels = c("5","30")),
                           acid = col_factor(levels = c("Control","Acid")),
-                          acidbrickRatioTreat = col_factor()
+                          acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
                         )        
 ))
+edata <- select(edata, rmf, plot, block, replanted, species, acidbrickRatioTreat, soilType)
+
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -82,13 +83,12 @@ ggplot(edata, aes(block, rmf, color = soilType)) + geom_boxplot() + geom_quasira
 
 ##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
 par(mfrow = c(2,2))
+dotchart((edata$rmf), groups = factor(edata$species), main = "Cleveland dotplot")
+dotchart((edata$rmf), groups = factor(edata$soilType), main = "Cleveland dotplot")
 dotchart((edata$rmf), groups = factor(edata$brickRatio), main = "Cleveland dotplot")
 dotchart((edata$rmf), groups = factor(edata$acid), main = "Cleveland dotplot")
-dotchart((edata$rmf), groups = factor(edata$watering), main = "Cleveland dotplot")
-dotchart((edata$rmf), groups = factor(edata$seedmix), main = "Cleveland dotplot")
-dotchart((edata$rmf), groups = factor(edata$grassRatio), main = "Cleveland dotplot")
 par(mfrow=c(1,1));
-boxplot(edata$rmf, ylim = c(0,45));#identify(rep(1,length(edata$rmf)),edata$rmf, labels = c(edata$no))
+boxplot(edata$rmf, ylim = c(0.2,0.8));#identify(rep(1,length(edata$rmf)),edata$rmf, labels = c(edata$no))
 par(mfrow = c(2,2));
 plot(table((edata$rmf)),type = "h", xlab = "Observed values", ylab = "Frequency")
 plot(table(log(edata$rmf)), type = "h", xlab = "Observed values", ylab = "Frequency");
@@ -98,74 +98,44 @@ ggplot(edata, aes(rmf)) + geom_density()
 ## 2 Model building ################################################################################
 
 #### a models ----------------------------------------------------------------------------------------
-#random structure
-m1 <- lmer(rmf ~ species * brickRatio + (1|block), edata, REML = F)
+#random structure --> no random factor needed
+m1 <- lmer(rmf ~ species * acidbrickRatioTreat + (1|block), edata, REML = F)
 VarCorr(m1)
-#4w-model
-m2 <- lmer(rmf ~ species * soilType * brickRatio * acid +
-             (1|block), edata, REML = F)
-isSingular(m2)
+#3w-model
+m2 <- lm(rmf ~ species * soilType * acidbrickRatioTreat, edata)
 simulationOutput <- simulateResiduals(m2, plot = T)
-#full 3w-model
-m3 <- lmer(rmf ~ (species + soilType + brickRatio + acid)^3 +
-             (1|block), edata, REML = F)
-isSingular(m3)
+#full 2w-model
+m3 <- lm(rmf ~ (species + soilType + acidbrickRatioTreat)^2, edata)
 simulationOutput <- simulateResiduals(m3, plot = T)
-#3w-model brick:water:mix
-m4 <- lmer(log(rmf) ~ (brickRatio + acid + f.watering + seedmix) +
-             brickRatio:acid + brickRatio:f.watering + brickRatio:seedmix + 
-             f.watering:seedmix +
-             brickRatio:f.watering:seedmix + 
-             (1|block), edata, REML = F)
-isSingular(m4)
+#2w-model reduced
+m4 <- lm(rmf ~ species + soilType + acidbrickRatioTreat +
+             acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
 simulationOutput <- simulateResiduals(m4, plot = T)
-#3w-model brick:acid:mix
-m5 <- lmer(log(rmf) ~ (brickRatio + acid + f.watering + seedmix) +  
-             brickRatio:acid + brickRatio:f.watering + brickRatio:seedmix + 
-             f.watering:seedmix + acid:seedmix + 
-             brickRatio:acid:seedmix + 
-             (1|block), edata, REML = F)
-isSingular(m5)
-simulationOutput <- simulateResiduals(m5, plot = T)
-#2w-model
-m6 <- lmer(rmf ~ (species + soilType + brickRatio + acid) +
-             species:soilType + brickRatio:acid + species:brickRatio +
-             (1|block), edata, REML = F)
-isSingular(m6)
-simulationOutput <- simulateResiduals(m6, plot = T);
 
 #### b comparison -----------------------------------------------------------------------------------------
-anova(m2,m3,m4,m5,m6) # --> m5
-(re.effects <- plot_model(m5, type = "re", show.values = TRUE))
-rm(m1,m2,m3,m4,m6)
+anova(m2,m3,m4) # --> m4
+rm(m1,m2,m3)
 
 #### c model check -----------------------------------------------------------------------------------------
-simulationOutput <- simulateResiduals(m5, plot = F)
+simulationOutput <- simulateResiduals(m4, plot = F)
 par(mfrow=c(2,2));
-plotResiduals(main = "species", simulationOutput$scaledResiduals, edata$brickRatio)
-plotResiduals(main = "brickRatio", simulationOutput$scaledResiduals, edata$acid)
-plotResiduals(main = "acid", simulationOutput$scaledResiduals, edata$f.watering)
-plotResiduals(main = "soilType", simulationOutput$scaledResiduals,edata$seedmix)
+plotResiduals(main = "species", simulationOutput$scaledResiduals, edata$species)
+plotResiduals(main = "soilType", simulationOutput$scaledResiduals,edata$soilType)
+plotResiduals(main = "acidbrickRatioTreat", simulationOutput$scaledResiduals, edata$acidbrickRatioTreat)
 plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
 
 
 ## 3 Chosen model output ################################################################################
 
 ### Model output ---------------------------------------------------------------------------------------------
-m5 <- lmer(log(rmf) ~ (brickRatio + acid + f.watering + seedmix) +  
-             brickRatio:acid + brickRatio:f.watering + brickRatio:seedmix + 
-             f.watering:seedmix + acid:seedmix + 
-             brickRatio:acid:seedmix + 
-             (1|block), edata, REML = F)
-VarCorr(m5)
-r.squaredGLMM(m5)
-Anova(m5, type = 3)
+m4 <- lm(rmf ~ species + soilType + acidbrickRatioTreat +
+           acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
+summary(m4) #r2 = 0.282, r2a = 0.169
+Anova(m4, type = 3)
 
 ### Effect sizes -----------------------------------------------------------------------------------------
-(emm <- emmeans(m5, revpairwise ~ seedmix | f.watering, type = "response"))
+(emm <- emmeans(m4, revpairwise ~ acidbrickRatioTreat | species, type = "response"))
 plot(emm, comparison = T)
-contrast(emmeans(m5, ~ seedmix * f.watering, type = "response"), "trt.vs.ctrl", ref = 1)
-(emm <- emmeans(m5, revpairwise ~ brickRatio * acid | seedmix, type="response"))
-plot(emm, comparison = T)
-(emm <- emmeans(m5, revpairwise ~ brickRatio | f.watering, type = "response"))
+contrast(emmeans(m4, ~ acidbrickRatioTreat | species, type = "response"), "trt.vs.ctrl", ref = 1)
+(emm <- emmeans(m4, revpairwise ~ acidbrickRatioTreat | soilType, type = "response"))
 plot(emm, comparison = T)

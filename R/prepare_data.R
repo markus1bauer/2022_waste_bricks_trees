@@ -6,6 +6,7 @@
 library(tidyverse)
 
 ### Start----------------------------------------------------------------------------------------------
+#library(installr);updateR(browse_news=F, install_R=T, copy_packages = T,copy_Rprofile.site = T,keep_old_packages = T, update_packages = T)
 rm(list = ls())
 setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/raw")
 
@@ -35,6 +36,7 @@ edata$conf.high <- c(1:100)
 edata$dateDiff13 <- as.numeric(edata$date3 - edata$date1)
 edata$dateDiff12 <- as.numeric(edata$date2 - edata$date1)
 edata$dateDiff23 <- as.numeric(edata$date3 - edata$date2)
+#Relative growth rate according to Kramer-Walter & Laughlin 2017 Plant Soil:
 edata$rgr13 <- (log(edata$diameter3 * edata$height3) - log(edata$diameter1 * edata$height1)) / edata$dateDiff13
 edata$rgr12 <- (log(edata$diameter3 * edata$height3) - log(edata$diameter1 * edata$height1)) / edata$dateDiff12
 edata$rgr23 <- (log(edata$diameter3 * edata$height3) - log(edata$diameter1 * edata$height1)) / edata$dateDiff23
@@ -48,6 +50,7 @@ edata <- edata %>%
 edata <- edata %>%
   mutate(rmf = rootMass / (rootMass + leafMass + stemMass)) %>%
   mutate(lmf = leafMass / (rootMass + leafMass + stemMass)) %>%
+  mutate(smf = stemMass / (rootMass + leafMass + stemMass)) %>%
   mutate(rootshootRatio = rootMass / (leafMass + stemMass))
 edata <- select(edata, -(diameter1:stemMassTotal), -(dateDiff13:dateDiff23), -(bagWeightLeaf:rootMassTotal))
 
