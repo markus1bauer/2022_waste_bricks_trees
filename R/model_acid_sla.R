@@ -45,7 +45,7 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                         )        
 ))
 edata <- gather(edata, "leaf", "sla", sla1, sla2, sla3, factor_key = T)
-edata <- select(edata, leaf, sla, plot, block, replanted, species, acid, brickRatio, acidbrickRatioTreat, soilType)
+edata <- select(edata, leaf, sla, plot, block, replanted, species, acidbrickRatioTreat, soilType)
 
 
 
@@ -61,26 +61,22 @@ edata <- select(edata, leaf, sla, plot, block, replanted, species, acid, brickRa
 par(mfrow = c(2,2))
 plot(sla ~ species, edata)
 plot(sla ~ soilType, edata)
-plot(sla ~ brickRatio, edata)
-plot(sla ~ acid, edata)
-par(mfrow = c(2,2))
+plot(sla ~ acidbrickRatioTreat, edata)
 plot(sla ~ block, edata)
-#2way (brickRatio:acid):
-ggplot(edata, aes(brickRatio, sla, color = acid)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (brickRatio:soilType):
-ggplot(edata, aes(soilType, sla,color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (soilType:acid):
-ggplot(edata, aes(soilType, sla, color = acid)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#3way (brickRatio:acid:soilType):
-ggplot(edata, aes(brickRatio, sla, color = acid)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#3way (brickRatio:acid:species):
-ggplot(edata, aes(brickRatio, sla, color = acid)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (acidbrickRatioTreat):
+ggplot(edata,aes(acidbrickRatioTreat, sla)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (acidbrickRatioTreat:soilType):
+ggplot(edata,aes(soilType, sla, color = acidbrickRatioTreat)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#3way (acidbrickRatioTreat:soilType):
+ggplot(edata,aes(acidbrickRatioTreat, sla)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#3way (acidbrickRatioTreat:species):
+ggplot(edata,aes(acidbrickRatioTreat, sla)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(edata, aes(soilType, sla, color = brickRatio, shape = acid)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-# interactions with block:
-ggplot(edata, aes(species, sla, color = brickRatio, shape = acid)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata, aes(brickRatio, sla, color = acid)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata, aes(block, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(soilType, sla, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#interactions with block:
+ggplot(edata,aes(species, sla, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(acidbrickRatioTreat, sla)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(block, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
 par(mfrow = c(2,2))
@@ -105,18 +101,18 @@ m1 <- lmer(sla ~ species * acidbrickRatioTreat + (1|block/plot), edata, REML = F
 VarCorr(m1)
 #3w-model
 m2 <- lmer((sla) ~ species * soilType * acidbrickRatioTreat + 
-             (1|block/plot), edata, REML= F)
+             (1|block/plot), edata, REML = F)
 isSingular(m2)
 simulationOutput <- simulateResiduals(m2, plot = T)
 #full 2w-model
 m3 <- lmer((sla) ~ (species + soilType + acidbrickRatioTreat)^2 +
-             (1|block/plot), edata, REML= F)
+             (1|block/plot), edata, REML = F)
 isSingular(m3)
 simulationOutput <- simulateResiduals(m3, plot = T)
 #2w-model reduced
 m4 <- lmer((sla) ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType +
-             (1|block/plot), edata, REML= F)
+             (1|block/plot), edata, REML = F)
 isSingular(m4)
 simulationOutput <- simulateResiduals(m4, plot = T)
 
@@ -143,5 +139,7 @@ Anova(m2, type = 3)
 
 ### Effect sizes -----------------------------------------------------------------------------------------
 (emm <- emmeans(m2, revpairwise ~ acidbrickRatioTreat * soilType | species, type = "response"))
+plot(emm, comparison = T)
+(emm <- emmeans(m2, revpairwise ~ acidbrickRatioTreat | species, type = "response"))
 plot(emm, comparison = T)
 contrast(emmeans(m2, ~ acidbrickRatioTreat * soilType | species, type = "response"), "trt.vs.ctrl", ref = 1)

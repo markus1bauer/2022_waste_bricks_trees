@@ -60,39 +60,22 @@ edata <- select(edata, rmf, plot, block, replanted, species, acidbrickRatioTreat
 par(mfrow = c(2,2))
 plot(rmf ~ species, edata)
 plot(rmf ~ soilType, edata)
-plot(rmf ~ brickRatio, edata)
-plot(rmf ~ acid, edata)
-par(mfrow = c(2,2))
+plot(rmf ~ acidbrickRatioTreat, edata)
 plot(rmf ~ block, edata)
-#2way (brickRatio:acid):
-ggplot(edata, aes(brickRatio, rmf, color = acid)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (brickRatio:soilType):
-ggplot(edata, aes(soilType, rmf,color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (soilType:acid):
-ggplot(edata, aes(soilType, rmf, color = acid)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#3way (brickRatio:acid:soilType):
-ggplot(edata, aes(brickRatio, rmf, color = acid)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (acidbrickRatioTreat):
+ggplot(edata,aes(acidbrickRatioTreat, rmf)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (acidbrickRatioTreat:soilType):
+ggplot(edata,aes(soilType, rmf, color = acidbrickRatioTreat)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#3way (acidbrickRatioTreat:soilType):
+ggplot(edata,aes(acidbrickRatioTreat, rmf)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:acid:species):
-ggplot(edata, aes(brickRatio, rmf, color = acid)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(acidbrickRatioTreat, rmf)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(edata, aes(soilType, rmf, color = brickRatio, shape = acid)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(soilType, rmf, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(edata, aes(species, rmf, color = brickRatio, shape = acid)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata, aes(brickRatio, rmf, color = acid)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata, aes(block, rmf, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-
-##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
-par(mfrow = c(2,2))
-dotchart((edata$rmf), groups = factor(edata$species), main = "Cleveland dotplot")
-dotchart((edata$rmf), groups = factor(edata$soilType), main = "Cleveland dotplot")
-dotchart((edata$rmf), groups = factor(edata$brickRatio), main = "Cleveland dotplot")
-dotchart((edata$rmf), groups = factor(edata$acid), main = "Cleveland dotplot")
-par(mfrow=c(1,1));
-boxplot(edata$rmf, ylim = c(0.2,0.8));#identify(rep(1,length(edata$rmf)),edata$rmf, labels = c(edata$no))
-par(mfrow = c(2,2));
-plot(table((edata$rmf)),type = "h", xlab = "Observed values", ylab = "Frequency")
-plot(table(log(edata$rmf)), type = "h", xlab = "Observed values", ylab = "Frequency");
-ggplot(edata, aes(rmf)) + geom_density()
+ggplot(edata,aes(species, rmf, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(acidbrickRatioTreat, rmf)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(block, rmf, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 
 ## 2 Model building ################################################################################

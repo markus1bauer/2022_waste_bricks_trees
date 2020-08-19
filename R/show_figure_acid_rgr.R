@@ -77,6 +77,7 @@ ggplot(pdata, aes(acidbrickRatioTreat, rgr13, shape = acidbrickRatioTreat, ymin 
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
+  annotate("text", label = "n.s.", x = 3.2, y = 0.0028) +
   scale_y_continuous(limits = c(0.0003,0.0028), breaks = seq(-100,100,0.0005)) +
   scale_shape_manual(values = c(1,16,16)) +
   labs(x = "", y = expression(paste("Relative growth rate (RGR)")), shape = "", color = "") +

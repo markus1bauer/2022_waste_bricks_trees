@@ -44,7 +44,7 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                          acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
                        )        
 ))
-edata <- select(edata, plot, block, replanted, species, acidbrickRatioTreat, soilType)
+edata <- select(edata, rgr13, plot, block, replanted, species, acidbrickRatioTreat, soilType)
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -59,23 +59,21 @@ edata <- select(edata, plot, block, replanted, species, acidbrickRatioTreat, soi
 par(mfrow = c(2,2))
 plot(rgr13 ~ species, edata)
 plot(rgr13 ~ soilType, edata)
-plot(rgr13 ~ brickRatio, edata)
-plot(rgr13 ~ acid, edata)
-par(mfrow = c(2,2))
+plot(rgr13 ~ acidbrickRatioTreat, edata)
 plot(rgr13 ~ block, edata)
-#2way (brickRatio:acid):
-ggplot(edata,aes(brickRatio, rgr13, color = acid)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (brickRatio:soilType):
-ggplot(edata,aes(soilType, rgr13,color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#3way (brickRatio:acid:soilType):
-ggplot(edata,aes(brickRatio, rgr13, color = acid)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (acidbrickRatioTreat):
+ggplot(edata,aes(acidbrickRatioTreat, rgr13)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (acidbrickRatioTreat:soilType):
+ggplot(edata,aes(soilType, rgr13, color = acidbrickRatioTreat)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#3way (acidbrickRatioTreat:soilType):
+ggplot(edata,aes(acidbrickRatioTreat, rgr13)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:acid:species):
-ggplot(edata,aes(brickRatio, rgr13, color = acid)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(acidbrickRatioTreat, rgr13)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(edata,aes(soilType, rgr13, color = brickRatio, shape = acid)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(soilType, rgr13, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(edata,aes(species, rgr13, color = brickRatio, shape = acid)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(brickRatio, rgr13, color = acid)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(species, rgr13, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata,aes(acidbrickRatioTreat, rgr13)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
 ggplot(edata,aes(block, rgr13, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
