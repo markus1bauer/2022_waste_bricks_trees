@@ -9,7 +9,6 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 
 ### Start ###
 rm(list = ls())

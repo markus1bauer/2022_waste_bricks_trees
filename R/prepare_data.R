@@ -6,7 +6,7 @@
 library(tidyverse)
 
 ### Start----------------------------------------------------------------------------------------------
-#library(installr);updateR(browse_news=F, install_R=T, copy_packages = T,copy_Rprofile.site = T,keep_old_packages = T, update_packages = T)
+#installr::updateR(browse_news = F, install_R = T, copy_packages = T, copy_Rprofile.site = T, keep_old_packages = T, update_packages = T, start_new_R = F, quit_R = T)
 rm(list = ls())
 setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/raw")
 
@@ -25,7 +25,8 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                          substrate = col_factor(),
                          soilType = col_factor(),
                          brickRatio = col_factor(levels = c("5","30")),
-                         acid = col_factor(levels = c("Control","Acid"))
+                         acid = col_factor(levels = c("Control","Acid")),
+                         comment = col_factor()
                          )        
 ))
 
@@ -41,18 +42,24 @@ edata$rgr13 <- (log(edata$diameter3 * edata$height3) - log(edata$diameter1 * eda
 edata$rgr12 <- (log(edata$diameter3 * edata$height3) - log(edata$diameter1 * edata$height1)) / edata$dateDiff12
 edata$rgr23 <- (log(edata$diameter3 * edata$height3) - log(edata$diameter1 * edata$height1)) / edata$dateDiff23
 edata <- edata %>%
-  mutate(stemMass = stemMassTotal - bagWeightStem) %>%
-  mutate(leafMass = leafMassTotal - bagWeightLeaf + leaf1Weight + leaf2Weight + leaf3Weight) %>%
-  mutate(rootMass = rootMassTotal - bagWeightRoot) %>%
-  mutate(sla1 = leaf1Area / leaf1Weight) %>%
-  mutate(sla2 = leaf2Area / leaf2Weight) %>%
-  mutate(sla3 = leaf3Area / leaf3Weight)
+  mutate(stemMass = stemMassTotal - bagMassStem) %>%
+  mutate(leafMass = restleafMassTotal - bagMassRestleaf + leaf1Mass + leaf2Mass + leaf3Mass) %>%
+  mutate(absorptivefinerootMass = absorptivefinerootMassTotal - bagMassAbsorptivefineroot) %>%
+  mutate(transportfinerootMass = transportfinerootMassTotal - bagMassTransportfineroot) %>%
+  mutate(restrootMass = restrootMassTotal - bagMassRestroot) %>%
+  mutate(sla1 = leaf1Area / leaf1Mass) %>%
+  mutate(sla2 = leaf2Area / leaf2Mass) %>%
+  mutate(sla3 = leaf3Area / leaf3Mass)
+edata <- edata %>%
+  mutate(rootMass = transportfinerootMass + absorptivefinerootMass + restrootMass) %>%
+  mutate(abstransRatio = absorptivefinerootMass / transportfinerootMass) %>%
+  mutate(srl = (rootLength/100) / absorptivefinerootMass)
 edata <- edata %>%
   mutate(rmf = rootMass / (rootMass + leafMass + stemMass)) %>%
   mutate(lmf = leafMass / (rootMass + leafMass + stemMass)) %>%
   mutate(smf = stemMass / (rootMass + leafMass + stemMass)) %>%
   mutate(rootshootRatio = rootMass / (leafMass + stemMass))
-edata <- select(edata, -(diameter1:stemMassTotal), -(dateDiff13:dateDiff23), -(bagWeightLeaf:rootMassTotal))
+edata <- select(edata, -(date1:date3), -(diameter1:transportfinerootMassTotal), -threshold, -rootMass, -(dateDiff13:dateDiff23), -(stemMass:restrootMass))
 
 
 ### Create data frame for mycorrhiza:soilType:brickRatio ----------------------------------------------------------------

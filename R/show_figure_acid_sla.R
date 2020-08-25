@@ -8,7 +8,6 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 library(ggbeeswarm)
 library(lme4)
 library(emmeans)
@@ -24,9 +23,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza = col_factor(),
@@ -38,9 +34,9 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                         )        
 ))
 edata <- gather(edata, "leaf", "sla", sla1, sla2, sla3, factor_key = T)
-edata <- select(edata, leaf, sla, plot, block, replanted, species, acidbrickRatioTreat, soilType, conf.high, conf.low)
+edata <- select(edata, leaf, sla, plot, block, species, acidbrickRatioTreat, soilType, conf.high, conf.low)
 edata$acidbrickRatioTreat <- dplyr::recode(edata$acidbrickRatioTreat,
-                               "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
+                                           "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
 
 #### Chosen model ###
 m2 <- lmer((sla) ~ species * soilType * acidbrickRatioTreat + 
@@ -101,13 +97,10 @@ ggplot(pdata, aes(acidbrickRatioTreat, sla, shape = acidbrickRatioTreat, ymin = 
   geom_text(data = ann_text2, label = "ab") +
   geom_text(data = ann_text3, label = "a") +
   geom_text(data = ann_text4, label = "b") +
-  scale_y_continuous(limits = c(110,280), breaks = seq(-100,380,25)) +
+  scale_y_continuous(limits = c(110,280), breaks = seq(-100,380,20)) +
   scale_shape_manual(values = c(1,16,16)) +
-  labs(x = "", y = expression(Specific~leaf~area~"("*SLA*")"~"["*mg~mm^-2*"]"), shape = "", color = "") +
+  labs(x = "", y = expression(Specific~leaf~area~"("*SLA*")"~"["*cm^2~g^-1*"]"), shape = "", color = "") +
   guides(x = guide_axis(angle = 45), shape = F)+
   themeMB()
 ggsave("figure_acid_sla_(800dpi_8x7.5cm).tiff",
       dpi = 800, width = 8, height = 7.5, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
-#visreg(m5, "seedmix", by = "f.watering", ylab = expression(paste(Delta,"biomass [g g"^"-1"*"]")), xlab = "", data = edata,
-#       type = "contrast", partial = T, rug = F, gg = T, overlay = F, band = T, points = list(cex = 0.5, pch = 16), line = list(col = "black"), whitespace = .2) +
-#  themeMB()

@@ -8,7 +8,6 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 library(ggbeeswarm)
 library(lme4)
 library(emmeans)
@@ -24,9 +23,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza = col_factor(),
@@ -37,12 +33,12 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
                         )        
 ))
-edata <- select(edata, srl, plot, block, replanted, species, acidbrickRatioTreat, soilType, conf.low, conf.high)
+edata <- select(edata, srl, plot, block, species, acidbrickRatioTreat, soilType, conf.low, conf.high)
 edata$acidbrickRatioTreat <- dplyr::recode(edata$acidbrickRatioTreat,
-                               "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
+                                           "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
 
 #### Chosen model ###
-m4 <- lm(srl ~ species + soilType + acidbrickRatioTreat +
+m4 <- lm(log(srl) ~ species + soilType + acidbrickRatioTreat +
            acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
 
 
@@ -76,14 +72,11 @@ ggplot(pdata, aes(acidbrickRatioTreat, srl, shape = acidbrickRatioTreat, ymin = 
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
-  annotate("text", label = "n.s.", x = 3.2, y = 0.5) +
-  scale_y_continuous(limits = c(0.15,0.5), breaks = seq(-100,100,0.05)) +
+  annotate("text", label = "n.s.", x = 3.2, y = 150) +
+  scale_y_continuous(limits = c(0,150), breaks = seq(-100,200,20)) +
   scale_shape_manual(values = c(1,16,16)) +
-  labs(x = "", y = expression(Specific~root~length~"("SRL*["1-3"]*")"~"["*m~g^-1*"]"), shape = "", color = "") +
-  guides(x = guide_axis(angle = 45), shape = F)+
+  labs(x = "", y = expression(Specific~root~length~(SRL[1-3])*~"["*m~g^-1*"]"), shape = "", color = "") +
+  guides(x = guide_axis(angle = 45), shape = F) +
   themeMB()
-ggsave("figure_acid_srl_(800dpi_8x7cm).tiff",
-      dpi = 800, width = 8, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
-#visreg(m5, "seedmix", by = "f.watering", ylab = expression(paste(Delta,"biomass [g g"^"-1"*"]")), xlab = "", data = edata,
-#       type = "contrast", partial = T, rug = F, gg = T, overlay = F, band = T, points = list(cex = 0.5, pch = 16), line = list(col = "black"), whitespace = .2) +
-#  themeMB()
+ggsave("figure_acid_srl_(800dpi_8x7.5cm).tiff",
+      dpi = 800, width = 8, height = 7.5, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")

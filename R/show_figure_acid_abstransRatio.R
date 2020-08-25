@@ -8,7 +8,6 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 library(ggbeeswarm)
 library(lme4)
 library(emmeans)
@@ -24,9 +23,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza = col_factor(),
@@ -37,13 +33,16 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
                         )        
 ))
-edata <- select(edata, abstransRatio, plot, block, replanted, species, acidbrickRatioTreat, soilType, conf.low, conf.high)
+edata <- select(edata, abstransRatio, plot, block, species, acidbrickRatioTreat, soilType, conf.low, conf.high)
 edata$acidbrickRatioTreat <- dplyr::recode(edata$acidbrickRatioTreat,
-                               "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
+                                           "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
+#Remove 1 outlier
+edata <- filter(edata, abstransRatio < 6)
+
 
 #### Chosen model ###
-m4 <- lm(abstransRatio ~ species + soilType + acidbrickRatioTreat +
-           acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
+m3 <- lmer(log(abstransRatio) ~ (species + soilType + acidbrickRatioTreat)^2 +
+             (1|block), edata, REML = F)
 
 
 
@@ -65,10 +64,30 @@ themeMB <- function(){
 }
 
 ### interaction: acid x brickRatio x species ###
-pdata <- ggemmeans(m4, terms = c("acidbrickRatioTreat", "species"), type = "fe")
+pdata <- ggemmeans(m3, terms = c("acidbrickRatioTreat", "species"), type = "fe")
 pdata <- rename(pdata, abstransRatio = predicted, acidbrickRatioTreat = x, species = group)
 meandata <- filter(pdata, acidbrickRatioTreat == "Control 30% bricks")
 pd <- position_dodge(.6)
+ann_text1 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks", 
+                        abstransRatio = 2.2,
+                        species = factor("Acer", levels = c("Acer","Tilia")),
+                        conf.low = 2.2,
+                        conf.high = 2.2)
+ann_text2 <- data.frame(acidbrickRatioTreat = "Control 30% bricks", 
+                        abstransRatio = 2.2,
+                        species = factor("Tilia", levels = c("Acer","Tilia")),
+                        conf.low = 2.2,
+                        conf.high = 2.2)
+ann_text3 <- data.frame(acidbrickRatioTreat = "Acid 5% bricks", 
+                        abstransRatio = 2.2,
+                        species = factor("Tilia", levels = c("Acer","Tilia")),
+                        conf.low = 2.2,
+                        conf.high = 2.2)
+ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks", 
+                        abstransRatio = 2.2,
+                        species = factor("Tilia", levels = c("Acer","Tilia")),
+                        conf.low = 2.2,
+                        conf.high = 2.2)
 ggplot(pdata, aes(acidbrickRatioTreat, abstransRatio, shape = acidbrickRatioTreat, ymin = conf.low, ymax = conf.high))+
   geom_quasirandom(data = edata, aes(acidbrickRatioTreat, abstransRatio), 
                    color = "grey70", dodge.width = .6, size = 0.7)+
@@ -76,14 +95,14 @@ ggplot(pdata, aes(acidbrickRatioTreat, abstransRatio, shape = acidbrickRatioTrea
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
-  annotate("text", label = "n.s.", x = 3.2, y = 0.5) +
-  scale_y_continuous(limits = c(0.15,0.5), breaks = seq(-100,100,0.05)) +
+  geom_text(data = ann_text1, label = "n.s.") +
+  geom_text(data = ann_text2, label = "a") +
+  geom_text(data = ann_text3, label = "ab") +
+  geom_text(data = ann_text4, label = "b") +
+  scale_y_continuous(limits = c(0,2.2), breaks = seq(-100,100,0.5)) +
   scale_shape_manual(values = c(1,16,16)) +
   labs(x = "", y = expression(Absorptive*":"*transport~fine~roots~"["*g~g^-1*"]"), shape = "", color = "") +
   guides(x = guide_axis(angle = 45), shape = F)+
   themeMB()
-ggsave("figure_acid_abstransRatio_(800dpi_8x7cm).tiff",
-      dpi = 800, width = 8, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
-#visreg(m5, "seedmix", by = "f.watering", ylab = expression(paste(Delta,"biomass [g g"^"-1"*"]")), xlab = "", data = edata,
-#       type = "contrast", partial = T, rug = F, gg = T, overlay = F, band = T, points = list(cex = 0.5, pch = 16), line = list(col = "black"), whitespace = .2) +
-#  themeMB()
+ggsave("figure_acid_abstransRatio_(800dpi_8x8cm).tiff",
+      dpi = 800, width = 8, height = 8, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")

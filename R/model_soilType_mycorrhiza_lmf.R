@@ -8,18 +8,10 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 library(ggbeeswarm)
-library(car); #Anova(); vif(): variance inflation factors --> checking for dependence (Collinearity) (below 3 is ok)
-library(nlme); #use for vif()
-library(lme4)
 library(lmerTest)
 library(DHARMa)
-#library(vcd)
-library(sjPlot) #plot random effects
-library(MuMIn)
 library(emmeans)
-library(ggeffects)
 
 ### Start ###
 rm(list = ls())
@@ -32,9 +24,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           plot = col_factor(),
                           block = col_factor(),
                           replanted = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           species = col_factor(),
                           mycorrhiza = col_factor(levels = c("Control","Mycorrhiza")),
                           substrate = col_factor(),
@@ -98,11 +87,10 @@ dotchart((edata$lmf), groups = factor(edata$soilType), main = "Cleveland dotplot
 dotchart((edata$lmf), groups = factor(edata$mycorrhiza), main = "Cleveland dotplot")
 dotchart((edata$lmf), groups = factor(edata$block), main = "Cleveland dotplot")
 par(mfrow=c(1,1));
-boxplot(edata$lmf, ylim = c(0.0,0.2));#identify(rep(1,length(edata$lmf)),edata$lmf, labels = c(edata$no))
-par(mfrow = c(2,2));
-plot(table((edata$lmf)),type = "h", xlab = "Observed values", ylab = "Frequency")
-plot(table(log(edata$lmf)), type = "h", xlab = "Observed values", ylab = "Frequency");
+boxplot(edata$lmf);#identify(rep(1,length(edata$lmf)),edata$lmf, labels = c(edata$no))
+plot(table((edata$lmf)), type = "h", xlab = "Observed values", ylab = "Frequency")
 ggplot(edata, aes(lmf)) + geom_density()
+ggplot(edata, aes(log(lmf))) + geom_density()
 
 
 ## 2 Model building ################################################################################
@@ -113,31 +101,31 @@ m1 <- lmer(lmf ~ species * brickRatio + (1|block), edata, REML = F)
 VarCorr(m1)
 #4w-model
 m2 <- lm(log(lmf) ~ species * brickRatio * soilType * mycorrhiza, edata)
-simulationOutput <- simulateResiduals(m2, plot = T)
+simulateResiduals(m2, plot = T)
 #full 3w-model
 m3 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^3, edata)
-simulationOutput <- simulateResiduals(m3, plot = T)
+simulateResiduals(m3, plot = T)
 #3w-model reduced
 m4 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza, edata)
-simulationOutput <- simulateResiduals(m4, plot = T)
+simulateResiduals(m4, plot = T)
 #2w-model full
 m5 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2, edata)
-simulationOutput <- simulateResiduals(m5, plot = T)
+simulateResiduals(m5, plot = T)
 #2w-model reduces
 m6 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza, edata)
-simulationOutput <- simulateResiduals(m6, plot = T);
+simulateResiduals(m6, plot = T);
 #1w-model full
 m7 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza), edata)
-simulationOutput <- simulateResiduals(m7, plot = T);
+simulateResiduals(m7, plot = T);
 
 #### b comparison -----------------------------------------------------------------------------------------
 anova(m2,m3,m4,m5,m6,m7) # --> m7 BUT use m4 because of 3-fold interaction
 rm(m1,m2,m3,m5,m6,m7)
 
 #### c model check -----------------------------------------------------------------------------------------
-simulationOutput <- simulateResiduals(m4, plot = F)
+simulationOutput <- simulateResiduals(m4, plot = T)
 par(mfrow=c(2,2));
 plotResiduals(main = "species", simulationOutput$scaledResiduals, edata$species)
 plotResiduals(main = "brickRatio", simulationOutput$scaledResiduals, edata$brickRatio)
@@ -152,7 +140,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
 m4 <- lm(sqrt(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
            species:brickRatio:soilType + species:brickRatio:mycorrhiza, edata)
 summary(m4) #r2 = 0.651, r2adj = 0.589
-Anova(m4, type = 3)
+car::Anova(m4, type = 3)
 
 ### Effect sizes -----------------------------------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ brickRatio * soilType | species, type="response"))

@@ -8,18 +8,10 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 library(ggbeeswarm)
-library(car); #Anova(); vif(): variance inflation factors --> checking for dependence (Collinearity) (below 3 is ok)
-library(nlme); #use for vif()
-library(lme4)
 library(lmerTest)
 library(DHARMa)
-#library(vcd)
-library(sjPlot) #plot random effects
-library(MuMIn)
 library(emmeans)
-library(ggeffects)
 
 ### Start ###
 rm(list = ls())
@@ -31,9 +23,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza = col_factor(),
@@ -62,20 +51,33 @@ plot(rmf ~ species, edata)
 plot(rmf ~ soilType, edata)
 plot(rmf ~ acidbrickRatioTreat, edata)
 plot(rmf ~ block, edata)
-#2way (acidbrickRatioTreat):
-ggplot(edata,aes(acidbrickRatioTreat, rmf)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (acidbrickRatioTreat:soilType):
-ggplot(edata,aes(soilType, rmf, color = acidbrickRatioTreat)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (species:soilType):
+ggplot(edata, aes(soilType, rmf, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (species:replanted):
+ggplot(edata, aes(replanted, rmf, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (acidbrickRatioTreat:soilType):
-ggplot(edata,aes(acidbrickRatioTreat, rmf)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(acidbrickRatioTreat, rmf)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:acid:species):
-ggplot(edata,aes(acidbrickRatioTreat, rmf)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(acidbrickRatioTreat, rmf)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(edata,aes(soilType, rmf, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-# interactions with block:
-ggplot(edata,aes(species, rmf, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(acidbrickRatioTreat, rmf)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, rmf, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(soilType, rmf, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#interactions with block:
+ggplot(edata, aes(species, rmf, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(acidbrickRatioTreat, rmf)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(block, rmf, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+
+##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
+par(mfrow = c(2,2))
+dotchart((edata$rmf), groups = factor(edata$species), main = "Cleveland dotplot")
+dotchart((edata$rmf), groups = factor(edata$soilType), main = "Cleveland dotplot")
+dotchart((edata$rmf), groups = factor(edata$acidbrickRatioTreat), main = "Cleveland dotplot")
+dotchart((edata$rmf), groups = factor(edata$block), main = "Cleveland dotplot")
+par(mfrow=c(1,1));
+boxplot(edata$rmf);#identify(rep(1,length(edata$rmf)), edata$rmf, labels = c(edata$no))
+plot(table((edata$rmf)), type = "h", xlab = "Observed values", ylab = "Frequency")
+ggplot(edata, aes(rmf)) + geom_density()
+ggplot(edata, aes(log(rmf))) + geom_density()
+
 
 
 ## 2 Model building ################################################################################
@@ -86,21 +88,21 @@ m1 <- lmer(rmf ~ species * acidbrickRatioTreat + (1|block), edata, REML = F)
 VarCorr(m1)
 #3w-model
 m2 <- lm(rmf ~ species * soilType * acidbrickRatioTreat, edata)
-simulationOutput <- simulateResiduals(m2, plot = T)
+simulateResiduals(m2, plot = T)
 #full 2w-model
 m3 <- lm(rmf ~ (species + soilType + acidbrickRatioTreat)^2, edata)
-simulationOutput <- simulateResiduals(m3, plot = T)
+simulateResiduals(m3, plot = T)
 #2w-model reduced
 m4 <- lm(rmf ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
-simulationOutput <- simulateResiduals(m4, plot = T)
+simulateResiduals(m4, plot = T)
 
 #### b comparison -----------------------------------------------------------------------------------------
 anova(m2,m3,m4) # --> m4
 rm(m1,m2,m3)
 
 #### c model check -----------------------------------------------------------------------------------------
-simulationOutput <- simulateResiduals(m4, plot = F)
+simulationOutput <- simulateResiduals(m4, plot = T)
 par(mfrow=c(2,2));
 plotResiduals(main = "species", simulationOutput$scaledResiduals, edata$species)
 plotResiduals(main = "soilType", simulationOutput$scaledResiduals,edata$soilType)
@@ -111,10 +113,10 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
 ## 3 Chosen model output ################################################################################
 
 ### Model output ---------------------------------------------------------------------------------------------
-m4 <- lm(rmf ~ species + soilType + acidbrickRatioTreat +
+m4 <- lm(rmf ~ species + soilType + acidbrickRatioTreat + 
            acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
 summary(m4) #r2 = 0.282, r2a = 0.169
-Anova(m4, type = 3)
+car::Anova(m4, type = 3)
 
 ### Effect sizes -----------------------------------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ acidbrickRatioTreat | species, type = "response"))

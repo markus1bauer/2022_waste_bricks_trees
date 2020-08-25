@@ -8,7 +8,6 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 library(ggbeeswarm)
 library(lme4)
 library(emmeans)
@@ -24,9 +23,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza = col_factor(levels = c("Control","Mycorrhiza")),
@@ -38,7 +34,7 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                         )        
 ))
 edata <- gather(edata, "leaf", "sla", sla1, sla2, sla3, factor_key = T)
-edata <- select(edata, leaf, sla, plot, block, replanted, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high)
+edata <- select(edata, leaf, sla, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high)
 
 #### Chosen model ###
 m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
@@ -76,14 +72,10 @@ ggplot(pdata, aes(soilType, sla, shape = brickRatio, ymin = conf.low, ymax = con
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
-  #annotate("text", label = "n.s.", x = 2.2, y = 270) +
-  scale_y_continuous(limits = c(120,270), breaks = seq(-100,100,20)) +
+  annotate("text", label = "n.s.", x = 2.2, y = 270) +
+  scale_y_continuous(limits = c(120,270), breaks = seq(-100,270,20)) +
   scale_shape_manual(values = c(1,16)) +
-  labs(x = "Soil fertility", y = expression(Specific~leaf~area~"("*SLA*")"~"["*mg~mm^-2*"]"), shape = "Brick ratio [%]", color = "") +
-  guides(x = guide_axis(angle = 0))+
+  labs(x = "Soil fertility", y = expression(Specific~leaf~area~"("*SLA*")"~"["*cm^2~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
   themeMB()
 ggsave("figure_soilType_sla_(800dpi_12x6cm).tiff",
        dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
-#visreg(m5, "seedmix", by = "f.watering", ylab = expression(paste(Delta,"biomass [g g"^"-1"*"]")), xlab = "", data = edata,
-#       type = "contrast", partial = T, rug = F, gg = T, overlay = F, band = T, points = list(cex = 0.5, pch = 16), line = list(col = "black"), whitespace = .2) +
-#  themeMB()

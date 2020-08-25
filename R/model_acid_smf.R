@@ -8,18 +8,10 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 library(ggbeeswarm)
-library(car); #Anova(); vif(): variance inflation factors --> checking for dependence (Collinearity) (below 3 is ok)
-library(nlme); #use for vif()
-library(lme4)
 library(lmerTest)
 library(DHARMa)
-#library(vcd)
-library(sjPlot) #plot random effects
-library(MuMIn)
 library(emmeans)
-library(ggeffects)
 
 ### Start ###
 rm(list = ls())
@@ -31,9 +23,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza = col_factor(),
@@ -62,20 +51,20 @@ plot(smf ~ species, edata)
 plot(smf ~ soilType, edata)
 plot(smf ~ acidbrickRatioTreat, edata)
 plot(smf ~ block, edata)
-#2way (acidbrickRatioTreat):
-ggplot(edata,aes(acidbrickRatioTreat, smf)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-#2way (acidbrickRatioTreat:soilType):
-ggplot(edata,aes(soilType, smf, color = acidbrickRatioTreat)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (species:soilType):
+ggplot(edata, aes(species, smf, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#2way (species:replanted):
+ggplot(edata, aes(species, smf, color = replanted)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (acidbrickRatioTreat:soilType):
-ggplot(edata,aes(acidbrickRatioTreat, smf)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(acidbrickRatioTreat, smf)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:acid:species):
-ggplot(edata,aes(acidbrickRatioTreat, smf)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(acidbrickRatioTreat, smf)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(edata,aes(soilType, smf, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-# interactions with block:
-ggplot(edata,aes(species, smf, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(acidbrickRatioTreat, smf)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, smf, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(soilType, smf, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+#interactions with block:
+ggplot(edata, aes(species, smf, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(acidbrickRatioTreat, smf)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(edata, aes(block, smf, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
 par(mfrow = c(2,2))
@@ -84,11 +73,10 @@ dotchart((edata$smf), groups = factor(edata$soilType), main = "Cleveland dotplot
 dotchart((edata$smf), groups = factor(edata$brickRatio), main = "Cleveland dotplot")
 dotchart((edata$smf), groups = factor(edata$acid), main = "Cleveland dotplot")
 par(mfrow=c(1,1));
-boxplot(edata$smf, ylim = c(0,0.6));#identify(rep(1,length(edata$smf)),edata$smf, labels = c(edata$no))
-par(mfrow = c(2,2));
-plot(table((edata$smf)),type = "h", xlab = "Observed values", ylab = "Frequency")
-plot(table(log(edata$smf)), type = "h", xlab = "Observed values", ylab = "Frequency");
+boxplot(edata$smf);#identify(rep(1, length(edata$smf)), edata$smf, labels = c(edata$no))
+plot(table((edata$smf)), type = "h", xlab = "Observed values", ylab = "Frequency")
 ggplot(edata, aes(smf)) + geom_density()
+ggplot(edata, aes(log(smf))) + geom_density()
 
 
 ## 2 Model building ################################################################################
@@ -99,21 +87,21 @@ m1 <- lmer(smf ~ species * acidbrickRatioTreat + (1|block), edata, REML = F)
 VarCorr(m1)
 #3w-model
 m2 <- lm(smf ~ species * soilType * acidbrickRatioTreat, edata)
-simulationOutput <- simulateResiduals(m2, plot = T)
+simulateResiduals(m2, plot = T)
 #full 2w-model
 m3 <- lm(smf ~ (species + soilType + acidbrickRatioTreat)^2, edata)
-simulationOutput <- simulateResiduals(m3, plot = T)
+simulateResiduals(m3, plot = T)
 #2w-model reduced
 m4 <- lm(smf ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
-simulationOutput <- simulateResiduals(m4, plot = T)
+simulateResiduals(m4, plot = T)
 
 #### b comparison -----------------------------------------------------------------------------------------
 anova(m2,m3,m4) # --> m4
 rm(m1,m2,m3)
 
 #### c model check -----------------------------------------------------------------------------------------
-simulationOutput <- simulateResiduals(m4, plot = F)
+simulationOutput <- simulateResiduals(m4, plot = T)
 par(mfrow=c(2,2));
 plotResiduals(main = "species", simulationOutput$scaledResiduals, edata$species)
 plotResiduals(main = "soilType", simulationOutput$scaledResiduals,edata$soilType)
@@ -127,7 +115,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
 m4 <- lm(smf ~ species + soilType + acidbrickRatioTreat +
            acidbrickRatioTreat:species + acidbrickRatioTreat:soilType, edata)
 summary(m4) #r2 = 0.511, r2a = 0.435
-Anova(m4, type = 3)
+car::Anova(m4, type = 3)
 
 ### Effect sizes -----------------------------------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ acidbrickRatioTreat | species, type = "response"))

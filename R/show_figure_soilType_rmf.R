@@ -8,7 +8,6 @@
 
 ### Packages ###
 library(tidyverse)
-library(ggplot2)
 library(ggbeeswarm)
 library(lme4)
 library(emmeans)
@@ -24,9 +23,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza = col_factor(levels = c("Control","Mycorrhiza")),
@@ -37,7 +33,7 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           acidbrickRatioTreat = col_factor()
                         )        
 ))
-edata <- select(edata, rmf, plot, block, replanted, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high)
+edata <- select(edata, rmf, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high)
 
 #### Chosen model ###
 m4 <- lmer(rmf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
@@ -76,13 +72,9 @@ ggplot(pdata, aes(soilType, rmf, shape = brickRatio, ymin = conf.low, ymax = con
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
   annotate("text", label = "n.s.", x = 2.2, y = 0.7) +
-  scale_y_continuous(limits = c(0.35,0.7), breaks = seq(-100,100,0.05)) +
+  scale_y_continuous(limits = c(0.35,0.7), breaks = seq(-100,100,0.1)) +
   scale_shape_manual(values = c(1,16)) +
   labs(x = "Soil fertility", y = expression(Root~mass~fraction~"("*RMF*")"~"["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
-  guides(x = guide_axis(angle = 0))+
   themeMB()
 ggsave("figure_soilType_rmf_(800dpi_12x6cm).tiff",
        dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
-#visreg(m5, "seedmix", by = "f.watering", ylab = expression(paste(Delta,"biomass [g g"^"-1"*"]")), xlab = "", data = edata,
-#       type = "contrast", partial = T, rug = F, gg = T, overlay = F, band = T, points = list(cex = 0.5, pch = 16), line = list(col = "black"), whitespace = .2) +
-#  themeMB()
