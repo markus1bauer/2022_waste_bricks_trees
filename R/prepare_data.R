@@ -44,21 +44,22 @@ edata$rgr23 <- (log(edata$diameter3 * edata$height3) - log(edata$diameter1 * eda
 edata <- edata %>%
   mutate(stemMass = stemMassTotal - bagMassStem) %>%
   mutate(leafMass = restleafMassTotal - bagMassRestleaf + leaf1Mass + leaf2Mass + leaf3Mass) %>%
+  mutate(sla1 = leaf1Area / leaf1Mass) %>% #specific leaf area of leaf 1 of one individual
+  mutate(sla2 = leaf2Area / leaf2Mass) %>% #specific leaf area of leaf 2 of one individual
+  mutate(sla3 = leaf3Area / leaf3Mass) %>% #specific leaf area of leaf 3 of one individual
   mutate(absorptivefinerootMass = absorptivefinerootMassTotal - bagMassAbsorptivefineroot) %>%
   mutate(transportfinerootMass = transportfinerootMassTotal - bagMassTransportfineroot) %>%
-  mutate(restrootMass = restrootMassTotal - bagMassRestroot) %>%
-  mutate(sla1 = leaf1Area / leaf1Mass) %>%
-  mutate(sla2 = leaf2Area / leaf2Mass) %>%
-  mutate(sla3 = leaf3Area / leaf3Mass)
+  mutate(restrootMass = restrootMassTotal - bagMassRestroot)
 edata <- edata %>%
   mutate(rootMass = transportfinerootMass + absorptivefinerootMass + restrootMass) %>%
   mutate(abstransRatio = absorptivefinerootMass / transportfinerootMass) %>%
-  mutate(srl = (rootLength/100) / absorptivefinerootMass)
+  mutate(srl = (rootLength/100) / absorptivefinerootMass) %>% #specific root length
+  mutate(rtd = rootVolume / absorptivefinerootMass) #root tissue density
 edata <- edata %>%
-  mutate(rmf = rootMass / (rootMass + leafMass + stemMass)) %>%
-  mutate(lmf = leafMass / (rootMass + leafMass + stemMass)) %>%
-  mutate(smf = stemMass / (rootMass + leafMass + stemMass)) %>%
-  mutate(rootshootRatio = rootMass / (leafMass + stemMass))
+  mutate(rmf = rootMass / (rootMass + leafMass + stemMass)) %>% #root mass fraction
+  mutate(lmf = leafMass / (rootMass + leafMass + stemMass)) %>% #leaf mass fraction
+  mutate(smf = stemMass / (rootMass + leafMass + stemMass)) %>% #stem mass fraction
+  mutate(rootshootRatio = rootMass / (leafMass + stemMass)) #root-to-shoot ratio
 edata <- select(edata, -(date1:date3), -(diameter1:transportfinerootMassTotal), -threshold, -rootMass, -(dateDiff13:dateDiff23), -(stemMass:restrootMass))
 
 

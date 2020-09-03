@@ -15,10 +15,10 @@ library(ggeffects)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_for_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
-(edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
+edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
                         cols(
                           .default = col_double(),
                           plot = col_factor(),
@@ -32,7 +32,7 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           acid = col_factor(),
                           acidbrickRatioTreat = col_factor()
                         )        
-))
+)
 edata <- select(edata, abstransRatio, plot, block, species, brickRatio, soilType, mycorrhiza, conf.high, conf.low)
 #Exclude 1 outlier
 edata <- filter(edata, abstransRatio < 6)
@@ -68,6 +68,7 @@ pdata$abstransRatio <- pdata$abstransRatio-1
 pdata$conf.low <- pdata$conf.low-1
 pdata$conf.high <- pdata$conf.high-1
 meandata <- filter(pdata, mycorrhiza == "Control" & brickRatio == "5")
+#Plot version 1
 pd <- position_dodge(.6)
 ggplot(pdata, aes(mycorrhiza, abstransRatio, shape = brickRatio, ymin = conf.low, ymax = conf.high))+
   geom_quasirandom(data = edata, aes(mycorrhiza, abstransRatio), 
@@ -84,10 +85,12 @@ ggplot(pdata, aes(mycorrhiza, abstransRatio, shape = brickRatio, ymin = conf.low
   themeMB()
 ggsave("figure_mycorrhiza_abstransRatio_(800dpi_12x6cm).tiff",
        dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+#Plot version 2
+rainbow <- matrix(hcl(seq(0, 360, length.out = 50 * 50), 80, 70), nrow = 50)
 pd <- position_dodge(1)
 ggplot(pdata, aes(mycorrhiza, abstransRatio, fill = brickRatio, ymin = conf.low, ymax = conf.high))+
   geom_hline(aes(yintercept = abstransRatio), meandata, color = "grey70") +
-  geom_crossbar(position = pd, alpha = 0.5) +
+  geom_crossbar(position = pd) + 
   geom_quasirandom(data = edata, aes(mycorrhiza, abstransRatio), 
                    color = "black", dodge.width = 1, size = 0.7)+
   facet_grid(~ species) +

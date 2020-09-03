@@ -18,7 +18,7 @@ rm(list = ls())
 setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
-(edata <- read_table2("data_processed_acid.txt", col_names = T, na = "na", col_types = 
+edata <- read_table2("data_processed_acid.txt", col_names = T, na = "na", col_types = 
                         cols(
                           .default = col_double(),
                           plot = col_factor(),
@@ -33,7 +33,7 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30")),
                           comment = col_factor()
                         )        
-))
+)
 edata <- select(edata, srl, plot, block, replanted, species, acid, brickRatio, acidbrickRatioTreat, soilType)
 
 
@@ -76,7 +76,7 @@ dotchart((edata$srl), groups = factor(edata$soilType), main = "Cleveland dotplot
 dotchart((edata$srl), groups = factor(edata$brickRatio), main = "Cleveland dotplot")
 dotchart((edata$srl), groups = factor(edata$acid), main = "Cleveland dotplot")
 par(mfrow=c(1,1));
-boxplot(edata$srl, ylim = c(0,200));#identify(rep(1,length(edata$srl)),edata$srl, labels = c(edata$no))
+boxplot(edata$srl);#identify(rep(1,length(edata$srl)),edata$srl, labels = c(edata$no))
 plot(table((edata$srl)), type = "h", xlab = "Observed values", ylab = "Frequency")
 ggplot(edata, aes(srl)) + geom_density()
 ggplot(edata, aes(log(srl))) + geom_density()

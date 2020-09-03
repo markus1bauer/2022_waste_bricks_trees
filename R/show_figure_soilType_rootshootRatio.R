@@ -74,7 +74,7 @@ ggplot(pdata, aes(soilType, rootshootRatio, shape = brickRatio, ymin = conf.low,
   annotate("text", label = "n.s.", x = 2.2, y = 2.06) +
   scale_y_continuous(limits = c(0.5,2.06), breaks = seq(-100,100,0.2)) +
   scale_shape_manual(values = c(1,16)) +
-  labs(x = "", y = expression("Root-to-shoot ratio ["*g~g^-1*"]"), shape = "", color = "") +
+  labs(x = "", y = expression("Root-to-shoot ratio ["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
   themeMB()
 ggsave("figure_soilType_rootshootRatio_(800dpi_12x6cm).tiff",
        dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")

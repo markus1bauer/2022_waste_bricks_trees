@@ -75,7 +75,7 @@ ggplot(pdata, aes(acidbrickRatioTreat, rootshootRatio, shape = acidbrickRatioTre
   annotate("text", label = "n.s.", x = 3.2, y = 2.06) +
   scale_y_continuous(limits = c(0.5,2.06), breaks = seq(-100,100,0.2)) +
   scale_shape_manual(values = c(1,16,16)) +
-  labs(x = "", y = expression("Root-to-shoot ratio ["*g~g^-1*"]"), shape = "", color = "") +
+  labs(x = "", y = expression("Root-to-shoot ratio ["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
   guides(x = guide_axis(angle = 45), shape = F)+
   themeMB()
 ggsave("figure_acid_rootshootRatio_(800dpi_8x7cm).tiff",
