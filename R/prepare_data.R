@@ -60,7 +60,7 @@ edata <- edata %>%
   mutate(lmf = leafMass / (rootMass + leafMass + stemMass)) %>% #leaf mass fraction
   mutate(smf = stemMass / (rootMass + leafMass + stemMass)) %>% #stem mass fraction
   mutate(rootshootRatio = rootMass / (leafMass + stemMass)) #root-to-shoot ratio
-edata <- select(edata, -(date1:date3), -(diameter1:transportfinerootMassTotal), -threshold, -rootMass, -(dateDiff13:dateDiff23), -(stemMass:restrootMass))
+edata <- select(edata, -(date1:date3), -(diameter1:transportfinerootMassTotal), -threshold, -rootMass, -(dateDiff13:dateDiff23), -(stemMass:leafMass), -(absorptivefinerootMass:restrootMass))
 
 
 ### Create data frame for mycorrhiza:soilType:brickRatio ----------------------------------------------------------------
@@ -70,5 +70,5 @@ edata1 <- filter(edata, acid != "Control")
 edata2 <- filter(edata, mycorrhiza != "Mycorrhiza");
 
 ### Save processed data-------------------------------------------------------------------------------
-write.table(edata1, "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed/data_processed_brickRatio.txt", sep="\t", row.names=F)
-write.table(edata2, "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed/data_processed_acid.txt", sep="\t", row.names=F)
+#write.table(edata1, "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed/data_processed_brickRatio.txt", sep = "\t", row.names = F, quote = F)
+#write.table(edata2, "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed/data_processed_acid.txt", sep = "\t", row.names = F, quote = F)

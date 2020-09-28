@@ -15,7 +15,7 @@ library(ggeffects)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_for_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
 (edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
@@ -67,14 +67,19 @@ pd <- position_dodge(.6)
 ggplot(pdata, aes(soilType, rootshootRatio, shape = brickRatio, ymin = conf.low, ymax = conf.high))+
   geom_quasirandom(data = edata, aes(soilType, rootshootRatio), 
                    color = "grey70", dodge.width = .6, size = 0.7)+
-  geom_hline(aes(yintercept = rootshootRatio), meandata, color = "grey70") +
+  geom_hline(aes(yintercept = rootshootRatio), meandata, 
+             color = "grey70", size = .25) +
+  geom_hline(aes(yintercept = conf.low), meandata, 
+             color = "grey70", linetype = "dashed", size = .25) +
+  geom_hline(aes(yintercept = conf.high), meandata, 
+             color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
   annotate("text", label = "n.s.", x = 2.2, y = 2.06) +
   scale_y_continuous(limits = c(0.5,2.06), breaks = seq(-100,100,0.2)) +
   scale_shape_manual(values = c(1,16)) +
-  labs(x = "", y = expression("Root-to-shoot ratio ["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
+  labs(x = "Soil fertility", y = expression("Root-to-shoot ratio ["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
   themeMB()
-ggsave("figure_soilType_rootshootRatio_(800dpi_12x6cm).tiff",
-       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+#ggsave("figure_soilType_rootshootRatio_(800dpi_12x6cm).tiff",
+#       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")

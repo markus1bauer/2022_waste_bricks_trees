@@ -69,7 +69,12 @@ pd <- position_dodge(.6)
 ggplot(pdata, aes(soilType, rtd, shape = brickRatio, ymin = conf.low, ymax = conf.high))+
   geom_quasirandom(data = edata, aes(soilType, rtd), 
                    color = "grey70", dodge.width = .6, size = 0.7)+
-  geom_hline(aes(yintercept = rtd), meandata, color = "grey70") +
+  geom_hline(aes(yintercept = rtd), meandata, 
+             color = "grey70", size = .25) +
+  geom_hline(aes(yintercept = conf.low), meandata, 
+             color = "grey70", linetype = "dashed", size = .25) +
+  geom_hline(aes(yintercept = conf.high), meandata, 
+             color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
@@ -78,5 +83,5 @@ ggplot(pdata, aes(soilType, rtd, shape = brickRatio, ymin = conf.low, ymax = con
   scale_shape_manual(values = c(1,16)) +
   labs(x = "Soil fertility", y = expression(Root~tissue~density~(RTD[1-3])*~"["*g~cm^-3*"]"), shape = "Brick ratio [%]", color = "") +
   themeMB()
-ggsave("figure_soilType_rtd_(800dpi_12x6cm).tiff",
-       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+#ggsave("figure_soilType_rtd_(800dpi_12x6cm).tiff",
+#       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")

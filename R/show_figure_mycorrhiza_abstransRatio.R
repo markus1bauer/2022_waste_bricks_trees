@@ -73,7 +73,12 @@ pd <- position_dodge(.6)
 ggplot(pdata, aes(mycorrhiza, abstransRatio, shape = brickRatio, ymin = conf.low, ymax = conf.high))+
   geom_quasirandom(data = edata, aes(mycorrhiza, abstransRatio), 
                    color = "grey70", dodge.width = .6, size = 0.7)+
-  geom_hline(aes(yintercept = abstransRatio), meandata, color = "grey70") +
+  geom_hline(aes(yintercept = abstransRatio), meandata, 
+             color = "grey70", size = .25) +
+  geom_hline(aes(yintercept = conf.low), meandata, 
+             color = "grey70", linetype = "dashed", size = .25) +
+  geom_hline(aes(yintercept = conf.high), meandata, 
+             color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
@@ -83,13 +88,17 @@ ggplot(pdata, aes(mycorrhiza, abstransRatio, shape = brickRatio, ymin = conf.low
   labs(x = "", y = expression(Absorptive*":"*transport~fine~roots~"["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
   guides(x = guide_axis(angle = 0))+
   themeMB()
-ggsave("figure_mycorrhiza_abstransRatio_(800dpi_12x6cm).tiff",
-       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+#ggsave("figure_mycorrhiza_abstransRatio_(800dpi_12x6cm).tiff",
+#       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
 #Plot version 2
-rainbow <- matrix(hcl(seq(0, 360, length.out = 50 * 50), 80, 70), nrow = 50)
 pd <- position_dodge(1)
 ggplot(pdata, aes(mycorrhiza, abstransRatio, fill = brickRatio, ymin = conf.low, ymax = conf.high))+
-  geom_hline(aes(yintercept = abstransRatio), meandata, color = "grey70") +
+  geom_hline(aes(yintercept = abstransRatio), meandata, 
+             color = "grey70", size = .25) +
+  geom_hline(aes(yintercept = conf.low), meandata, 
+             color = "grey70", linetype = "dashed", size = .25) +
+  geom_hline(aes(yintercept = conf.high), meandata, 
+             color = "grey70", linetype = "dashed", size = .25) +
   geom_crossbar(position = pd) + 
   geom_quasirandom(data = edata, aes(mycorrhiza, abstransRatio), 
                    color = "black", dodge.width = 1, size = 0.7)+
@@ -100,5 +109,5 @@ ggplot(pdata, aes(mycorrhiza, abstransRatio, fill = brickRatio, ymin = conf.low,
   labs(x = "", y = expression(Absorptive*":"*transport~fine~roots~"["*g~g^-1*"]"), fill = "Brick ratio [%]", color = "") +
   guides(x = guide_axis(angle = 0))+
   themeMB()
-ggsave("figure_mycorrhiza_abstransRatio_2_(800dpi_12x6cm).tiff",
-       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+#ggsave("figure_mycorrhiza_abstransRatio_2_(800dpi_12x6cm).tiff",
+#      dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
