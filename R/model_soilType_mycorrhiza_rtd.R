@@ -91,8 +91,8 @@ dotchart((edata$rtd), groups = factor(edata$brickRatio), main = "Cleveland dotpl
 dotchart((edata$rtd), groups = factor(edata$soilType), main = "Cleveland dotplot")
 dotchart((edata$rtd), groups = factor(edata$mycorrhiza), main = "Cleveland dotplot")
 dotchart((edata$rtd), groups = factor(edata$block), main = "Cleveland dotplot")
-par(mfrow=c(1,1));
-boxplot(edata$rtd);
+par(mfrow=c(1,2));
+boxplot(edata$rtd);boxplot(1/edata$rtd);
 identify(rep(1, length(edata$rtd)), edata$rtd, labels = c(edata$plot))
 plot(table((edata$rtd)), type = "h", xlab = "Observed values", ylab = "Frequency")
 ggplot(edata, aes(rtd)) + geom_density()

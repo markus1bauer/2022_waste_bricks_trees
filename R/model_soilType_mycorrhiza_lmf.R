@@ -18,7 +18,7 @@ rm(list = ls())
 setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
-(edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
+edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
                         cols(
                           .default = col_double(),
                           plot = col_factor(),
@@ -32,7 +32,7 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           acid = col_factor(levels = c("Acid")),
                           acidbrickRatioTreat = col_factor()
                         )        
-))
+)
 (edata <- select(edata, lmf, plot, block, replanted, species, brickRatio, soilType, mycorrhiza))
 
 
@@ -100,28 +100,34 @@ ggplot(edata, aes(log(lmf))) + geom_density()
 m1 <- lmer(lmf ~ species * brickRatio + (1|block), edata, REML = F)
 VarCorr(m1)
 #4w-model
-m2 <- lm(log(lmf) ~ species * brickRatio * soilType * mycorrhiza, edata)
+m2 <- lmer(log(lmf) ~ species * brickRatio * soilType * mycorrhiza + 
+             (1|block), edata, REML = F)
 simulateResiduals(m2, plot = T)
 #full 3w-model
-m3 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^3, edata)
+m3 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^3 + 
+           (1|block), edata, REML = F)
 simulateResiduals(m3, plot = T)
 #3w-model reduced
-m4 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-             species:brickRatio:soilType + species:brickRatio:mycorrhiza, edata)
+m4 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
+           species:brickRatio:soilType + species:brickRatio:mycorrhiza + 
+           (1|block), edata, REML = F)
 simulateResiduals(m4, plot = T)
 #2w-model full
-m5 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2, edata)
+m5 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 + 
+             (1|block), edata, REML = F)
 simulateResiduals(m5, plot = T)
 #2w-model reduces
-m6 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) +
-             species:brickRatio + species:soilType + species:mycorrhiza, edata)
+m6 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) +
+             species:brickRatio + species:soilType + species:mycorrhiza + 
+             (1|block), edata, REML = F)
 simulateResiduals(m6, plot = T);
 #1w-model full
-m7 <- lm(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza), edata)
+m7 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) + 
+             (1|block), edata, REML = F)
 simulateResiduals(m7, plot = T);
 
 #### b comparison -----------------------------------------------------------------------------------------
-anova(m2,m3,m4,m5,m6,m7) # --> m7 BUT use m4 because of 3-fold interaction
+anova(m2,m3,m4,m5,m6,m7) # --> m7 BUT use m4 because of 3-fold interactions are of interest
 rm(m1,m2,m3,m5,m6,m7)
 
 #### c model check -----------------------------------------------------------------------------------------
@@ -137,9 +143,12 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
 ## 3 Chosen model output ################################################################################
 
 ### Model output ---------------------------------------------------------------------------------------------
-m4 <- lm(sqrt(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-           species:brickRatio:soilType + species:brickRatio:mycorrhiza, edata)
-summary(m4) #r2 = 0.651, r2adj = 0.589
+m4 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
+             species:brickRatio:soilType + species:brickRatio:mycorrhiza +
+             (1|block), edata, REML = F)
+MuMIn::r.squaredGLMM(m4) #R2m = 0.654, R2c = 0.654
+VarCorr(m4)
+sjPlot::plot_model(m4, type = "re", show.values = T)
 car::Anova(m4, type = 3)
 
 ### Effect sizes -----------------------------------------------------------------------------------------

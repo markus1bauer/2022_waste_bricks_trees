@@ -18,7 +18,7 @@ rm(list = ls())
 setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
-(edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
+edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
                         cols(
                           .default = col_double(),
                           plot = col_factor(),
@@ -32,9 +32,9 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           acid = col_factor(),
                           acidbrickRatioTreat = col_factor()
                         )        
-))
+)
 edata <- gather(edata, "leaf", "sla", sla1, sla2, sla3, factor_key = T)
-edata <- select(edata, leaf, sla, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high)
+(edata <- select(edata, leaf, sla, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high))
 
 #### Chosen model ###
 m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
@@ -50,9 +50,11 @@ themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size=10, color = "black"),
+    strip.text = element_text(size = 11),
     axis.line.y = element_line(),
     axis.line.x = element_blank(),
     axis.ticks.x = element_blank(),
+    axis.text.y = element_text(angle = 90, hjust = 0.5),
     legend.key = element_rect(fill = "white"),
     legend.position = "right",
     legend.margin = margin(0, 0, 0, 0, "cm"),
@@ -78,9 +80,9 @@ ggplot(pdata, aes(soilType, sla, shape = brickRatio, ymin = conf.low, ymax = con
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
   annotate("text", label = "n.s.", x = 2.2, y = 270) +
-  scale_y_continuous(limits = c(120,270), breaks = seq(-100,270,20)) +
+  scale_y_continuous(limits = c(120,270), breaks = seq(-100,270,50)) +
   scale_shape_manual(values = c(1,16)) +
   labs(x = "Soil fertility", y = expression(Specific~leaf~area~"("*SLA*")"~"["*cm^2~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
   themeMB()
-#ggsave("figure_soilType_sla_(800dpi_12x6cm).tiff",
-#       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+ggsave("figure_soilType_sla_(800dpi_12x7cm).tiff",
+       dpi = 800, width = 12, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
