@@ -20,6 +20,7 @@ _Markus Bauer, Martin Krause, Valentin Heizinger and Johannes Kollmann_
     
 3. __Outputs__: the folder `outputs` contains  
     * The figures (.tiff) generated.
+    * The tables (.html/.png) generated.
     
 4. __R__: the folder `R` contains  
     * Scripts (.R) to generate all figures used in the manuscript and in the supporting information.
