@@ -1,4 +1,7 @@
 # Model for experiment with acid treatment and relative growth rate ####
+# Markus Bauer
+# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
+# DOI: ...
 
 
 
@@ -18,7 +21,7 @@ rm(list = ls())
 setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
-(edata <- read_table2("data_processed_acid.txt", col_names = T, na = "na", col_types = 
+(data <- read_csv2("data_processed_acid.csv", col_names = T, na = "na", col_types = 
                        cols(
                          .default = col_double(),
                          plot = col_factor(),
@@ -33,7 +36,7 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                          acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
                        )        
 ))
-edata <- select(edata, rgr13, plot, block, replanted, species, acidbrickRatioTreat, soilType)
+data <- select(data, rgr13, plot, block, replanted, species, acidbrickRatioTreat, soilType)
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -46,59 +49,59 @@ edata <- select(edata, rgr13, plot, block, replanted, species, acidbrickRatioTre
 #### a Graphs ---------------------------------------------------------------------------------------------
 #simple effects:
 par(mfrow = c(2,2))
-plot(rgr13 ~ species, edata)
-plot(rgr13 ~ soilType, edata)
-plot(rgr13 ~ acidbrickRatioTreat, edata)
-plot(rgr13 ~ block, edata)
+plot(rgr13 ~ species, data)
+plot(rgr13 ~ soilType, data)
+plot(rgr13 ~ acidbrickRatioTreat, data)
+plot(rgr13 ~ block, data)
 #2way (species:soilType):
-ggplot(edata, aes(soilType, rgr13, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(soilType, rgr13, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (species:replanted):
-ggplot(edata, aes(replanted, rgr13, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(replanted, rgr13, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (acidbrickRatioTreat:soilType):
-ggplot(edata, aes(acidbrickRatioTreat, rgr13)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(acidbrickRatioTreat, rgr13)) + facet_grid(~soilType) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:acid:species):
-ggplot(edata, aes(acidbrickRatioTreat, rgr13)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(acidbrickRatioTreat, rgr13)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(edata, aes(soilType, rgr13, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(soilType, rgr13, color = acidbrickRatioTreat)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #interactions with block:
-ggplot(edata, aes(species, rgr13, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata, aes(acidbrickRatioTreat, rgr13)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata, aes(block, rgr13, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(species, rgr13, color = acidbrickRatioTreat)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(acidbrickRatioTreat, rgr13)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(block, rgr13, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
 par(mfrow = c(2,2))
-dotchart((edata$rgr13), groups = factor(edata$species), main = "Cleveland dotplot")
-dotchart((edata$rgr13), groups = factor(edata$soilType), main = "Cleveland dotplot")
-dotchart((edata$rgr13), groups = factor(edata$acidbrickRatioTreat), main = "Cleveland dotplot")
-dotchart((edata$rgr13), groups = factor(edata$block), main = "Cleveland dotplot")
+dotchart((data$rgr13), groups = factor(data$species), main = "Cleveland dotplot")
+dotchart((data$rgr13), groups = factor(data$soilType), main = "Cleveland dotplot")
+dotchart((data$rgr13), groups = factor(data$acidbrickRatioTreat), main = "Cleveland dotplot")
+dotchart((data$rgr13), groups = factor(data$block), main = "Cleveland dotplot")
 par(mfrow=c(1,1));
-boxplot(edata$rgr13);#identify(rep(1, length(edata$rgr13)), edata$rgr13, labels = c(edata$no))
+boxplot(data$rgr13);#identify(rep(1, length(data$rgr13)), data$rgr13, labels = c(data$no))
 par(mfrow = c(2,2));
-plot(table((edata$rgr13)), type = "h", xlab = "Observed values", ylab = "Frequency")
-ggplot(edata, aes(rgr13)) + geom_density()
-ggplot(edata, aes(log(rgr13))) + geom_density()
+plot(table((data$rgr13)), type = "h", xlab = "Observed values", ylab = "Frequency")
+ggplot(data, aes(rgr13)) + geom_density()
+ggplot(data, aes(log(rgr13))) + geom_density()
 
 
 ## 2 Model building ################################################################################
 
 #### a models ----------------------------------------------------------------------------------------
 #random structure
-m1 <- lmer(rgr13 ~ species * acidbrickRatioTreat + (1|block), edata, REML = F)
+m1 <- lmer(rgr13 ~ species * acidbrickRatioTreat + (1|block), data, REML = F)
 VarCorr(m1)
 #3w-model
 m2 <- lmer(rgr13 ~ species * soilType * acidbrickRatioTreat +
-             (1|block), edata, REML = F)
+             (1|block), data, REML = F)
 isSingular(m2)
 simulateResiduals(m2, plot = T)
 #full 2w-model
 m3 <- lmer(rgr13 ~ (species + soilType + acidbrickRatioTreat)^2 +
-             (1|block), edata, REML = F)
+             (1|block), data, REML = F)
 isSingular(m3)
 simulateResiduals(m3, plot = T)
 #2w-model reduced
 m4 <- lmer((rgr13) ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType +
-             (1|block), edata, REML = F)
+             (1|block), data, REML = F)
 isSingular(m4)
 simulateResiduals(m4, plot = T)
 
@@ -109,10 +112,10 @@ rm(m1,m2,m3)
 #### c model check -----------------------------------------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = T)
 par(mfrow=c(2,2));
-plotResiduals(main = "species", simulationOutput$scaledResiduals, edata$species)
-plotResiduals(main = "soilType", simulationOutput$scaledResiduals,edata$soilType)
-plotResiduals(main = "acidbrickRatioTreat", simulationOutput$scaledResiduals, edata$acidbrickRatioTreat)
-plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
+plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
+plotResiduals(main = "soilType", simulationOutput$scaledResiduals,data$soilType)
+plotResiduals(main = "acidbrickRatioTreat", simulationOutput$scaledResiduals, data$acidbrickRatioTreat)
+plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 
 
 ## 3 Chosen model output ################################################################################
@@ -120,7 +123,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
 ### Model output ---------------------------------------------------------------------------------------------
 m4 <- lmer(rgr13 ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType +
-             (1|block), edata, REML = F)
+             (1|block), data, REML = F)
 MuMIn::r.squaredGLMM(m4) #R2m = 0.323, R2c = 0.366
 VarCorr(m4)
 sjPlot::plot_model(m4, type = "re", show.values = T)

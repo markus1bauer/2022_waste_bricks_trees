@@ -1,4 +1,7 @@
 # Model for experiment mycorrhiza and soil type and specific leaf area ####
+# Markus Bauer
+# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
+# DOI: ...
 
 
 
@@ -18,7 +21,7 @@ rm(list = ls())
 setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
 
 ### Load data ###
-(edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
+(data <- read_csv2("data_processed_brickRatio.csv", col_names = T, na = "na", col_types = 
                         cols(
                           .default = col_double(),
                           plot = col_factor(),
@@ -36,8 +39,8 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                           acidbrickRatioTreat = col_factor()
                         )        
 ))
-edata <- gather(edata, "leaf", "sla", sla1, sla2, sla3, factor_key = T)
-edata <- select(edata, leaf, sla, plot, block, replanted, species, brickRatio, mycorrhiza, soilType)
+data <- gather(data, "leaf", "sla", sla1, sla2, sla3, factor_key = T)
+data <- select(data, leaf, sla, plot, block, replanted, species, brickRatio, mycorrhiza, soilType)
 
 
 
@@ -51,89 +54,89 @@ edata <- select(edata, leaf, sla, plot, block, replanted, species, brickRatio, m
 #### a Graphs ---------------------------------------------------------------------------------------------
 #simple effects:
 par(mfrow = c(2,2))
-plot(sla ~ species, edata)
-plot(sla ~ brickRatio, edata)
-plot(sla ~ soilType, edata)
-plot(sla ~ mycorrhiza, edata)
+plot(sla ~ species, data)
+plot(sla ~ brickRatio, data)
+plot(sla ~ soilType, data)
+plot(sla ~ mycorrhiza, data)
 par(mfrow = c(2,2))
-plot(sla ~ block, edata)
+plot(sla ~ block, data)
 #2way (brickRatio:species):
-ggplot(edata, aes(species, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(species, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (brickRatio:soilType):
-ggplot(edata, aes(soilType, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(soilType, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (brickRatio:mycorrhiza):
-ggplot(edata, aes(mycorrhiza, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(mycorrhiza, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (species:soilType):
-ggplot(edata, aes(species, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(species, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (species:mycorrhiza):
-ggplot(edata, aes(species, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(species, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #2way (soilType:mycorrhiza):
-ggplot(edata, aes(soilType, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(soilType, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:species:soilType):
-ggplot(edata, aes(soilType, sla, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(soilType, sla, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:species:mycorrhiza):
-ggplot(edata, aes(mycorrhiza, sla, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(mycorrhiza, sla, color = brickRatio)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (species:soilType:mycorrhiza):
-ggplot(edata, aes(soilType, sla, color = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(soilType, sla, color = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(edata,aes(soilType, sla, color = brickRatio, shape = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data,aes(soilType, sla, color = brickRatio, shape = mycorrhiza)) + facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(edata,aes(brickRatio, sla, color = species)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, sla, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(edata,aes(block, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data,aes(brickRatio, sla, color = species)) + geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(data,aes(block, sla, color = species)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data,aes(block, sla, color = brickRatio)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data,aes(block, sla, color = soilType)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+ggplot(data,aes(block, sla, color = mycorrhiza)) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
 par(mfrow = c(2,2))
-dotchart((edata$sla), groups = factor(edata$species), main = "Cleveland dotplot")
-dotchart((edata$sla), groups = factor(edata$brickRatio), main = "Cleveland dotplot")
-dotchart((edata$sla), groups = factor(edata$soilType), main = "Cleveland dotplot")
-dotchart((edata$sla), groups = factor(edata$mycorrhiza), main = "Cleveland dotplot")
-dotchart((edata$sla), groups = factor(edata$block), main = "Cleveland dotplot")
+dotchart((data$sla), groups = factor(data$species), main = "Cleveland dotplot")
+dotchart((data$sla), groups = factor(data$brickRatio), main = "Cleveland dotplot")
+dotchart((data$sla), groups = factor(data$soilType), main = "Cleveland dotplot")
+dotchart((data$sla), groups = factor(data$mycorrhiza), main = "Cleveland dotplot")
+dotchart((data$sla), groups = factor(data$block), main = "Cleveland dotplot")
 par(mfrow=c(1,1));
-boxplot(edata$sla);#identify(rep(1, length(edata$sla)), edata$sla, labels = c(edata$plot))
-plot(table((edata$sla)), type = "h", xlab = "Observed values", ylab = "Frequency")
-ggplot(edata, aes(sla)) + geom_density()
-ggplot(edata, aes(log(sla))) + geom_density()
+boxplot(data$sla);#identify(rep(1, length(data$sla)), data$sla, labels = c(data$plot))
+plot(table((data$sla)), type = "h", xlab = "Observed values", ylab = "Frequency")
+ggplot(data, aes(sla)) + geom_density()
+ggplot(data, aes(log(sla))) + geom_density()
 
 
 ## 2 Model building ################################################################################
 
 #### a models ----------------------------------------------------------------------------------------
 #random structure
-m1 <- lmer(log(sla) ~ species * brickRatio + (1|block/plot), edata, REML = F)
+m1 <- lmer(log(sla) ~ species * brickRatio + (1|block/plot), data, REML = F)
 VarCorr(m1)
 #4w-model
 m2 <- lmer(log(sla) ~ species * brickRatio * soilType * mycorrhiza +
-             (1|block/plot), edata, REML = F)
+             (1|block/plot), data, REML = F)
 isSingular(m2)
 simulateResiduals(m2, plot = T)
 #full 3w-model
 m3 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^3 +
-             (1|block/plot), edata, REML = F)
+             (1|block/plot), data, REML = F)
 isSingular(m3)
 simulateResiduals(m3, plot = T)
 #3w-model reduced
 m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block/plot), edata, REML = F)
+             (1|block/plot), data, REML = F)
 isSingular(m4)
 simulateResiduals(m4, plot = T)
 #2w-model full
 m5 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-             (1|block/plot), edata, REML = F)
+             (1|block/plot), data, REML = F)
 isSingular(m5)
 simulateResiduals(m5, plot = T)
 #2w-model reduces
 m6 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza +
-             (1|block/plot), edata, REML = F)
+             (1|block/plot), data, REML = F)
 isSingular(m6)
 simulateResiduals(m6, plot = T)
 #1w-model full
 m7 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza) +
-             (1|block/plot), edata, REML = F)
+             (1|block/plot), data, REML = F)
 isSingular(m7)
 simulateResiduals(m7, plot = T);
 
@@ -144,11 +147,11 @@ rm(m1,m2,m3,m5,m6)
 #### c model check -----------------------------------------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = T)
 par(mfrow=c(2,2));
-plotResiduals(main = "species", simulationOutput$scaledResiduals, edata$species)
-plotResiduals(main = "brickRatio", simulationOutput$scaledResiduals, edata$brickRatio)
-plotResiduals(main = "soilType", simulationOutput$scaledResiduals, edata$soilType)
-plotResiduals(main = "mycorrhiza", simulationOutput$scaledResiduals, edata$mycorrhiza)
-plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
+plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
+plotResiduals(main = "brickRatio", simulationOutput$scaledResiduals, data$brickRatio)
+plotResiduals(main = "soilType", simulationOutput$scaledResiduals, data$soilType)
+plotResiduals(main = "mycorrhiza", simulationOutput$scaledResiduals, data$mycorrhiza)
+plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 
 
 ## 3 Chosen model output ################################################################################
@@ -156,7 +159,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, edata$block)
 ### Model output ---------------------------------------------------------------------------------------------
 m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block/plot), edata, REML = F)
+             (1|block/plot), data, REML = F)
 MuMIn::r.squaredGLMM(m4) #R2m = 0.396, R2c = 0.692
 VarCorr(m4)
 sjPlot::plot_model(m4, type = "re", show.values = T)
