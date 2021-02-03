@@ -47,7 +47,7 @@ m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plotten ################################################################################################################
+# B Plot ################################################################################################################
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 themeMB <- function(){
   theme(
@@ -65,7 +65,7 @@ themeMB <- function(){
   )
 }
 
-### acid:soilType ###
+### brickRatio:soilType ###
 pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"), type = "fe")
 pdata <- rename(pdata, sla = predicted, soilType = x, brickRatio = group, species = facet)
 meandata <- filter(pdata, soilType == "poor" & brickRatio == "5")

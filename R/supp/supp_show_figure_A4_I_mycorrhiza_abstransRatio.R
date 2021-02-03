@@ -1,4 +1,7 @@
-# Show Figure absorptive vs. transportive fine-root ratio  ~ mycorrhiza:species:brickRatio ####
+# Show Figure absorptive vs. transportive fine-root ratio ~ mycorrhiza:species:brickRatio ####
+# Markus Bauer
+# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
+# DOI: ...
 
 
 
@@ -14,43 +17,47 @@ library(emmeans)
 library(ggeffects)
 
 ### Start ###
-rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
+rm(list = c("data", "meandata", "pd", "pdata", "m4"))
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
 
 ### Load data ###
-edata <- read_table2("data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
-                        cols(
-                          .default = col_double(),
-                          plot = col_factor(),
-                          block = col_factor(),
-                          replanted = col_factor(),
-                          species = col_factor(),
-                          mycorrhiza = col_factor(levels = c("Control","Mycorrhiza")),
-                          substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
-                          acid = col_factor(),
-                          acidbrickRatioTreat = col_factor()
-                        )        
+data <- read_csv2("data_processed_brickRatio.csv", col_names = T, na = "na", col_types = 
+                    cols(
+                      .default = col_double(),
+                      plot = col_factor(),
+                      block = col_factor(),
+                      replanted = col_factor(),
+                      species = col_factor(),
+                      mycorrhiza = col_factor(levels = c("Control","Mycorrhiza")),
+                      substrate = col_factor(),
+                      soilType = col_factor(levels = c("poor","rich")),
+                      brickRatio = col_factor(levels = c("5","30")),
+                      acid = col_factor(),
+                      acidbrickRatioTreat = col_factor()
+                    )        
 )
-edata <- select(edata, abstransRatio, plot, block, species, brickRatio, soilType, mycorrhiza, conf.high, conf.low)
+(data <- select(data, abstransRatio, plot, block, species, brickRatio, soilType, mycorrhiza, conf.high, conf.low))
 #Exclude 1 outlier
-edata <- filter(edata, abstransRatio < 6)
+data <- filter(data, abstransRatio < 6)
 
 #### Chosen model ###
-m4 <- lmer(log(abstransRatio+1) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
+m4 <- lmer(log(abstransRatio + 1) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), edata, REML = F)
+             (1|block), data, REML = F)
 
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plotten ################################################################################################################
+# B Plot ################################################################################################################
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
-    text  = element_text(size=10, color = "black"),
+    text  = element_text(size = 8, color = "black"),
+    axis.title.y = element_text(size = 8),
+    axis.title.x = element_text(size = 10),
+    axis.text.y = element_text(angle = 90, hjust = 0.5),
+    axis.text.x = element_text(size = 10, color = "black"),
     axis.line.y = element_line(),
     axis.line.x = element_blank(),
     axis.ticks.x = element_blank(),
@@ -61,53 +68,37 @@ themeMB <- function(){
   )
 }
 
-### acid:soilType ###
-pdata <- ggemmeans(m4, terms = c("mycorrhiza","brickRatio", "species"), type = "fe")
+### brickRatio:mycorrhiza ###
+pdata <- ggemmeans(m4, terms = c("mycorrhiza", "brickRatio", "species"), type = "fe")
 pdata <- rename(pdata, abstransRatio = predicted, mycorrhiza = x, brickRatio = group, species = facet)
-pdata$abstransRatio <- pdata$abstransRatio-1
-pdata$conf.low <- pdata$conf.low-1
-pdata$conf.high <- pdata$conf.high-1
+#pdata$abstransRatio <- pdata$abstransRatio - 1
+#pdata$conf.low <- pdata$conf.low - 1
+#pdata$conf.high <- pdata$conf.high - 1
 meandata <- filter(pdata, mycorrhiza == "Control" & brickRatio == "5")
-#Plot version 1
 pd <- position_dodge(.6)
-ggplot(pdata, aes(mycorrhiza, abstransRatio, shape = brickRatio, ymin = conf.low, ymax = conf.high))+
-  geom_quasirandom(data = edata, aes(mycorrhiza, abstransRatio), 
-                   color = "grey70", dodge.width = .6, size = 0.7)+
-  geom_hline(aes(yintercept = abstransRatio), meandata, 
-             color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
-             color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
-             color = "grey70", linetype = "dashed", size = .25) +
-  geom_errorbar(position = pd, width = 0.0, size = 0.4) +
-  geom_point(position = pd, size = 2.5) +
-  facet_grid(~ species) +
-  annotate("text", label = "n.s.", x = 2.2, y = 2.2) +
-  scale_y_continuous(limits = c(-0.02,2.2), breaks = seq(-100,100,0.5)) +
-  scale_shape_manual(values = c(1,16)) +
-  labs(x = "", y = expression(Absorptive*":"*transport~fine~roots~"["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
-  guides(x = guide_axis(angle = 0))+
-  themeMB()
-#ggsave("figure_mycorrhiza_abstransRatio_(800dpi_12x6cm).tiff",
-#       dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
-#Plot version 2
-pd <- position_dodge(1)
-ggplot(pdata, aes(mycorrhiza, abstransRatio, fill = brickRatio, ymin = conf.low, ymax = conf.high))+
-  geom_hline(aes(yintercept = abstransRatio), meandata, 
-             color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
-             color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
-             color = "grey70", linetype = "dashed", size = .25) +
-  geom_crossbar(position = pd) + 
-  geom_quasirandom(data = edata, aes(mycorrhiza, abstransRatio), 
-                   color = "black", dodge.width = 1, size = 0.7)+
-  facet_grid(~ species) +
-  annotate("text", label = "n.s.", x = 2.2, y = 2.2) +
-  scale_y_continuous(limits = c(-0.02,2.2), breaks = seq(-100,100,0.5)) +
-  scale_fill_manual(values = c("grey30","darkred")) +
-  labs(x = "", y = expression(Absorptive*":"*transport~fine~roots~"["*g~g^-1*"]"), fill = "Brick ratio [%]", color = "") +
-  guides(x = guide_axis(angle = 0))+
-  themeMB()
-#ggsave("figure_mycorrhiza_abstransRatio_2_(800dpi_12x6cm).tiff",
-#      dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+(abstransRatio <- ggplot(pdata, aes(mycorrhiza, abstransRatio, shape = brickRatio, ymin = conf.low, ymax = conf.high))+
+    geom_quasirandom(data = data, aes(mycorrhiza, abstransRatio), 
+                     color = "grey70", dodge.width = .6, size = 0.7)+
+    geom_hline(aes(yintercept = abstransRatio), meandata, 
+               color = "grey70", size = .25) +
+    geom_hline(aes(yintercept = conf.low), meandata, 
+               color = "grey70", linetype = "dashed", size = .25) +
+    geom_hline(aes(yintercept = conf.high), meandata, 
+               color = "grey70", linetype = "dashed", size = .25) +
+    geom_errorbar(position = pd, width = 0.0, size = 0.4) +
+    geom_point(position = pd, size = 2.5) +
+    facet_grid(~ species) +
+    annotate("text", label = "n.s.", x = 2.2, y = 2.2) +
+    scale_y_continuous(limits = c(-0.02, 2.2), breaks = seq(-100, 100, 0.5)) +
+    scale_shape_manual(values = c(1, 16)) +
+    labs(x = "Mycorrhiza", y = expression(Absorptive*":"*transport~roots~"["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
+    themeMB() +
+    theme(strip.text = element_blank(), 
+          strip.background = element_blank(),
+          axis.title.x = element_blank(),
+          legend.position = "none")
+  
+)
+
+#ggsave("figure_A4_I_mycorrhiza_abstransRatio_2_(800dpi_12x6cm).tiff",
+#      dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures/supp")

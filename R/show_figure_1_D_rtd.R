@@ -48,7 +48,7 @@ m4 <- lmer(log(rtd) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plotten ################################################################################################################
+# B Plot ################################################################################################################
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 themeMB <- function(){
   theme(
@@ -66,7 +66,7 @@ themeMB <- function(){
   )
 }
 
-### acid:soilType ###
+### brickRatio:soilType ###
 pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"), type = "fe")
 pdata <- rename(pdata, rtd = predicted, soilType = x, brickRatio = group, species = facet)
 meandata <- filter(pdata, soilType == "poor" & brickRatio == "5")
@@ -94,5 +94,6 @@ pd <- position_dodge(.6)
         axis.text.x = element_blank(),
         legend.position = "none")
 )
+
 #ggsave("figure_1_D_rtd_(800dpi_12x7cm).tiff",
  #      dpi = 800, width = 12, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")

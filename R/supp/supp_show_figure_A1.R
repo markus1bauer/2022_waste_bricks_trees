@@ -1,18 +1,21 @@
-# Show figure A1 grain size distribution ####
+# Show Figure grain size ditribution of experiment 1 ####
+# Markus Bauer
+# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
+# DOI: ...
 
 
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # A Preparation ################################################################################################################
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#library(installr);updateR(browse_news=F, install_R=T, copy_packages = T,copy_Rprofile.site = T,keep_old_packages = T, update_packages = T)
+
 
 ### Packages ###
 library(tidyverse)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
 
 ### Load data ###
 edata <- read_table2("supp_data_processed_brickRatio.txt", col_names = T, na = "na", col_types = 
@@ -32,7 +35,7 @@ themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
     panel.grid = element_line(color = "grey80"),
-    text  = element_text(size=10, color = "black"),
+    text  = element_text(size = 10, color = "black"),
     axis.line.y = element_line(),
     axis.line.x = element_line(),
     axis.text.x = element_text(angle = 270),
@@ -53,4 +56,4 @@ ggplot(edata, aes(x = grainSize, y = grainSizeCum, color = substrateAbb, linetyp
   labs(x = "Grain size [mm]", y = "Cumulative ratio [wt%]", linetype = "", color = "") +
   themeMB()
 ggsave("figure_A1_(800dpi_16x10cm).tiff",
-      dpi = 800, width = 16, height = 10, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures/supp")
+      dpi = 800, width = 16, height = 10, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures/supp")

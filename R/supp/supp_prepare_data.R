@@ -1,4 +1,7 @@
-### Script to prepare data of grain size distribution ###
+# Prepare data for grain size distribution ####
+# Markus Bauer
+# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
+# DOI: ...
 
 
 
@@ -6,8 +9,9 @@
 library(tidyverse)
 
 ### Start----------------------------------------------------------------------------------------------
+#library(installr);updateR(browse_news=F, install_R=T, copy_packages = T,copy_Rprofile.site = T,keep_old_packages = T, update_packages = T)
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/raw")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/raw")
 
 ### Load data ###
 edata <- read_table2("supp_data_raw.txt", col_names = T, na = "na", col_types = 
@@ -41,5 +45,5 @@ edata$substrateAbb <- dplyr::recode(edata$substrate,
 )
 
 ### Save processed data-------------------------------------------------------------------------------
-write.table(edata1,"Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed/supp_data_processed_brickRatio.txt", sep="\t", row.names=F)
-write.table(edata,"Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed/supp_data_processed_acid.txt", sep="\t", row.names=F)
+write.table(edata1,"Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed/supp_data_processed_brickRatio.txt", sep="\t", row.names=F)
+write.table(edata,"Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed/supp_data_processed_acid.txt", sep="\t", row.names=F)

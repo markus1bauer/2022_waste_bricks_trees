@@ -18,7 +18,7 @@ library(ggeffects)
 
 ### Start ###
 rm(list = c("data", "meandata", "pd", "pdata", "m4"))
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
 
 ### Load data ###
 (data <- read_csv("data_processed_acid.csv", col_names = T, na = "na", col_types = 
@@ -53,7 +53,7 @@ m4 <- lmer((rgr13) ~ species + soilType + acidbrickRatioTreat +
 themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
-    text  = element_text(size=10, color = "black"),
+    text  = element_text(size = 10, color = "black"),
     strip.text = element_text(size = 11),
     axis.line.y = element_line(),
     axis.line.x = element_blank(),
@@ -90,4 +90,4 @@ ggplot(pdata, aes(acidbrickRatioTreat, rgr13, shape = acidbrickRatioTreat, ymin 
   themeMB()
 
 #ggsave("figure_2_acid_(800dpi_8x7cm).tiff",
-#      dpi = 800, width = 8, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+#      dpi = 800, width = 8, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures")

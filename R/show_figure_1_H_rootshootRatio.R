@@ -18,7 +18,7 @@ library(ggeffects)
 
 ### Start ###
 rm(list = c("data", "meandata", "pd", "pdata", "m4"))
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
 
 ### Load data ###
 data <- read_csv2("data_processed_brickRatio.csv", col_names = T, na = "na", col_types = 
@@ -46,7 +46,7 @@ m4 <- lmer(log(rootshootRatio) ~ (species + brickRatio + soilType + mycorrhiza)^
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plotten ################################################################################################################
+# B Plot ################################################################################################################
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 themeMB <- function(){
   theme(
@@ -63,7 +63,7 @@ themeMB <- function(){
   )
 }
 
-### acid:soilType ###
+### brickRatio:soilType ###
 pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"), type = "fe")
 pdata <- rename(pdata, rootshootRatio = predicted, soilType = x, brickRatio = group, species = facet)
 meandata <- filter(pdata, soilType == "poor" & brickRatio == "5")
@@ -93,4 +93,4 @@ pd <- position_dodge(.6)
 )
 
 #ggsave("figure_1_H_rootshootRatio_(800dpi_12x7cm).tiff",
- #      dpi = 800, width = 12, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+ #      dpi = 800, width = 12, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures")

@@ -9,18 +9,20 @@
 # A Preparation ################################################################################################################
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
 ### Packages ###
 library(patchwork)
 
 ### Start ###
 rm(list = c("data", "meandata", "pd", "pdata", "m4"))
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
 
 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plotten ################################################################################################################
+# B Plot ################################################################################################################
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 (rgr13 | srl) / 
   (sla | rtd) / 
@@ -29,5 +31,6 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
   (abstransRatio | branchingIntensity) +
   plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")") +
   theme(plot.tag = element_text(size = 10))
-ggsave("figure_1_(300dpi_17x22.5cm).tiff",
-      dpi = 300, width = 17, height = 22.5, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/outputs/figures")
+
+ggsave("figure_A4_(300dpi_17x22.5cm).tiff",
+      dpi = 300, width = 17, height = 22.5, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures/supp")
