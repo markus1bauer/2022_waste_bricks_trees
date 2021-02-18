@@ -18,7 +18,7 @@ library(emmeans)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
+setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
 
 ### Load data ###
 (data <- read_csv2("data_processed_acid.csv", col_names = T, na = "na", col_types = 
@@ -34,8 +34,9 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks
                          brickRatio = col_factor(levels = c("5","30")),
                          acid = col_factor(levels = c("Control","Acid")),
                          acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
-                       )        
-))
+                       )
+                   )
+  )
 data <- select(data, rgr13, plot, block, replanted, species, acidbrickRatioTreat, soilType)
 
 
