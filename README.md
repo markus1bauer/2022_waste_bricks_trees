@@ -26,6 +26,7 @@ _Markus Bauer, Martin Krause, Valentin Heizinger and Johannes Kollmann_
     * Scripts (.R) to generate all figures used in the manuscript and in the supporting information.
     
 ***
+[![CC BY 4.0][cc-by-shield]][cc-by]
 
 When using the __data available__ in this repository, please cite the original publication and the dataset.  
 
@@ -41,13 +42,12 @@ __Dataset DOI__
 
 [![DOI](https://zenodo.org/???)](https://doi.org/????/zenodo.???) following via Zenodo
 
-Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
 
 This work is subject to the provisions of a
 [Creative Commons Namensnennung 4.0 International-Lizenz][cc-by].
 
 [![CC BY 4.0][cc-by-image]][cc-by]
 
-[cc-by]: https://creativecommons.org/licenses/by/4.0/deed.de
+[cc-by]: https://creativecommons.org/licenses/by/4.0/deed.en
 [cc-by-image]: https://licensebuttons.net/l/by/4.0/88x31.png
 [cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
