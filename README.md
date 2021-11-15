@@ -1,7 +1,7 @@
 # Testing waste bricks as growing substrate for urban trees
 
-_Markus Bauer, Martin Krause, Valentin Heizinger and Johannes Kollmann_  
-    
+_Markus Bauer <a href="https://orcid.org/0000-0001-5372-4174"><img src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height = "16"></a>, Martin Krause, Valentin Heizinger and Johannes Kollmann <a href="https://orcid.org/0000-0002-4990-3636"><img src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height = "16"></a>_  
+
 ***
 
 **Journal**: [XXX](https://www.???.??)
