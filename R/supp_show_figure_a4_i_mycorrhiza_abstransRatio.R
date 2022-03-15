@@ -57,7 +57,7 @@ m4 <- lmer(log(abstransRatio + 1) ~
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -81,23 +81,20 @@ pdata <- ggemmeans(m4, terms = c("mycorrhiza", "brickRatio", "species"),
 pdata <- rename(pdata,
                 abstransRatio = predicted, mycorrhiza = x, brickRatio = group,
                 species = facet)
-#pdata$abstransRatio <- pdata$abstransRatio - 1
-#pdata$conf.low <- pdata$conf.low - 1
-#pdata$conf.high <- pdata$conf.high - 1
 meandata <- filter(pdata, mycorrhiza == "Control" & brickRatio == "5")
 pd <- position_dodge(.6)
 
 ### plot ###
 (abstransRatio <- ggplot(pdata,
                          aes(mycorrhiza, abstransRatio, shape = brickRatio,
-                             ymin = conf.low, ymax = conf.high))+
-    geom_quasirandom(data = data, aes(mycorrhiza, abstransRatio), 
-                     color = "grey70", dodge.width = .6, size = 0.7)+
-    geom_hline(aes(yintercept = abstransRatio), meandata, 
+                             ymin = conf.low, ymax = conf.high)) +
+    geom_quasirandom(data = data, aes(mycorrhiza, abstransRatio),
+                     color = "grey70", dodge.width = .6, size = 0.7) +
+    geom_hline(aes(yintercept = abstransRatio), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = 0.0, size = 0.4) +
     geom_point(position = pd, size = 2.5) +
@@ -109,13 +106,12 @@ pd <- position_dodge(.6)
          y = expression(Absorptive*":"*transport~roots~"["*g~g^-1*"]"),
          shape = "Brick ratio [%]", color = "") +
     themeMB() +
-    theme(strip.text = element_blank(), 
+    theme(strip.text = element_blank(),
           strip.background = element_blank(),
           axis.title.x = element_blank(),
           legend.position = "none")
-  
-)
+  )
 
-ggsave("figure_A4_I_mycorrhiza_abstransRatio_2_800dpi_12x6cm.tiff",
+ggsave("figure_a4_i_abstransRatio_2_800dpi_12x6cm.tiff",
        dpi = 800, width = 12, height = 6, units = "cm",
        path = here("outputs", "figures", "supp"))

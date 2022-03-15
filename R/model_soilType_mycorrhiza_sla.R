@@ -95,18 +95,18 @@ ggplot(data, aes(mycorrhiza, sla, color = brickRatio)) + facet_grid(~species) +
 ggplot(data, aes(soilType, sla, color = mycorrhiza)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, sla, color = brickRatio, shape = mycorrhiza)) +
+ggplot(data, aes(soilType, sla, color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(data,aes(brickRatio, sla, color = species)) + geom_boxplot() +
+ggplot(data, aes(brickRatio, sla, color = species)) + geom_boxplot() +
   facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, sla, color = species)) + geom_boxplot() +
+ggplot(data, aes(block, sla, color = species)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, sla, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(block, sla, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, sla, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(block, sla, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, sla, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(block, sla, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? ---------------------------
@@ -130,41 +130,41 @@ ggplot(data, aes(log(sla))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure
-m1 <- lmer(log(sla) ~ species * brickRatio + (1 | block/plot),
+m1 <- lmer(log(sla) ~ species * brickRatio + (1 | block / plot),
            data, REML = FALSE)
 VarCorr(m1)
 #4w-model
 m2 <- lmer(log(sla) ~ species * brickRatio * soilType * mycorrhiza +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 3w-model
 m3 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^3 +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #3w-model reduced
 m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 #2w-model full
 m5 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m5)
 simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
 m6 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m6)
 simulateResiduals(m6, plot = TRUE)
 #1w-model full
 m7 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza) +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m7)
-simulateResiduals(m7, plot = TRUE);
+simulateResiduals(m7, plot = TRUE)
 
 #### b comparison ------------------------------------------------------------
 anova(m2, m3, m4, m5, m6, m7)
@@ -173,7 +173,7 @@ rm(m1, m2, m3, m5, m6)
 
 #### c model check -----------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
-par(mfrow = c(2, 2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "brickRatio",
               simulationOutput$scaledResiduals, data$brickRatio)
@@ -189,7 +189,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 ### Model output -------------------------------------------------------------
 m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m4)
 #R2m = 0.396, R2c = 0.692
 VarCorr(m4)
@@ -199,7 +199,7 @@ tidytable <- broom::tidy(table)
 
 ### Effect sizes -------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ brickRatio * soilType | species,
-                type="response"))
+                type = "response"))
 plot(emm, comparison = TRUE)
 contrast(emmeans(m4, ~ brickRatio * soilType | species,
                  type = "response"), "trt.vs.ctrl", ref = 1)

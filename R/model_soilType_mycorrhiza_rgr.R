@@ -64,45 +64,45 @@ plot(rgr13 ~ soilType, data)
 plot(rgr13 ~ mycorrhiza, data)
 plot(rgr13 ~ block, data)
 #2way (brickRatio:species):
-ggplot(data,aes(species, rgr13, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(species, rgr13, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 #2way (brickRatio:soilType):
-ggplot(data,aes(soilType, rgr13, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(soilType, rgr13, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 #2way (brickRatio:mycorrhiza):
-ggplot(data,aes(mycorrhiza, rgr13, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(mycorrhiza, rgr13, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 #2way (species:soilType):
-ggplot(data,aes(species, rgr13, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(species, rgr13, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 #2way (species:mycorrhiza):
-ggplot(data,aes(species, rgr13, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(species, rgr13, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 #2way (soilType:mycorrhiza):
-ggplot(data,aes(soilType, rgr13, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(soilType, rgr13, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:species:soilType):
-ggplot(data,aes(soilType, rgr13, color = brickRatio)) + facet_grid(~species) +
+ggplot(data, aes(soilType, rgr13, color = brickRatio)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (brickRatio:species:mycorrhiza):
-ggplot(data,aes(mycorrhiza, rgr13, color = brickRatio)) +
+ggplot(data, aes(mycorrhiza, rgr13, color = brickRatio)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (species:soilType:mycorrhiza):
-ggplot(data,aes(soilType, rgr13, color = mycorrhiza)) + facet_grid(~species) +
+ggplot(data, aes(soilType, rgr13, color = mycorrhiza)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, rgr13, color = brickRatio, shape = mycorrhiza)) +
+ggplot(data, aes(soilType, rgr13, color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~ species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(data,aes(brickRatio, rgr13, color = species)) + geom_boxplot() +
+ggplot(data, aes(brickRatio, rgr13, color = species)) + geom_boxplot() +
   facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rgr13, color = species)) + geom_boxplot() +
+ggplot(data, aes(block, rgr13, color = species)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rgr13, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(block, rgr13, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rgr13, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(block, rgr13, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rgr13, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(block, rgr13, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? ---------------------------
@@ -115,7 +115,7 @@ dotchart((data$rgr13),
          groups = factor(data$soilType), main = "Cleveland dotplot")
 dotchart((data$rgr13),
          groups = factor(data$mycorrhiza), main = "Cleveland dotplot")
-par(mfrow=c(1, 1))
+par(mfrow = c(1, 1))
 boxplot(data$rgr13)
 par(mfrow = c(2, 2))
 plot(table((data$rgr13)), type = "h",
@@ -165,7 +165,7 @@ rm(m1, m2, m3, m5, m6)
 
 #### c model check ----------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
-par(mfrow = c(2, 2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "brickRatio",
               simulationOutput$scaledResiduals, data$brickRatio)

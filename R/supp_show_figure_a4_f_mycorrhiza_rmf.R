@@ -55,7 +55,7 @@ m4 <- lmer(rmf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -81,13 +81,13 @@ pd <- position_dodge(.6)
 ### plot ###
 (rmf <- ggplot(pdata, aes(mycorrhiza, rmf, shape = brickRatio,
                           ymin = conf.low, ymax = conf.high)) +
-    geom_quasirandom(data = data, aes(mycorrhiza, rmf), 
+    geom_quasirandom(data = data, aes(mycorrhiza, rmf),
                      color = "grey70", dodge.width = .6, size = 0.7) +
-    geom_hline(aes(yintercept = rmf), meandata, 
+    geom_hline(aes(yintercept = rmf), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = 0.0, size = 0.4) +
     geom_point(position = pd, size = 2.5) +
@@ -99,13 +99,13 @@ pd <- position_dodge(.6)
          y = expression(Root~mass~fraction~"["*g~g^-1*"]"),
          shape = "Brick ratio [%]", color = "") +
     themeMB() +
-    theme(strip.text = element_blank(), 
+    theme(strip.text = element_blank(),
           strip.background = element_blank(),
           axis.title.x = element_blank(),
           axis.text.x = element_blank(),
           legend.position = "none")
 )
 
-ggsave("figure_A4_F_mycorrhiza_rmf_800dpi_12x6cm.tiff",
+ggsave("figure_a4_f_rmf_800dpi_12x6cm.tiff",
        dpi = 800, width = 12, height = 6, units = "cm",
        path = here("outputs", "figures", "supp"))

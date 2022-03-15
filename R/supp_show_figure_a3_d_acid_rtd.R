@@ -64,7 +64,7 @@ m3 <- lmer((1 / rtd) ~ (species + soilType + acidbrickRatioTreat)^2 +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -83,7 +83,7 @@ themeMB <- function(){
 ### interaction: acid x brickRatio x species ###
 pdata <- ggemmeans(m3, terms = c("acidbrickRatioTreat", "species"),
                    type = "fe")
-pdata <- rename(pdata, rtd = predicted,acidbrickRatioTreat = x,
+pdata <- rename(pdata, rtd = predicted, acidbrickRatioTreat = x,
                 species = group)
 pdata$rtd <- 1 / pdata$rtd
 pdata$conf.low <- 1 / pdata$conf.low
@@ -94,14 +94,14 @@ pd <- position_dodge(.6)
 ### plot ###
 (rtd <- ggplot(pdata, aes(acidbrickRatioTreat, rtd,
                           shape = acidbrickRatioTreat,
-                          ymin = conf.low, ymax = conf.high))+
-    geom_quasirandom(data = data, aes(acidbrickRatioTreat, rtd), 
-                     color = "grey70", dodge.width = .6, size = 0.7)+
-    geom_hline(aes(yintercept = rtd), meandata, 
+                          ymin = conf.low, ymax = conf.high)) +
+    geom_quasirandom(data = data, aes(acidbrickRatioTreat, rtd),
+                     color = "grey70", dodge.width = .6, size = 0.7) +
+    geom_hline(aes(yintercept = rtd), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = 0.0, size = 0.4) +
     geom_point(position = pd, size = 2.5) +
@@ -113,13 +113,13 @@ pd <- position_dodge(.6)
          y = expression(Root~tissue~density[1-3]~"["*g~cm^-3*"]"),
          shape = "", color = "") +
     themeMB() +
-    theme(strip.text = element_blank(), 
+    theme(strip.text = element_blank(),
           strip.background = element_blank(),
           axis.title.x = element_blank(),
           axis.text.x = element_blank(),
           legend.position = "none")
   )
 
-ggsave("figure_A3_D_acid_rtd_800dpi_8x8cm.tiff",
+ggsave("figure_a3_d_rtd_800dpi_8x8cm.tiff",
        dpi = 800, width = 8, height = 8, units = "cm",
        path = here("outputs", "figures", "supp"))

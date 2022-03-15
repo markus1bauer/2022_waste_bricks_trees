@@ -40,7 +40,8 @@ data <- read_csv("data_processed_brickRatio.csv",
                           acidbrickRatioTreat = col_factor()
                         )
                   ) %>%
-  select(rmf, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high)
+  select(rmf, plot, block, species, brickRatio, soilType, mycorrhiza,
+         conf.low, conf.high)
 
 #### Chosen model ###
 m4 <- lmer(rmf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
@@ -54,7 +55,7 @@ m4 <- lmer(rmf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -80,13 +81,13 @@ pd <- position_dodge(.6)
 ### plot ###
 (rmf <- ggplot(pdata, aes(soilType, rmf, shape = brickRatio,
                           ymin = conf.low, ymax = conf.high)) +
-  geom_quasirandom(data = data, aes(soilType, rmf), 
+  geom_quasirandom(data = data, aes(soilType, rmf),
                    color = "grey70", dodge.width = .6, size = 0.7) +
-  geom_hline(aes(yintercept = rmf), meandata, 
+  geom_hline(aes(yintercept = rmf), meandata,
              color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
+  geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
+  geom_hline(aes(yintercept = conf.high), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
@@ -95,16 +96,16 @@ pd <- position_dodge(.6)
   scale_y_continuous(limits = c(0.35, 0.7), breaks = seq(-100, 100, 0.1)) +
   scale_shape_manual(values = c(1, 16)) +
   labs(x = "Soil fertility",
-       y = expression(Root~mass~fraction~"["*g~g^-1*"]"),
+       y = expression(Root~mass~fraction~"[" * g~g^-1 * "]"),
        shape = "Brick ratio [%]", color = "") +
   themeMB() +
-  theme(strip.text = element_blank(), 
+  theme(strip.text = element_blank(),
         strip.background = element_blank(),
         axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         legend.position = "none")
 )
 
-ggsave("figure_1_F_rmf_(800dpi_12x7cm).tiff",
+ggsave("figure_1_f_rmf_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))

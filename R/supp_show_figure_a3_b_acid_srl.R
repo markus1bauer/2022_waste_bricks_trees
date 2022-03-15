@@ -62,7 +62,7 @@ m4 <- lm(log(srl) ~ species + soilType + acidbrickRatioTreat +
 
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -89,14 +89,14 @@ pd <- position_dodge(.6)
 ### plot ###
 (srl <- ggplot(pdata,
                aes(acidbrickRatioTreat, srl, shape = acidbrickRatioTreat,
-                   ymin = conf.low, ymax = conf.high))+
-    geom_quasirandom(data = data, aes(acidbrickRatioTreat, srl), 
-                     color = "grey70", dodge.width = .6, size = .7)+
-    geom_hline(aes(yintercept = srl), meandata, 
+                   ymin = conf.low, ymax = conf.high)) +
+    geom_quasirandom(data = data, aes(acidbrickRatioTreat, srl),
+                     color = "grey70", dodge.width = .6, size = .7) +
+    geom_hline(aes(yintercept = srl), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = 0.0, size = 0.4) +
     geom_point(position = pd, size = 2.5) +
@@ -113,6 +113,6 @@ pd <- position_dodge(.6)
         legend.position = "none")
 )
 
-ggsave("figure_A3_B_acid_srl_800dpi_8x7.5cm.tiff",
+ggsave("figure_a3_b_srl_800dpi_8x7.5cm.tiff",
        dpi = 800, width = 8, height = 7.5, units = "cm",
        path = here("outputs", "figures", "supp"))

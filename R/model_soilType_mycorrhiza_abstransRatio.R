@@ -95,19 +95,19 @@ ggplot(data, aes(mycorrhiza, abstransRatio, color = brickRatio)) +
 ggplot(data, aes(soilType, abstransRatio, color = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, abstransRatio,
+ggplot(data, aes(soilType, abstransRatio,
                 color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #interactions with block:
-ggplot(data,aes(brickRatio, abstransRatio, color = species)) + geom_boxplot() +
-  facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, abstransRatio, color = species)) + geom_boxplot() +
+ggplot(data, aes(brickRatio, abstransRatio, color = species)) +
+  geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
+ggplot(data, aes(block, abstransRatio, color = species)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, abstransRatio, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(block, abstransRatio, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, abstransRatio, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(block, abstransRatio, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, abstransRatio, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(block, abstransRatio, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? --------------------------

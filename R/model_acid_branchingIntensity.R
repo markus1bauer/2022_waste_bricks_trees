@@ -136,11 +136,11 @@ rm(m1, m2, m4)
 
 #### c model check -----------------------------------------------------------
 simulationOutput <- simulateResiduals(m3, plot = TRUE)
-par(mfrow = c(2, 2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",
-              simulationOutput$scaledResiduals,data$soilType)
+              simulationOutput$scaledResiduals, data$soilType)
 plotResiduals(main = "acidbrickRatioTreat",
               simulationOutput$scaledResiduals, data$acidbrickRatioTreat)
 plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)

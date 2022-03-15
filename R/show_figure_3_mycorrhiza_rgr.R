@@ -55,10 +55,10 @@ m4 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^2 +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
-    text  = element_text(size=10, color = "black"),
+    text  = element_text(size = 10, color = "black"),
     strip.text = element_text(size = 11),
     axis.line.y = element_line(),
     axis.line.x = element_blank(),
@@ -71,7 +71,7 @@ themeMB <- function(){
 }
 
 ### acid:soilType ###
-pdata <- ggemmeans(m4, terms = c("mycorrhiza","brickRatio", "species"),
+pdata <- ggemmeans(m4, terms = c("mycorrhiza", "brickRatio", "species"),
                    type = "fe")
 pdata <- pdata %>%
   rename(rgr13 = predicted, mycorrhiza = x, brickRatio = group, species = facet)
@@ -80,21 +80,22 @@ pd <- position_dodge(.6)
 
 ### plot ###
 ggplot(pdata, aes(mycorrhiza, rgr13, shape = brickRatio,
-                  ymin = conf.low, ymax = conf.high))+
-  geom_quasirandom(data = data, aes(mycorrhiza, rgr13), 
-                   color = "grey70", dodge.width = .6, size = 0.7)+
-  geom_hline(aes(yintercept = rgr13), meandata, 
+                  ymin = conf.low, ymax = conf.high)) +
+  geom_quasirandom(data = data, aes(mycorrhiza, rgr13),
+                   color = "grey70", dodge.width = .6, size = 0.7) +
+  geom_hline(aes(yintercept = rgr13), meandata,
              color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
+  geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
+  geom_hline(aes(yintercept = conf.high), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
   annotate("text", label = "n.s.", x = 2.2, y = 0.0028) +
-  scale_y_continuous(limits = c(0.0003,0.0028), breaks = seq(-100,100,0.0005)) +
-  scale_shape_manual(values = c(1,16)) +
+  scale_y_continuous(limits = c(0.0003, 0.0028),
+                     breaks = seq(-100, 100, 0.0005)) +
+  scale_shape_manual(values = c(1, 16)) +
   labs(x = "",
        y = expression(paste("Relative growth rate (RGR)")),
        shape = "Brick ratio [%]",

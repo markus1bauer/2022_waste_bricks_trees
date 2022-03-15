@@ -23,10 +23,10 @@ rm(list = c("data", "meandata", "pd", "pdata", "m4"))
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-(rgr13 | srl) / 
-  (sla | rtd) / 
-  (lmf | rmf) / 
-  (smf | rootshootRatio) / 
+(rgr13 | srl) /
+  (sla | rtd) /
+  (lmf | rmf) /
+  (smf | rootshootRatio) /
   (abstransRatio | branchingIntensity) +
   plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")") +
   theme(plot.tag = element_text(size = 10))

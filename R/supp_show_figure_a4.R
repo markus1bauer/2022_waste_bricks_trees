@@ -24,14 +24,14 @@ rm(list = c("data", "meandata", "pd", "pdata", "m4"))
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-(rgr13 | srl) / 
-  (sla | rtd) / 
-  (lmf | rmf) / 
-  (smf | rootshootRatio) / 
+(rgr13 | srl) /
+  (sla | rtd) /
+  (lmf | rmf) /
+  (smf | rootshootRatio) /
   (abstransRatio | branchingIntensity) +
   plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")") +
   theme(plot.tag = element_text(size = 10))
 
-ggsave("figure_A4_300dpi_17x22.5cm.tiff",
+ggsave("figure_a4_300dpi_17x22.5cm.tiff",
        dpi = 300, width = 17, height = 22.5, units = "cm",
        path = here("outputs", "figures", "supp"))

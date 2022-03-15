@@ -61,7 +61,7 @@ m4 <- lmer((rgr13) ~ species + soilType + acidbrickRatioTreat +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 10, color = "black"),
@@ -87,13 +87,13 @@ pd <- position_dodge(.6)
 ### plot ###
 ggplot(pdata, aes(acidbrickRatioTreat, rgr13, shape = acidbrickRatioTreat,
                   ymin = conf.low, ymax = conf.high)) +
-  geom_quasirandom(data = data, aes(acidbrickRatioTreat, rgr13), 
+  geom_quasirandom(data = data, aes(acidbrickRatioTreat, rgr13),
                    color = "grey70", dodge.width = .6, size = 0.7) +
-  geom_hline(aes(yintercept = rgr13), meandata, 
+  geom_hline(aes(yintercept = rgr13), meandata,
              color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
+  geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
+  geom_hline(aes(yintercept = conf.high), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
@@ -105,9 +105,9 @@ ggplot(pdata, aes(acidbrickRatioTreat, rgr13, shape = acidbrickRatioTreat,
   labs(x = "",
        y = expression(paste("Relative growth rate (RGR)")),
        shape = "", color = "") +
-  guides(x = guide_axis(angle = 30), shape = FALSE)+
+  guides(x = guide_axis(angle = 30), shape = FALSE) +
   themeMB()
 
-ggsave("figure_2_acid_(800dpi_8x7cm).tiff",
+ggsave("figure_2_acid_800dpi_8x7cm.tiff",
        dpi = 800, width = 8, height = 7, units = "cm",
        path = here("outputs", "figures"))

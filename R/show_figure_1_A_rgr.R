@@ -55,7 +55,7 @@ m4 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^2 +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -82,13 +82,13 @@ pd <- position_dodge(.6)
 ### plot ###
 (rgr13 <- ggplot(pdata, aes(soilType, rgr13, shape = brickRatio,
                             ymin = conf.low, ymax = conf.high)) +
-  geom_quasirandom(data = data, aes(soilType, rgr13), 
+  geom_quasirandom(data = data, aes(soilType, rgr13),
                    color = "grey70", dodge.width = .6, size = 0.7) +
-  geom_hline(aes(yintercept = rgr13), meandata, 
+  geom_hline(aes(yintercept = rgr13), meandata,
              color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
+  geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
+  geom_hline(aes(yintercept = conf.high), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
@@ -105,6 +105,6 @@ pd <- position_dodge(.6)
         legend.position = c(0.3, 0.03))
 )
 
-ggsave("figure_soilType_rgr_(800dpi_12x7cm).tiff",
+ggsave("figure_1_a_rgr_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))

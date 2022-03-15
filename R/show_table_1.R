@@ -156,22 +156,24 @@ data <- as_tibble(data)
    ) %>%
    #column labels
    cols_label(
-      substrate = md("**Substrate**"), 
-      soilFertility = md("**Fertility**"), 
-      brickRatio = md("**Brick ratio**<br/>[vol%]"), 
-      acid = md("**Acid**"), 
-      soilTexture = md("**Texture**"), 
-      fineSand = md("**Fine sand**<br/>[wt%]"), 
-      silt = md("**Silt**<br/>[wt%]"), 
-      pH = md("**pH<br/>**"), 
+      substrate = md("**Substrate**"),
+      soilFertility = md("**Fertility**"),
+      brickRatio = md("**Brick ratio**<br/>[vol%]"),
+      acid = md("**Acid**"),
+      soilTexture = md("**Texture**"),
+      fineSand = md("**Fine sand**<br/>[wt%]"),
+      silt = md("**Silt**<br/>[wt%]"),
+      pH = md("**pH<br/>**"),
       C = md("**C organic**<br/>[wt%]"),
-      P = md("**P<sub>2</sub>O<sub>5</sub>**<br/>[mg 100 g<sup>-1</sup>]"), 
+      P = md("**P<sub>2</sub>O<sub>5</sub>**<br/>[mg 100 g<sup>-1</sup>]"),
       K = md("**K<sub>2</sub>O**<br/>[mg 100 g<sup>-1</sup>]"),
       Mg = md("**Mg<sup>2+</sup>**<br/>[mg 100 g<sup>-1</sup>]")
       ) %>%
    #footnote
    tab_source_note(
-     source_note = "Bauer, Krause, Heizinger, Kollmann (2022): Ecological application of waste bricks: No negative effects of brick-augmented substrates on urban tree growth. - Journal. DOI: xxx"
+     source_note = "Bauer, Krause, Heizinger, Kollmann (2022): Ecological
+     application of waste bricks: No negative effects of brick-augmented
+     substrates on urban tree growth. - Journal. DOI: xxx"
    )
 )
 
@@ -213,23 +215,23 @@ gtsave(table1, "table_1.png")
       part = "all"
     ) %>%
     bold(
-      bold = T,
+      bold = TRUE,
       part = "header"
     ) %>%
     fit_to_width(
       max_width = 22.5
     ) %>%
     set_header_labels(
-      substrate = "Substrate", 
-      soilFertility = "Fertility", 
-      brickRatio = "Brick ratio [vol%]", 
-      acid = "Acid", 
-      soilTexture = "Texture", 
-      fineSand = "Fine sand [wt%]", 
-      silt = "Silt [wt%]", 
-      pH = "pH", 
+      substrate = "Substrate",
+      soilFertility = "Fertility",
+      brickRatio = "Brick ratio [vol%]",
+      acid = "Acid",
+      soilTexture = "Texture",
+      fineSand = "Fine sand [wt%]",
+      silt = "Silt [wt%]",
+      pH = "pH",
       C = "C organic [wt%]",
-      P = "P2O5 [mg 100 g-1]", 
+      P = "P2O5 [mg 100 g-1]",
       K = "K2O [mg 100 g-1]",
       Mg = "Mg2+ [mg 100 g-1]"
     )

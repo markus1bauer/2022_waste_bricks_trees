@@ -89,18 +89,18 @@ ggplot(data, aes(mycorrhiza, lmf, color = brickRatio)) + facet_grid(~species) +
 ggplot(data, aes(soilType, lmf, color = mycorrhiza)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, lmf, color = brickRatio, shape = mycorrhiza)) +
+ggplot(data, aes(soilType, lmf, color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(data,aes(brickRatio, lmf, color = species)) + geom_boxplot() +
+ggplot(data, aes(brickRatio, lmf, color = species)) + geom_boxplot() +
   facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, lmf, color = species)) + geom_boxplot() +
+ggplot(data, aes(block, lmf, color = species)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, lmf, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(block, lmf, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, lmf, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(block, lmf, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, lmf, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(block, lmf, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? ---------------------------
@@ -129,29 +129,29 @@ ggplot(data, aes(log(lmf))) + geom_density()
 m1 <- lmer(lmf ~ species * brickRatio + (1 | block), data, REML = FALSE)
 VarCorr(m1)
 #4w-model
-m2 <- lmer(log(lmf) ~ species * brickRatio * soilType * mycorrhiza + 
+m2 <- lmer(log(lmf) ~ species * brickRatio * soilType * mycorrhiza +
              (1 | block), data, REML = FALSE)
 simulateResiduals(m2, plot = TRUE)
 #full 3w-model
-m3 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^3 + 
+m3 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^3 +
            (1 | block), data, REML = FALSE)
 simulateResiduals(m3, plot = TRUE)
 #3w-model reduced
 m4 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-           species:brickRatio:soilType + species:brickRatio:mycorrhiza + 
+           species:brickRatio:soilType + species:brickRatio:mycorrhiza +
            (1 | block), data, REML = FALSE)
 simulateResiduals(m4, plot = TRUE)
 #2w-model full
-m5 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 + 
+m5 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              (1 | block), data, REML = FALSE)
 simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
 m6 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) +
-             species:brickRatio + species:soilType + species:mycorrhiza + 
+             species:brickRatio + species:soilType + species:mycorrhiza +
              (1 | block), data, REML = FALSE)
 simulateResiduals(m6, plot = TRUE)
 #1w-model full
-m7 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) + 
+m7 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) +
              (1 | block), data, REML = FALSE)
 simulateResiduals(m7, plot = TRUE)
 

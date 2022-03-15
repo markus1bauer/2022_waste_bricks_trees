@@ -57,7 +57,7 @@ m4 <- lmer(log(srl) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -84,13 +84,13 @@ pd <- position_dodge(.6)
 ### plot ###
 (srl <- ggplot(pdata, aes(soilType, srl, shape = brickRatio,
                           ymin = conf.low, ymax = conf.high)) +
-  geom_quasirandom(data = data, aes(soilType, srl), 
+  geom_quasirandom(data = data, aes(soilType, srl),
                    color = "grey70", dodge.width = .6, size = .7) +
-  geom_hline(aes(yintercept = srl), meandata, 
+  geom_hline(aes(yintercept = srl), meandata,
              color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
+  geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
+  geom_hline(aes(yintercept = conf.high), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = .0, size = .4) +
   geom_point(position = pd, size = 2.5) +
@@ -99,7 +99,7 @@ pd <- position_dodge(.6)
   scale_y_continuous(limits = c(0, 150), breaks = seq(-100, 150, 25)) +
   scale_shape_manual(values = c(1, 16)) +
   labs(x = "Soil fertility",
-       y = expression(Specific~root~length[1-3]~"["*m~g^-1*"]"),
+       y = expression(Specific~root~length[1-3]~"[" * m~g^-1 * "]"),
        shape = "Brick ratio [%]", color = "") +
   themeMB() +
   theme(axis.title.x = element_blank(),
@@ -107,6 +107,6 @@ pd <- position_dodge(.6)
         legend.position = "none")
 )
 
-ggsave("figure_soilType_srl_(800dpi_12x7cm).tiff",
+ggsave("figure_1_b_srl_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))

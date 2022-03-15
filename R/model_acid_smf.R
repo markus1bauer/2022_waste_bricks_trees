@@ -127,7 +127,7 @@ simulationOutput <- simulateResiduals(m4, plot = TRUE)
 par(mfrow = c(2, 2))
 plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",
-              simulationOutput$scaledResiduals,data$soilType)
+              simulationOutput$scaledResiduals, data$soilType)
 plotResiduals(main = "acidbrickRatioTreat",
               simulationOutput$scaledResiduals, data$acidbrickRatioTreat)
 plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)

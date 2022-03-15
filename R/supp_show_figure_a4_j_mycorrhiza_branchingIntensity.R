@@ -56,7 +56,7 @@ m4 <- lmer(log(branchingIntensity) ~
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -75,7 +75,7 @@ themeMB <- function(){
 }
 
 ### brickRatio:mycorrhiza ###
-pdata <- ggemmeans(m4, terms = c("mycorrhiza","brickRatio", "species"),
+pdata <- ggemmeans(m4, terms = c("mycorrhiza", "brickRatio", "species"),
                    type = "fe")
 pdata <- rename(pdata,
                 branchingIntensity = predicted, mycorrhiza = x,
@@ -88,13 +88,13 @@ pd <- position_dodge(.6)
                               aes(mycorrhiza, branchingIntensity,
                                   shape = brickRatio,
                                   ymin = conf.low, ymax = conf.high)) +
-    geom_quasirandom(data = data, aes(mycorrhiza, branchingIntensity), 
+    geom_quasirandom(data = data, aes(mycorrhiza, branchingIntensity),
                      color = "grey70", dodge.width = .6, size = 0.7) +
-    geom_hline(aes(yintercept = branchingIntensity), meandata, 
+    geom_hline(aes(yintercept = branchingIntensity), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = 0.0, size = 0.4) +
     geom_point(position = pd, size = 2.5) +
@@ -107,12 +107,12 @@ pd <- position_dodge(.6)
          shape = "Brick ratio [%]",
          color = "") +
     themeMB() +
-    theme(strip.text = element_blank(), 
+    theme(strip.text = element_blank(),
           strip.background = element_blank(),
           axis.title.x = element_blank(),
           legend.position = "none")
 )
 
-ggsave("figure_A4_J_mycorrhiza_branchingIntensity_800dpi_12x7cm.tiff",
+ggsave("figure_a4_j_branchingIntensity_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures", "supp"))

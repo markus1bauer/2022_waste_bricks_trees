@@ -73,10 +73,10 @@ ggplot(data, aes(species, sla, color = replanted)) + geom_boxplot() +
 ggplot(data, aes(acidbrickRatioTreat, sla)) + facet_grid(~soilType) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #3way (acidbrickRatioTreat:species):
-ggplot(data ,aes(acidbrickRatioTreat, sla)) + facet_grid(~species) +
+ggplot(data, aes(acidbrickRatioTreat, sla)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, sla, color = acidbrickRatioTreat)) +
+ggplot(data, aes(soilType, sla, color = acidbrickRatioTreat)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #interactions with block:
 ggplot(data, aes(species, sla, color = acidbrickRatioTreat)) +
@@ -107,23 +107,23 @@ ggplot(data, aes(log(sla))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure
-m1 <- lmer(sla ~ species * acidbrickRatioTreat + (1 | block/plot),
+m1 <- lmer(sla ~ species * acidbrickRatioTreat + (1 | block / plot),
            data, REML = FALSE)
 VarCorr(m1)
 #3w-model
-m2 <- lmer((sla) ~ species * soilType * acidbrickRatioTreat + 
-             (1 | block/plot), data, REML = FALSE)
+m2 <- lmer((sla) ~ species * soilType * acidbrickRatioTreat +
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 2w-model
 m3 <- lmer((sla) ~ (species + soilType + acidbrickRatioTreat)^2 +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #2w-model reduced
 m4 <- lmer((sla) ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType +
-             (1 | block/plot), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 
@@ -137,7 +137,7 @@ simulationOutput <- simulateResiduals(m2, plot = TRUE)
 par(mfrow = c(2, 2))
 plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",
-              simulationOutput$scaledResiduals,data$soilType)
+              simulationOutput$scaledResiduals, data$soilType)
 plotResiduals(main = "acidbrickRatioTreat",
               simulationOutput$scaledResiduals, data$acidbrickRatioTreat)
 plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
@@ -146,8 +146,8 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 ## 3 Chosen model output #####################################################
 
 ### Model output -------------------------------------------------------------
-m2 <- lmer(sla ~ species * soilType * acidbrickRatioTreat + 
-             (1 | block/plot), data, REML= FALSE)
+m2 <- lmer(sla ~ species * soilType * acidbrickRatioTreat +
+             (1 | block / plot), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m2)
 #r2m = 0.466, r2c = 0.567
 VarCorr(m2)

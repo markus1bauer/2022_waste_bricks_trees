@@ -153,12 +153,12 @@ tidytable <- broom::tidy(table)
 ### Effect sizes -------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ acidbrickRatioTreat | species,
                 type = "response"))
-plot(emm, comparison = T)
+plot(emm, comparison = TRUE)
 contrast(emmeans(m4, ~ acidbrickRatioTreat | species,
                  type = "response"), "trt.vs.ctrl", ref = 1)
 (emm <- emmeans(m4, revpairwise ~ acidbrickRatioTreat | soilType,
                 type = "response"))
-plot(emm, comparison = T)
+plot(emm, comparison = TRUE)
 (emm <- emmeans(m4, revpairwise ~ soilType | acidbrickRatioTreat,
                 type = "response"))
 

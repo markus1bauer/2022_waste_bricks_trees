@@ -55,12 +55,12 @@ setwd(here("data", "processed"))
 
 #### a Graphs ---------------------------------------------------------------
 #simple effects:
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(branchingIntensity ~ species, data)
 plot(branchingIntensity ~ brickRatio, data)
 plot(branchingIntensity ~ soilType, data)
 plot(branchingIntensity ~ mycorrhiza, data)
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(branchingIntensity ~ block, data)
 #2way (brickRatio:species):
 ggplot(data, aes(species, branchingIntensity, color = brickRatio)) +
@@ -93,19 +93,19 @@ ggplot(data, aes(mycorrhiza, branchingIntensity, color = brickRatio)) +
 ggplot(data, aes(soilType, branchingIntensity, color = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, branchingIntensity,
+ggplot(data, aes(soilType, branchingIntensity,
                 color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #interactions with block:
-ggplot(data,aes(brickRatio, branchingIntensity, color = species)) +
+ggplot(data, aes(brickRatio, branchingIntensity, color = species)) +
   geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, branchingIntensity, color = species)) +
+ggplot(data, aes(block, branchingIntensity, color = species)) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, branchingIntensity, color = brickRatio)) +
+ggplot(data, aes(block, branchingIntensity, color = brickRatio)) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, branchingIntensity, color = soilType)) +
+ggplot(data, aes(block, branchingIntensity, color = soilType)) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, branchingIntensity, color = mycorrhiza)) +
+ggplot(data, aes(block, branchingIntensity, color = mycorrhiza)) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? --------------------------
@@ -181,7 +181,7 @@ rm(m1, m2, m3, m5, m6, m7)
 
 #### c model check -----------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
-par(mfrow = c(2, 2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "brickRatio",
               simulationOutput$scaledResiduals, data$brickRatio)
@@ -222,6 +222,6 @@ contrast(emmeans(m4, ~ brickRatio * mycorrhiza | species,
 plot(emm, comparison = TRUE)
 
 ### Save ###
-write.csv(tidytable, 
+write.csv(tidytable,
           here("outputs", "statistics",
                "table_anova_soilType_mycorrhiza_branchingIntensity.csv"))

@@ -55,7 +55,7 @@ m4 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -78,14 +78,14 @@ pdata <- rename(pdata, smf = predicted, mycorrhiza = x, brickRatio = group,
 meandata <- filter(pdata, mycorrhiza == "Control" & brickRatio == "5")
 pd <- position_dodge(.6)
 (smf <- ggplot(pdata, aes(mycorrhiza, smf, shape = brickRatio,
-                          ymin = conf.low, ymax = conf.high))+
-    geom_quasirandom(data = data, aes(mycorrhiza, smf), 
-                     color = "grey70", dodge.width = .6, size = .7)+
-    geom_hline(aes(yintercept = smf), meandata, 
+                          ymin = conf.low, ymax = conf.high)) +
+    geom_quasirandom(data = data, aes(mycorrhiza, smf),
+                     color = "grey70", dodge.width = .6, size = .7) +
+    geom_hline(aes(yintercept = smf), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = .0, size = .4) +
     geom_point(position = pd, size = 2.5) +
@@ -97,13 +97,13 @@ pd <- position_dodge(.6)
          y = expression(Stem~mass~fraction~"["*g~g^-1*"]"),
          shape = "Brick ratio [%]", color = "") +
     themeMB() +
-    theme(strip.text = element_blank(), 
+    theme(strip.text = element_blank(),
           strip.background = element_blank(),
           axis.title.x = element_blank(),
           axis.text.x = element_blank(),
           legend.position = "none")
 )
 
-ggsave("figure_A4_G_mycorrhiza_smf_800dpi_12x6cm.tiff",
+ggsave("figure_a4_g_smf_800dpi_12x6cm.tiff",
        dpi = 800, width = 12, height = 6, units = "cm",
        path = here("outputs", "figures", "supp"))

@@ -61,7 +61,7 @@ m4 <- lm(rmf ~ species + soilType + acidbrickRatioTreat +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -87,14 +87,14 @@ pd <- position_dodge(.6)
 ### plot ###
 (rmf <- ggplot(pdata,
                aes(acidbrickRatioTreat, rmf, shape = acidbrickRatioTreat,
-                   ymin = conf.low, ymax = conf.high))+
-   geom_quasirandom(data = data, aes(acidbrickRatioTreat, rmf), 
-                     color = "grey70", dodge.width = .6, size = 0.7)+
-    geom_hline(aes(yintercept = rmf), meandata, 
+                   ymin = conf.low, ymax = conf.high)) +
+   geom_quasirandom(data = data, aes(acidbrickRatioTreat, rmf),
+                     color = "grey70", dodge.width = .6, size = 0.7) +
+    geom_hline(aes(yintercept = rmf), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = 0.0, size = 0.4) +
     geom_point(position = pd, size = 2.5) +
@@ -106,13 +106,13 @@ pd <- position_dodge(.6)
          y = expression(Root~mass~fraction~"["*g~g^-1*"]"),
          shape = "Brick ratio [%]", color = "") +
     themeMB() +
-    theme(strip.text = element_blank(), 
+    theme(strip.text = element_blank(),
           strip.background = element_blank(),
           axis.title.x = element_blank(),
           axis.text.x = element_blank(),
           legend.position = "none")
   )
 
-ggsave("figure_A3_E_acid_rmf_800dpi_8x7cm.tiff",
+ggsave("figure_a3_f_rmf_800dpi_8x7cm.tiff",
        dpi = 800, width = 8, height = 7, units = "cm",
        path = here("outputs", "figures", "supp"))

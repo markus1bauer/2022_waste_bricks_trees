@@ -100,7 +100,7 @@ identify(rep(1, length(data$rtd)), data$rtd, labels = c(data$plot))
 plot(table((data$rtd)), type = "h",
      xlab = "Observed values", ylab = "Frequency")
 ggplot(data, aes(rtd)) + geom_density()
-ggplot(data, aes((1/rtd))) + geom_density()
+ggplot(data, aes((1 / rtd))) + geom_density()
 
 
 ## 2 Model building #########################################################
@@ -111,7 +111,7 @@ m1 <- lmer((1 / rtd) ~ species * acidbrickRatioTreat + (1 | block),
            data, REML = FALSE)
 VarCorr(m1)
 #3w-model
-m2 <- lmer((1/rtd) ~ species * soilType * acidbrickRatioTreat +
+m2 <- lmer((1 / rtd) ~ species * soilType * acidbrickRatioTreat +
              (1 | block), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
@@ -138,7 +138,7 @@ par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",
-              simulationOutput$scaledResiduals,data$soilType)
+              simulationOutput$scaledResiduals, data$soilType)
 plotResiduals(main = "acidbrickRatioTreat",
               simulationOutput$scaledResiduals, data$acidbrickRatioTreat)
 plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)

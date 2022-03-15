@@ -106,7 +106,8 @@ ggplot(data, aes(log(lmf))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure --> no random factor needed
-m1 <- lmer(lmf ~ species * acidbrickRatioTreat + (1 | block), data, REML = FALSE)
+m1 <- lmer(lmf ~ species * acidbrickRatioTreat + (1 | block),
+           data, REML = FALSE)
 VarCorr(m1)
 #3w-model
 m2 <- lm(sqrt(lmf) ~ species * soilType * acidbrickRatioTreat, data)
@@ -120,8 +121,9 @@ m4 <- lm(sqrt(lmf) ~ species + soilType + acidbrickRatioTreat +
 simulateResiduals(m4, plot = TRUE)
 
 #### b comparison ------------------------------------------------------------
-anova(m2,m3,m4) # --> m4
-rm(m1,m2,m3)
+anova(m2, m3, m4)
+# --> m4
+rm(m1, m2, m3)
 
 #### c model check -----------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
@@ -129,7 +131,7 @@ par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",
-              simulationOutput$scaledResiduals,data$soilType)
+              simulationOutput$scaledResiduals, data$soilType)
 plotResiduals(main = "acidbrickRatioTreat",
               simulationOutput$scaledResiduals, data$acidbrickRatioTreat)
 plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)

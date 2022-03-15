@@ -56,7 +56,7 @@ m4 <- lmer(log(rootshootRatio) ~
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -83,14 +83,14 @@ pd <- position_dodge(.6)
 ### plot ###
 (rootshootRatio <- ggplot(pdata,
                           aes(soilType, rootshootRatio, shape = brickRatio,
-                              ymin = conf.low, ymax = conf.high))+
-  geom_quasirandom(data = data, aes(soilType, rootshootRatio), 
-                   color = "grey70", dodge.width = .6, size = 0.7)+
-  geom_hline(aes(yintercept = rootshootRatio), meandata, 
+                              ymin = conf.low, ymax = conf.high)) +
+  geom_quasirandom(data = data, aes(soilType, rootshootRatio),
+                   color = "grey70", dodge.width = .6, size = 0.7) +
+  geom_hline(aes(yintercept = rootshootRatio), meandata,
              color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
+  geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
+  geom_hline(aes(yintercept = conf.high), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
@@ -99,16 +99,16 @@ pd <- position_dodge(.6)
   scale_y_continuous(limits = c(0.5, 2.06), breaks = seq(-100, 100, 0.5)) +
   scale_shape_manual(values = c(1, 16)) +
   labs(x = "Soil fertility",
-       y = expression("Root-to-shoot ratio ["*g~g^-1*"]"),
+       y = expression("Root-to-shoot ratio [" * g~g^-1 * "]"),
        shape = "Brick ratio [%]", color = "") +
   themeMB() +
-  theme(strip.text = element_blank(), 
+  theme(strip.text = element_blank(),
         strip.background = element_blank(),
         axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         legend.position = "none")
 )
 
-ggsave("figure_1_H_rootshootRatio_(800dpi_12x7cm).tiff",
+ggsave("figure_1_h_rootshootRatio_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))

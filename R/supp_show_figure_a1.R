@@ -25,7 +25,7 @@ edata <- read_table2("supp_data_processed_brickRatio.txt",
                          .default = col_double(),
                          substrate = col_factor(),
                          substrateAbb = col_factor()
-                       )        
+                       )      
 )
 
 
@@ -35,7 +35,7 @@ edata <- read_table2("supp_data_processed_brickRatio.txt",
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     panel.grid = element_line(color = "grey80"),
@@ -69,6 +69,7 @@ ggplot(edata, aes(x = grainSize, y = grainSizeCum,
   labs(x = "Grain size [mm]", y = "Cumulative ratio [wt%]",
        linetype = "", color = "") +
   themeMB()
-ggsave("figure_A1_(800dpi_16x10cm).tiff",
+
+ggsave("figure_a1_800dpi_16x10cm.tiff",
       dpi = 800, width = 16, height = 10, units = "cm",
       path = here("outputs", "figures", "supp"))

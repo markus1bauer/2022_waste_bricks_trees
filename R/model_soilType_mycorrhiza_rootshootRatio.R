@@ -55,12 +55,12 @@ setwd(here("data", "processed"))
 
 #### a Graphs ----------------------------------------------------------------
 #simple effects:
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(rootshootRatio ~ species, data)
 plot(rootshootRatio ~ brickRatio, data)
 plot(rootshootRatio ~ soilType, data)
 plot(rootshootRatio ~ mycorrhiza, data)
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(rootshootRatio ~ block, data)
 #2way (brickRatio:species):
 ggplot(data, aes(species, rootshootRatio, color = brickRatio)) +
@@ -90,19 +90,19 @@ ggplot(data, aes(mycorrhiza, rootshootRatio, color = brickRatio)) +
 ggplot(data, aes(soilType, rootshootRatio, color = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, rootshootRatio,
+ggplot(data, aes(soilType, rootshootRatio,
                 color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(data,aes(brickRatio, rootshootRatio, color = species)) +
+ggplot(data, aes(brickRatio, rootshootRatio, color = species)) +
   geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rootshootRatio, color = species)) + geom_boxplot() +
+ggplot(data, aes(block, rootshootRatio, color = species)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rootshootRatio, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(block, rootshootRatio, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rootshootRatio, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(block, rootshootRatio, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rootshootRatio, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(block, rootshootRatio, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? ---------------------------

@@ -96,25 +96,25 @@ ggplot(data, aes(mycorrhiza, srl, color = brickRatio)) + facet_grid(~species) +
 ggplot(data, aes(soilType, srl, color = mycorrhiza)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, srl, color = brickRatio, shape = mycorrhiza)) +
+ggplot(data, aes(soilType, srl, color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #interactions with block:
-ggplot(data,aes(brickRatio, srl, color = species)) + geom_boxplot() +
+ggplot(data, aes(brickRatio, srl, color = species)) + geom_boxplot() +
   facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, srl, color = species)) + geom_boxplot() +
+ggplot(data, aes(block, srl, color = species)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, srl, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(block, srl, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, srl, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(block, srl, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, srl, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(block, srl, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? ----------------------------
 par(mfrow = c(2, 2))
 dotchart((data$srl), groups = factor(data$species), main = "Cleveland dotplot")
 dotchart((data$srl),
-         groups =factor(data$brickRatio), main = "Cleveland dotplot")
+         groups = factor(data$brickRatio), main = "Cleveland dotplot")
 dotchart((data$srl), groups = factor(data$soilType), main = "Cleveland dotplot")
 dotchart((data$srl),
          groups = factor(data$mycorrhiza), main = "Cleveland dotplot")
@@ -158,14 +158,14 @@ simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
 m6 <- lmer(log(srl) ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza +
-             (1 | block), data, REML = F)
+             (1 | block), data, REML = FALSE)
 isSingular(m6)
-simulateResiduals(m6, plot = TRUE);
+simulateResiduals(m6, plot = TRUE)
 #1w-model full
 m7 <- lmer(log(srl) ~ (species + brickRatio + soilType + mycorrhiza) +
              (1 | block), data, REML = FALSE)
 isSingular(m7)
-simulateResiduals(m7, plot = TRUE);
+simulateResiduals(m7, plot = TRUE)
 
 #### b comparison -------------------------------------------------------------
 anova(m2, m3, m4, m5, m6, m7)
@@ -174,7 +174,7 @@ rm(m1, m2, m3, m5, m6, m7)
 
 #### c model check ------------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
-par(mfrow = c(2, 2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "brickRatio",
               simulationOutput$scaledResiduals, data$brickRatio)
@@ -199,7 +199,7 @@ tidytable <- broom::tidy(table)
 
 ### Effect sizes --------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ brickRatio * soilType | species,
-                type="response"))
+                type = "response"))
 plot(emm, comparison = TRUE)
 contrast(emmeans(m4, ~ brickRatio * soilType | species,
                  type = "response"), "trt.vs.ctrl", ref = 1)

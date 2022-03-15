@@ -31,7 +31,8 @@ data <- read_csv("data_processed_brickRatio.csv",
                           block = col_factor(),
                           replanted = col_factor(),
                           species = col_factor(),
-                          mycorrhiza = col_factor(levels = c("Control", "Mycorrhiza")),
+                          mycorrhiza =
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
                           soilType = col_factor(levels = c("poor", "rich")),
                           brickRatio = col_factor(levels = c("5", "30")),
@@ -39,7 +40,8 @@ data <- read_csv("data_processed_brickRatio.csv",
                           acidbrickRatioTreat = col_factor()
                         )
                   ) %>%
-  select(branchingIntensity, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high)
+  select(branchingIntensity, plot, block, species, brickRatio, soilType,
+         mycorrhiza, conf.low, conf.high)
 
 #### Chosen model ###
 m4 <- lmer(log(branchingIntensity) ~
@@ -54,7 +56,7 @@ m4 <- lmer(log(branchingIntensity) ~
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -73,7 +75,7 @@ themeMB <- function(){
 }
 
 ### brickRatio:soilType ###
-pdata <- ggemmeans(m4, terms = c("soilType","brickRatio", "species"),
+pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"),
                    type = "fe")
 pdata <- pdata %>%
   rename(branchingIntensity = predicted, soilType = x,
@@ -86,13 +88,13 @@ pd <- position_dodge(.6)
                               aes(soilType, branchingIntensity,
                                   shape = brickRatio,
                                   ymin = conf.low, ymax = conf.high)) +
-  geom_quasirandom(data = data, aes(soilType, branchingIntensity), 
+  geom_quasirandom(data = data, aes(soilType, branchingIntensity),
                    color = "grey70", dodge.width = .6, size = 0.7) +
-  geom_hline(aes(yintercept = branchingIntensity), meandata, 
+  geom_hline(aes(yintercept = branchingIntensity), meandata,
              color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
+  geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
+  geom_hline(aes(yintercept = conf.high), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
@@ -104,11 +106,11 @@ pd <- position_dodge(.6)
        y = expression(Branching~intensity~"["*tips~cm^-1*"]"),
        shape = "Brick ratio [%]", color = "") +
   themeMB() +
-  theme(strip.text = element_blank(), 
+  theme(strip.text = element_blank(),
         strip.background = element_blank(),
         legend.position = "none")
 )
 
-ggsave("figure_1_J_branchingIntensity_(800dpi_12x7cm).tiff",
+ggsave("figure_1_j_branchingIntensity_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))

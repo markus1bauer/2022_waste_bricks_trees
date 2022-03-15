@@ -23,7 +23,8 @@ rm(list = c("data", "meandata", "pd", "pdata", "m4"))
 setwd(here("data", "processed"))
 
 ### Load data ###
-(data <- read_csv("data_processed_acid.csv", col_names = T, na = "na", col_types = 
+(data <- read_csv("data_processed_acid.csv",
+                  col_names = TRUE, na = "na", col_types =
                      cols(
                        .default = col_double(),
                        plot = col_factor(),
@@ -64,7 +65,7 @@ m3 <- lmer(log(abstransRatio) ~ (species + soilType + acidbrickRatioTreat)^2 +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -91,37 +92,37 @@ meandata <- filter(pdata, acidbrickRatioTreat == "Control 30% bricks")
 pd <- position_dodge(.6)
 
 ### plot ###
-ann_text1 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks", 
+ann_text1 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
                         abstransRatio = 2.2,
-                        species = factor("Acer", levels = c("Acer","Tilia")),
+                        species = factor("Acer", levels = c("Acer", "Tilia")),
                         conf.low = 2.2,
                         conf.high = 2.2)
-ann_text2 <- data.frame(acidbrickRatioTreat = "Control 30% bricks", 
+ann_text2 <- data.frame(acidbrickRatioTreat = "Control 30% bricks",
                         abstransRatio = 2.2,
-                        species = factor("Tilia", levels = c("Acer","Tilia")),
+                        species = factor("Tilia", levels = c("Acer", "Tilia")),
                         conf.low = 2.2,
                         conf.high = 2.2)
-ann_text3 <- data.frame(acidbrickRatioTreat = "Acid 5% bricks", 
+ann_text3 <- data.frame(acidbrickRatioTreat = "Acid 5% bricks",
                         abstransRatio = 2.2,
-                        species = factor("Tilia", levels = c("Acer","Tilia")),
+                        species = factor("Tilia", levels = c("Acer", "Tilia")),
                         conf.low = 2.2,
                         conf.high = 2.2)
-ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks", 
+ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
                         abstransRatio = 2.2,
-                        species = factor("Tilia", levels = c("Acer","Tilia")),
+                        species = factor("Tilia", levels = c("Acer", "Tilia")),
                         conf.low = 2.2,
                         conf.high = 2.2)
 (abstransRatio <- ggplot(pdata,
                          aes(acidbrickRatioTreat, abstransRatio,
                              shape = acidbrickRatioTreat,
                              ymin = conf.low, ymax = conf.high)) +
-    geom_quasirandom(data = data, aes(acidbrickRatioTreat, abstransRatio), 
-                     color = "grey70", dodge.width = .6, size = 0.7)+
-    geom_hline(aes(yintercept = abstransRatio), meandata, 
+    geom_quasirandom(data = data, aes(acidbrickRatioTreat, abstransRatio),
+                     color = "grey70", dodge.width = .6, size = 0.7) +
+    geom_hline(aes(yintercept = abstransRatio), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = 0.0, size = 0.4) +
     geom_point(position = pd, size = 2.5) +
@@ -136,7 +137,7 @@ ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
          y = expression(Absorptive*":"*transport~roots~"["*g~g^-1*"]"),
          shape = "") +
     themeMB() +
-    theme(strip.text = element_blank(), 
+    theme(strip.text = element_blank(),
           strip.background = element_blank(),
           axis.title.x = element_blank(),
           axis.text.x = element_blank(),
@@ -144,6 +145,6 @@ ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
           legend.position = "bottom")
   )
 
-ggsave("figure_A3_I_acid_abstransRatio_800dpi_8x8cm.tiff",
+ggsave("figure_a3_i_abstransRatio_800dpi_8x8cm.tiff",
        dpi = 800, width = 8, height = 8, units = "cm",
        path = here("outputs", "figures", "supp"))

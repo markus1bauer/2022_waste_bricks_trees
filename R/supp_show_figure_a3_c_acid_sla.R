@@ -52,8 +52,8 @@ data$acidbrickRatioTreat <- dplyr::recode(data$acidbrickRatioTreat,
                                           "Acid_30" = "Acid 30% bricks")
 
 #### Chosen model ###
-m2 <- lmer((sla) ~ species * soilType * acidbrickRatioTreat + 
-             (1 | block/plot), data, REML= FALSE)
+m2 <- lmer((sla) ~ species * soilType * acidbrickRatioTreat +
+             (1 | block / plot), data, REML = FALSE)
 
 
 
@@ -62,7 +62,7 @@ m2 <- lmer((sla) ~ species * soilType * acidbrickRatioTreat +
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -85,22 +85,22 @@ pdata <- rename(pdata, sla = predicted, acidbrickRatioTreat = x,
                 species = group)
 meandata <- filter(pdata, acidbrickRatioTreat == "Control 30% bricks")
 pd <- position_dodge(.6)
-ann_text1 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks", 
+ann_text1 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
                         sla = 265,
                         species = factor("Acer", levels = c("Acer", "Tilia")),
                         conf.low = 265,
                         conf.high = 265)
-ann_text2 <- data.frame(acidbrickRatioTreat = "Control 30% bricks", 
+ann_text2 <- data.frame(acidbrickRatioTreat = "Control 30% bricks",
                         sla = 265,
                         species = factor("Tilia", levels = c("Acer", "Tilia")),
                         conf.low = 265,
                         conf.high = 265)
-ann_text3 <- data.frame(acidbrickRatioTreat = "Acid 5% bricks", 
+ann_text3 <- data.frame(acidbrickRatioTreat = "Acid 5% bricks",
                         sla = 265,
                         species = factor("Tilia", levels = c("Acer", "Tilia")),
                         conf.low = 265,
                         conf.high = 265)
-ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks", 
+ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
                         sla = 265,
                         species = factor("Tilia", levels = c("Acer", "Tilia")),
                         conf.low = 265,
@@ -109,14 +109,14 @@ ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
 ### plot ###
 (sla <- ggplot(pdata,
                aes(acidbrickRatioTreat, sla, shape = acidbrickRatioTreat,
-                   ymin = conf.low, ymax = conf.high))+
-    geom_quasirandom(data = data, aes(acidbrickRatioTreat, sla), 
-                     color = "grey70", dodge.width = .6, size = 0.7)+
-    geom_hline(aes(yintercept = sla), meandata, 
+                   ymin = conf.low, ymax = conf.high)) +
+    geom_quasirandom(data = data, aes(acidbrickRatioTreat, sla),
+                     color = "grey70", dodge.width = .6, size = 0.7) +
+    geom_hline(aes(yintercept = sla), meandata,
                color = "grey70", size = .25) +
-    geom_hline(aes(yintercept = conf.low), meandata, 
+    geom_hline(aes(yintercept = conf.low), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
-    geom_hline(aes(yintercept = conf.high), meandata, 
+    geom_hline(aes(yintercept = conf.high), meandata,
                color = "grey70", linetype = "dashed", size = .25) +
     geom_errorbar(position = pd, width = 0.0, size = 0.4) +
     geom_point(position = pd, size = 2.5) +
@@ -131,13 +131,13 @@ ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
          y = expression(Specific~leaf~area~"["*cm^2~g^-1*"]"),
          shape = "", color = "") +
     themeMB() +
-    theme(strip.text = element_blank(), 
+    theme(strip.text = element_blank(),
           strip.background = element_blank(),
           axis.title.x = element_blank(),
           axis.text.x = element_blank(),
           legend.position = "none")
 )
 
-ggsave("figure_A3_C_acid_sla_800dpi_8x7.5cm.tiff",
+ggsave("figure_a3_c_sla_800dpi_8x7.5cm.tiff",
        dpi = 800, width = 8, height = 7.5, units = "cm",
        path = here("outputs", "figures", "supp"))

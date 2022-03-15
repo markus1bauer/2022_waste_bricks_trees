@@ -46,7 +46,8 @@ data <- read_csv("data_processed_brickRatio.csv",
   filter(abstransRatio < 6)
 
 #### Chosen model ###
-m4 <- lmer(log(abstransRatio + 1) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
+m4 <- lmer(log(abstransRatio + 1) ~
+             (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
              (1 | block), data, REML = FALSE)
 
@@ -57,7 +58,7 @@ m4 <- lmer(log(abstransRatio + 1) ~ (species + brickRatio + soilType + mycorrhiz
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
@@ -81,23 +82,20 @@ pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"),
 pdata <- pdata %>%
   rename(abstransRatio = predicted, soilType = x, brickRatio = group,
          species = facet)
-#pdata$abstransRatio <- pdata$abstransRatio - 1
-#pdata$conf.low <- pdata$conf.low - 1
-#pdata$conf.high <- pdata$conf.high - 1
 meandata <- filter(pdata, soilType == "poor" & brickRatio == "5")
 pd <- position_dodge(.6)
 
 ### plot ###
 (abstransRatio <- ggplot(pdata,
                          aes(soilType, abstransRatio, shape = brickRatio,
-                             ymin = conf.low, ymax = conf.high))+
-  geom_quasirandom(data = data, aes(soilType, abstransRatio), 
-                   color = "grey70", dodge.width = .6, size = 0.7)+
-  geom_hline(aes(yintercept = abstransRatio), meandata, 
+                             ymin = conf.low, ymax = conf.high)) +
+  geom_quasirandom(data = data, aes(soilType, abstransRatio),
+                   color = "grey70", dodge.width = .6, size = 0.7) +
+  geom_hline(aes(yintercept = abstransRatio), meandata,
              color = "grey70", size = .25) +
-  geom_hline(aes(yintercept = conf.low), meandata, 
+  geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
-  geom_hline(aes(yintercept = conf.high), meandata, 
+  geom_hline(aes(yintercept = conf.high), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
@@ -109,11 +107,11 @@ pd <- position_dodge(.6)
        y = expression(Absorptive*":"*transport~roots~"["*g~g^-1*"]"),
        shape = "Brick ratio [%]", color = "") +
   themeMB() +
-  theme(strip.text = element_blank(), 
+  theme(strip.text = element_blank(),
         strip.background = element_blank(),
         legend.position = "none")
 )
 
-ggsave("figure_1_I_abstransRatio_(800dpi_12x7cm).tiff",
+ggsave("figure_1_i_abstransRatio_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))

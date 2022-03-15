@@ -57,12 +57,12 @@ data <- read_csv("data_processed_brickRatio.csv",
 
 #### a Graphs ----------------------------------------------------------------
 #simple effects:
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(rtd ~ species, data)
 plot(rtd ~ brickRatio, data)
 plot(rtd ~ soilType, data)
 plot(rtd ~ mycorrhiza, data)
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(rtd ~ block, data)
 #2way (brickRatio:species):
 ggplot(data, aes(species, rtd, color = brickRatio)) + geom_boxplot() +
@@ -95,21 +95,21 @@ ggplot(data, aes(mycorrhiza, rtd, color = brickRatio)) + facet_grid(~species) +
 ggplot(data, aes(soilType, rtd, color = mycorrhiza)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, rtd, color = brickRatio, shape = mycorrhiza)) +
+ggplot(data, aes(soilType, rtd, color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #interactions with block:
-ggplot(data,aes(brickRatio, rtd, color = species)) + geom_boxplot() +
+ggplot(data, aes(brickRatio, rtd, color = species)) + geom_boxplot() +
   facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rtd, color = species)) + geom_boxplot() +
+ggplot(data, aes(block, rtd, color = species)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rtd, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(block, rtd, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rtd, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(block, rtd, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, rtd, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(block, rtd, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
-##### b Outliers, zero-inflation, transformations? -----------------------------------------------------
+##### b Outliers, zero-inflation, transformations? ---------------------------
 par(mfrow = c(2, 2))
 dotchart((data$rtd), groups = factor(data$species), main = "Cleveland dotplot")
 dotchart((data$rtd),
@@ -121,7 +121,7 @@ dotchart((data$rtd),
 dotchart((data$rtd), groups = factor(data$block), main = "Cleveland dotplot")
 par(mfrow = c(1, 2))
 boxplot(data$rtd)
-boxplot(1 / data$rtd);
+boxplot(1 / data$rtd)
 identify(rep(1, length(data$rtd)), data$rtd, labels = c(data$plot))
 plot(table((data$rtd)), type = "h",
      xlab = "Observed values", ylab = "Frequency")

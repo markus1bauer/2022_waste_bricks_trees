@@ -77,7 +77,7 @@ ggplot(data, aes(acidbrickRatioTreat, rgr13)) + facet_grid(~species) +
 ggplot(data, aes(soilType, rgr13, color = acidbrickRatioTreat)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #interactions with block:
-ggplot(data, aes(species, rgr13, color = acidbrickRatioTreat)) + 
+ggplot(data, aes(species, rgr13, color = acidbrickRatioTreat)) +
   geom_boxplot() + facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
 ggplot(data, aes(acidbrickRatioTreat, rgr13)) + geom_boxplot() +
   facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
@@ -138,7 +138,7 @@ par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",
-              simulationOutput$scaledResiduals,data$soilType)
+              simulationOutput$scaledResiduals, data$soilType)
 plotResiduals(main = "acidbrickRatioTreat",
               simulationOutput$scaledResiduals, data$acidbrickRatioTreat)
 plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)

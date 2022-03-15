@@ -25,7 +25,7 @@ edata <- read_table2("supp_data_processed_acid.txt",
                          .default = col_double(),
                          substrate = col_factor(),
                          substrateAbb = col_factor()
-                       )        
+                       )      
 )
 
 
@@ -35,7 +35,7 @@ edata <- read_table2("supp_data_processed_acid.txt",
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-themeMB <- function(){
+themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     panel.grid = element_line(color = "grey80"),
@@ -63,13 +63,13 @@ ggplot(edata, aes(x = grainSize, y = grainSizeCum,
     ) +
   scale_linetype_manual(
     values = c(
-      "solid","solid","dashed","solid","solid","dashed","dotted","dotted"
+      "solid", "solid", "dashed", "solid", "solid", "dashed", "dotted", "dotted"
       )
     ) +
-  scale_x_log10(breaks = c(0.002,0.063,0.2,0.63,2,4,8,16,25,31.5)) +
+  scale_x_log10(breaks = c(0.002, 0.063, 0.2, 0.63, 2, 4, 8, 16, 25, 31.5)) +
   labs(x = "Grain size [mm]", y = "Cumulative ratio [wt%]",
        linetype = "", color = "") +
   themeMB()
-ggsave("figure_A2_(800dpi_16x10cm).tiff",
+ggsave("figure_a2_800dpi_16x10cm.tiff",
       dpi = 800, width = 16, height = 10, units = "cm",
       path = here("outputs", "figures", "supp"))

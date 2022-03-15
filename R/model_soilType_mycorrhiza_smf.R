@@ -90,18 +90,18 @@ ggplot(data, aes(mycorrhiza, smf, color = brickRatio)) + facet_grid(~species) +
 ggplot(data, aes(soilType, smf, color = mycorrhiza)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
-ggplot(data,aes(soilType, smf, color = brickRatio, shape = mycorrhiza)) +
+ggplot(data, aes(soilType, smf, color = brickRatio, shape = mycorrhiza)) +
   facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
-ggplot(data,aes(brickRatio, smf, color = species)) + geom_boxplot() +
+ggplot(data, aes(brickRatio, smf, color = species)) + geom_boxplot() +
   facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, smf, color = species)) + geom_boxplot() +
+ggplot(data, aes(block, smf, color = species)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, smf, color = brickRatio)) + geom_boxplot() +
+ggplot(data, aes(block, smf, color = brickRatio)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, smf, color = soilType)) + geom_boxplot() +
+ggplot(data, aes(block, smf, color = soilType)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
-ggplot(data,aes(block, smf, color = mycorrhiza)) + geom_boxplot() +
+ggplot(data, aes(block, smf, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? ---------------------------
@@ -185,7 +185,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 ### Model output -------------------------------------------------------------
 m4 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1 | block), data, REML = F)
+             (1 | block), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m4)
 #R2m = 0.474, R2c = 0.525
 VarCorr(m4)
@@ -195,7 +195,7 @@ tidytable <- broom::tidy(table)
 
 ### Effect sizes -------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ brickRatio * soilType | species,
-                type="response"))
+                type = "response"))
 plot(emm, comparison = TRUE)
 contrast(emmeans(m4, ~ brickRatio * soilType | species,
                  type = "response"), "trt.vs.ctrl", ref = 1)
