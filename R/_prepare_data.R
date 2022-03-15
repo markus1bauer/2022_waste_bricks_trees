@@ -1,7 +1,7 @@
-## Script to prepare data of tree experiment ####
+# Waste bricks for tree substrates
+# Prepare species, sites, and traits data ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 ### Packages -----------------------------------------------------------------
