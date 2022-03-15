@@ -188,7 +188,8 @@ MuMIn::r.squaredGLMM(m4)
 #R2m = 0.232, R2c = 0.307
 VarCorr(m4)
 sjPlot::plot_model(m4, type = "re", show.values = TRUE)
-car::Anova(m4, type = 3)
+(table <- car::Anova(m4, type = 3))
+tidytable <- broom::tidy(table)
 
 ### Effect sizes ------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ brickRatio * soilType | species,
@@ -201,3 +202,7 @@ contrast(emmeans(m4, ~ brickRatio * soilType | species,
 plot(emm, comparison = T)
 contrast(emmeans(m4, ~ brickRatio * mycorrhiza | species,
                  type = "response"), "trt.vs.ctrl", ref = 1)
+
+### Save ###
+write.csv(tidytable, here("outputs", "statistics",
+                          "table_anova_soilType_mycorrhiza_rmf.csv"))

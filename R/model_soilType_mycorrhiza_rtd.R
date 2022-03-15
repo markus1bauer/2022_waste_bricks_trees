@@ -158,12 +158,12 @@ m6 <- lmer((1 / rtd) ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza +
              (1|block), data, REML = FALSE)
 isSingular(m6)
-simulateResiduals(m6, plot = TRUE);
+simulateResiduals(m6, plot = TRUE)
 #1w-model full
 m7 <- lmer((1 / rtd) ~ (species + brickRatio + soilType + mycorrhiza) +
              (1|block), data, REML = FALSE)
 isSingular(m7)
-simulateResiduals(m7, plot = TRUE);
+simulateResiduals(m7, plot = TRUE)
 
 #### b comparison ------------------------------------------------------------
 anova(m2,m3,m4,m5,m6,m7)
@@ -194,7 +194,8 @@ MuMIn::r.squaredGLMM(m4)
 #R2m = 0.129, R2c = 0.227
 VarCorr(m4)
 sjPlot::plot_model(m4, type = "re", show.values = TRUE)
-car::Anova(m4, type = 3)
+(table <- car::Anova(m4, type = 3))
+tidytable <- broom::tidy(table)
 
 ### Effect sizes -------------------------------------------------------------
 (emm <- emmeans(m4, revpairwise ~ brickRatio * soilType | species,
@@ -202,3 +203,7 @@ car::Anova(m4, type = 3)
 plot(emm, comparison = TRUE)
 contrast(emmeans(m4, ~ brickRatio * soilType | species,
                  type = "response"), "trt.vs.ctrl", ref = 1)
+
+### Save ###
+write.csv(tidytable, here("outputs", "statistics",
+                          "table_anova_soilType_mycorrhiza_rtd.csv"))

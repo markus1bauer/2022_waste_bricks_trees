@@ -213,4 +213,5 @@ contrast(emmeans(m4, ~ brickRatio * mycorrhiza | species,
 plot(emm, comparison = TRUE)
 
 ### Save ###
-write.csv(tidytable, here("outputs", "statistics", "table_anova_soilType_mycorrhiza_srl.csv"))
+write.csv(tidytable, here("outputs", "statistics",
+                          "table_anova_soilType_mycorrhiza_srl.csv"))

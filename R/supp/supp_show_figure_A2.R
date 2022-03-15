@@ -5,20 +5,22 @@
 
 
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# A Preparation ################################################################################################################
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# A Preparation ##############################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 ### Packages ###
+library(here)
 library(tidyverse)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
+setwd(here("data", "processed"))
 
 ### Load data ###
-edata <- read_table2("supp_data_processed_acid.txt", col_names = T, na = "na", col_types = 
+edata <- read_table2("supp_data_processed_acid.txt",
+                     col_names = TRUE, na = "na", col_types =
                        cols(
                          .default = col_double(),
                          substrate = col_factor(),
@@ -28,9 +30,11 @@ edata <- read_table2("supp_data_processed_acid.txt", col_names = T, na = "na", c
 
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plotten ################################################################################################################
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# B Plotten ##################################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
@@ -48,13 +52,24 @@ themeMB <- function(){
 }
 
 
-ggplot(edata, aes(x = grainSize, y = grainSizeCum, color = substrateAbb, linetype = substrateAbb)) +
+ggplot(edata, aes(x = grainSize, y = grainSizeCum,
+                  color = substrateAbb, linetype = substrateAbb)) +
   #geom_smooth(size = .8, se = F) +
   geom_line(size = .8) +
-  scale_color_manual(values = c("red4","green4","red4","red","green","red","black","black")) +
-  scale_linetype_manual(values = c("solid","solid","dashed","solid","solid","dashed","dotted","dotted")) +
+  scale_color_manual(
+    values = c(
+      "red4", "green4", "red4", "red", "green", "red", "black", "black"
+      )
+    ) +
+  scale_linetype_manual(
+    values = c(
+      "solid","solid","dashed","solid","solid","dashed","dotted","dotted"
+      )
+    ) +
   scale_x_log10(breaks = c(0.002,0.063,0.2,0.63,2,4,8,16,25,31.5)) +
-  labs(x = "Grain size [mm]", y = "Cumulative ratio [wt%]", linetype = "", color = "") +
+  labs(x = "Grain size [mm]", y = "Cumulative ratio [wt%]",
+       linetype = "", color = "") +
   themeMB()
 ggsave("figure_A2_(800dpi_16x10cm).tiff",
-      dpi = 800, width = 16, height = 10, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures/supp")
+      dpi = 800, width = 16, height = 10, units = "cm",
+      path = here("outputs", "figures", "supp"))

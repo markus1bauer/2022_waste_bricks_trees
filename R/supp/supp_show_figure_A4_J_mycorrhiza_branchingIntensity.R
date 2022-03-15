@@ -5,11 +5,13 @@
 
 
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# A Preparation ################################################################################################################
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# A Preparation ##############################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 ### Packages ###
+library(here)
 library(tidyverse)
 library(ggbeeswarm)
 library(lme4)
@@ -18,36 +20,42 @@ library(ggeffects)
 
 ### Start ###
 rm(list = c("data", "meandata", "pd", "pdata", "m4"))
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
+setwd(here("data", "processed"))
 
 ### Load data ###
-data <- read_csv2("data_processed_brickRatio.csv", col_names = T, na = "na", col_types = 
+data <- read_csv2("data_processed_brickRatio.csv",
+                  col_names = TRUE, na = "na", col_types =
                     cols(
                       .default = col_double(),
                       plot = col_factor(),
                       block = col_factor(),
                       replanted = col_factor(),
                       species = col_factor(),
-                      mycorrhiza = col_factor(levels = c("Control","Mycorrhiza")),
+                      mycorrhiza =
+                        col_factor(levels = c("Control","Mycorrhiza")),
                       substrate = col_factor(),
                       soilType = col_factor(levels = c("poor","rich")),
                       brickRatio = col_factor(levels = c("5","30")),
                       acid = col_factor(),
                       acidbrickRatioTreat = col_factor()
-                    )        
-)
-(data <- select(data, branchingIntensity, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high))
+                    )
+                  ) %>%
+  select(branchingIntensity, plot, block, species, brickRatio, soilType,
+         mycorrhiza, conf.low, conf.high)
 
 #### Chosen model ###
-m4 <- lmer(log(branchingIntensity) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
+m4 <- lmer(log(branchingIntensity) ~
+             (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = F)
+             (1 | block), data, REML = FALSE)
 
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plot ################################################################################################################
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# B Plot #####################################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
@@ -67,11 +75,19 @@ themeMB <- function(){
 }
 
 ### brickRatio:mycorrhiza ###
-pdata <- ggemmeans(m4, terms = c("mycorrhiza","brickRatio", "species"), type = "fe")
-pdata <- rename(pdata, branchingIntensity = predicted, mycorrhiza = x, brickRatio = group, species = facet)
+pdata <- ggemmeans(m4, terms = c("mycorrhiza","brickRatio", "species"),
+                   type = "fe")
+pdata <- rename(pdata,
+                branchingIntensity = predicted, mycorrhiza = x,
+                brickRatio = group, species = facet)
 meandata <- filter(pdata, mycorrhiza == "Control" & brickRatio == "5")
 pd <- position_dodge(.6)
-(branchingIntensity <- ggplot(pdata, aes(mycorrhiza, branchingIntensity, shape = brickRatio, ymin = conf.low, ymax = conf.high)) +
+
+### post ###
+(branchingIntensity <- ggplot(pdata,
+                              aes(mycorrhiza, branchingIntensity,
+                                  shape = brickRatio,
+                                  ymin = conf.low, ymax = conf.high)) +
     geom_quasirandom(data = data, aes(mycorrhiza, branchingIntensity), 
                      color = "grey70", dodge.width = .6, size = 0.7) +
     geom_hline(aes(yintercept = branchingIntensity), meandata, 
@@ -86,7 +102,10 @@ pd <- position_dodge(.6)
     annotate("text", label = "n.s.", x = 2.2, y = 12) +
     scale_y_continuous(limits = c(0, 12), breaks = seq(-100, 150, 2)) +
     scale_shape_manual(values = c(1, 16)) +
-    labs(x = "Mycorrhiza", y = expression(Branching~intensity~"["*tips~cm^-1*"]"), shape = "Brick ratio [%]", color = "") +
+    labs(x = "Mycorrhiza",
+         y = expression(Branching~intensity~"["*tips~cm^-1*"]"),
+         shape = "Brick ratio [%]",
+         color = "") +
     themeMB() +
     theme(strip.text = element_blank(), 
           strip.background = element_blank(),
@@ -94,5 +113,6 @@ pd <- position_dodge(.6)
           legend.position = "none")
 )
 
-#ggsave("figure_A4_J_mycorrhiza_branchingIntensity_(800dpi_12x7cm).tiff",
-#     dpi = 800, width = 12, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures/supp")
+ggsave("figure_A4_J_mycorrhiza_branchingIntensity_800dpi_12x7cm.tiff",
+       dpi = 800, width = 12, height = 7, units = "cm",
+       path = here("outputs", "figures", "supp"))

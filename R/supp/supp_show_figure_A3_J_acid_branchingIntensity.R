@@ -5,11 +5,13 @@
 
 
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# A Preparation ################################################################################################################
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# A Preparation ##############################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 ### Packages ###
+library(here)
 library(tidyverse)
 library(ggbeeswarm)
 library(lme4)
@@ -17,11 +19,13 @@ library(emmeans)
 library(ggeffects)
 
 ### Start ###
-rm(list = c("data", "meandata", "pd", "pdata", "m3", "ann_text1", "ann_text2", "ann_text3", "ann_text4"))
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
+rm(list = c("data", "meandata", "pd", "pdata", "m3", "ann_text1", "ann_text2",
+            "ann_text3", "ann_text4"))
+setwd(here("data", "processed"))
 
 ### Load data ###
-(data <- read_csv2("data_processed_acid.csv", col_names = T, na = "na", col_types = 
+(data <- read_csv("data_processed_acid.csv",
+                   col_names = TRUE, na = "na", col_types =
                      cols(
                        .default = col_double(),
                        plot = col_factor(),
@@ -33,23 +37,34 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks
                        soilType = col_factor(levels = c("poor","rich")),
                        brickRatio = col_factor(levels = c("5","30")),
                        acid = col_factor(levels = c("Control","Acid")),
-                       acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
+                       acidbrickRatioTreat =
+                         col_factor(
+                           levels = c("Control_30","Acid_5","Acid_30"
+                                      )
+                           )
                      )
-)
-)
-data <- select(data, branchingIntensity, plot, block, species, acidbrickRatioTreat, soilType, conf.low, conf.high)
+                   ) %>%
+    select(branchingIntensity, plot, block, species, acidbrickRatioTreat,
+           soilType, conf.low, conf.high)
+  )
+  
 data$acidbrickRatioTreat <- dplyr::recode(data$acidbrickRatioTreat,
-                                          "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
+                                          "Control_30" = "Control 30% bricks",
+                                          "Acid_5" = "Acid 5% bricks",
+                                          "Acid_30" = "Acid 30% bricks")
 
 #### Chosen model ###
-m3 <- lmer(log(branchingIntensity) ~ (species + soilType + acidbrickRatioTreat)^2 +
-             (1|block), data, REML = F)
+m3 <- lmer(log(branchingIntensity) ~
+             (species + soilType + acidbrickRatioTreat)^2 +
+             (1|block), data, REML = FALSE)
 
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plot ################################################################################################################
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# B Plot #####################################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
@@ -69,11 +84,18 @@ themeMB <- function(){
 }
 
 ### brickRatio:mycorrhiza ###
-pdata <- ggemmeans(m3, terms = c("acidbrickRatioTreat", "species"), type = "fe")
-pdata <- rename(pdata, branchingIntensity = predicted, acidbrickRatioTreat = x, species = group)
+pdata <- ggemmeans(m3, terms = c("acidbrickRatioTreat", "species"),
+                   type = "fe")
+pdata <- rename(pdata, branchingIntensity = predicted,
+                acidbrickRatioTreat = x, species = group)
 meandata <- filter(pdata, acidbrickRatioTreat == "Control 30% bricks")
 pd <- position_dodge(.6)
-(branchingIntensity <- ggplot(pdata, aes(acidbrickRatioTreat, branchingIntensity, shape = acidbrickRatioTreat, ymin = conf.low, ymax = conf.high)) +
+
+### plot ###
+(branchingIntensity <- ggplot(pdata,
+                              aes(acidbrickRatioTreat, branchingIntensity,
+                                  shape = acidbrickRatioTreat,
+                                  ymin = conf.low, ymax = conf.high)) +
     geom_quasirandom(data = data, aes(acidbrickRatioTreat, branchingIntensity), 
                      color = "grey70", dodge.width = .6, size = 0.7) +
     geom_hline(aes(yintercept = branchingIntensity), meandata, 
@@ -88,7 +110,9 @@ pd <- position_dodge(.6)
     annotate("text", label = "n.s.", x = 3.2, y = 12) +
     scale_y_continuous(limits = c(0, 12), breaks = seq(-100, 150, 2)) +
     scale_shape_manual(values = c(1, 16, 15)) +
-    labs(x = "", y = expression(Branching~intensity~"["*tips~cm^-1*"]"), shape = "", color = "") +
+    labs(x = "",
+         y = expression(Branching~intensity~"["*tips~cm^-1*"]"),
+         shape = "", color = "") +
     themeMB() +
     theme(strip.text = element_blank(), 
           strip.background = element_blank(),
@@ -98,5 +122,6 @@ pd <- position_dodge(.6)
           legend.position = "bottom")
 )
 
-#ggsave("figure_A4_I_mycorrhiza_branchingIntensity_2_(800dpi_12x6cm).tiff",
-#      dpi = 800, width = 12, height = 6, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures/supp")
+ggsave("figure_A4_I_mycorrhiza_branchingIntensity_2_800dpi_12x6cm.tiff",
+       dpi = 800, width = 12, height = 6, units = "cm",
+       path = here("outputs", "figures", "supp"))

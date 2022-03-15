@@ -2,11 +2,13 @@
 
 
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# A Preparation ################################################################################################################
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# A Preparation ##############################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 ### Packages ###
+library(here)
 library(tidyverse)
 library(ggbeeswarm)
 library(lme4)
@@ -15,10 +17,11 @@ library(ggeffects)
 
 ### Start ###
 rm(list = c("data", "meandata", "pd", "pdata", "m3"))
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
+setwd(here("data", "processed"))
 
 ### Load data ###
-(data <- read_csv2("data_processed_acid.csv", col_names = T, na = "na", col_types = 
+(data <- read_csv2("data_processed_acid.csv",
+                   col_names = TRUE, na = "na", col_types =
                      cols(
                        .default = col_double(),
                        plot = col_factor(),
@@ -30,13 +33,19 @@ setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks
                        soilType = col_factor(levels = c("poor","rich")),
                        brickRatio = col_factor(levels = c("5","30")),
                        acid = col_factor(levels = c("Control","Acid")),
-                       acidbrickRatioTreat = col_factor(levels = c("Control_30","Acid_5","Acid_30"))
+                       acidbrickRatioTreat =
+                         col_factor(
+                           levels = c("Control_30","Acid_5","Acid_30")
+                           )
                      )
-                   )
-  )
-data <- select(data, lmf, plot, block, species, acidbrickRatioTreat, soilType, conf.low, conf.high)
+                   ) %>%
+    select(lmf, plot, block, species, acidbrickRatioTreat, soilType,
+           conf.low, conf.high)
+)
 data$acidbrickRatioTreat <- dplyr::recode(data$acidbrickRatioTreat,
-                                          "Control_30" = "Control 30% bricks", "Acid_5" = "Acid 5% bricks", "Acid_30" = "Acid 30% bricks")
+                                          "Control_30" = "Control 30% bricks",
+                                          "Acid_5" = "Acid 5% bricks",
+                                          "Acid_30" = "Acid 30% bricks")
 
 #### Chosen model ###
 m4 <- lm(lmf ~ species + soilType + acidbrickRatioTreat +
@@ -44,9 +53,11 @@ m4 <- lm(lmf ~ species + soilType + acidbrickRatioTreat +
 
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plotten ################################################################################################################
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# B Plotten ##################################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
@@ -63,11 +74,17 @@ themeMB <- function(){
 }
 
 ### interaction: acid x brickRatio x species ###
-pdata <- ggemmeans(m4, terms = c("acidbrickRatioTreat", "species"), type = "fe")
-pdata <- rename(pdata, lmf = predicted, acidbrickRatioTreat = x, species = group)
+pdata <- ggemmeans(m4, terms = c("acidbrickRatioTreat", "species"),
+                   type = "fe")
+pdata <- rename(pdata, lmf = predicted,
+                acidbrickRatioTreat = x, species = group)
 meandata <- filter(pdata, acidbrickRatioTreat == "Control 30% bricks")
 pd <- position_dodge(.6)
-(lmf <- ggplot(pdata, aes(acidbrickRatioTreat, lmf, shape = acidbrickRatioTreat, ymin = conf.low, ymax = conf.high))+
+
+### plot ###
+(lmf <- ggplot(pdata, aes(acidbrickRatioTreat, lmf,
+                          shape = acidbrickRatioTreat,
+                          ymin = conf.low, ymax = conf.high))+
     geom_quasirandom(data = data, aes(acidbrickRatioTreat, lmf), 
                      color = "grey70", dodge.width = .6, size = 0.7)+
     geom_hline(aes(yintercept = lmf), meandata, 
@@ -82,7 +99,9 @@ pd <- position_dodge(.6)
     annotate("text", label = "n.s.", x = 3.2, y = 0.2) +
     scale_y_continuous(limits = c(0.05, 0.2), breaks = seq(-100, 100, 0.05)) +
     scale_shape_manual(values = c(1, 16, 15)) +
-    labs(x = "", y = expression(Leaf~mass~fraction~"["*g~g^-1*"]"), shape = "", color = "") +
+    labs(x = "",
+         y = expression(Leaf~mass~fraction~"["*g~g^-1*"]"),
+         shape = "", color = "") +
     themeMB() +
     theme(strip.text = element_blank(), 
         strip.background = element_blank(),
@@ -90,5 +109,7 @@ pd <- position_dodge(.6)
         axis.text.x = element_blank(),
         legend.position = "none")
   )
-#ggsave("figure_A3_E_acid_lmf_(800dpi_8x7cm).tiff",
-#      dpi = 800, width = 8, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures/supp")
+
+ggsave("figure_A3_E_acid_lmf_800dpi_8x7cm.tiff",
+       dpi = 800, width = 8, height = 7, units = "cm",
+       path = here("outputs", "figures", "supp"))
