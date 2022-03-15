@@ -1,7 +1,7 @@
-# Show Figure grain size ditribution of experiment 1 ####
+# Waste bricks for tree substrates
+# Show Figure A1 ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 

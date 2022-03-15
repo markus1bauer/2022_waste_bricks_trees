@@ -1,7 +1,7 @@
-# Show Figure relative growth rate ~ mycorrhiza:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure 3 ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -31,10 +31,10 @@ setwd(here("data", "processed"))
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza =
-                            col_factor(levels = c("Control","Mycorrhiza")),
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(),
                           acidbrickRatioTreat = col_factor()
                         )
@@ -46,7 +46,7 @@ setwd(here("data", "processed"))
 #### Chosen model ###
 m4 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 
 
 

@@ -1,7 +1,7 @@
-# Show Figure leaf mass fraction  ~ soilType:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure 1E ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 

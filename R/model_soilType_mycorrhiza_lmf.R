@@ -1,7 +1,7 @@
-# Model for experiment mycorrhiza and soil type and leaf mass fraction ####
+# Waste bricks for tree substrates
+# Model leaf mass fraction ~ soil type * mycorrhiza ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -33,10 +33,10 @@ data <- read_csv2("data_processed_brickRatio.csv",
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza =
-                            col_factor(levels = c("Control","Mycorrhiza")),
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(levels = c("Acid")),
                           acidbrickRatioTreat = col_factor()
                         )
@@ -126,33 +126,33 @@ ggplot(data, aes(log(lmf))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure --> no random effect needed
-m1 <- lmer(lmf ~ species * brickRatio + (1|block), data, REML = FALSE)
+m1 <- lmer(lmf ~ species * brickRatio + (1 | block), data, REML = FALSE)
 VarCorr(m1)
 #4w-model
 m2 <- lmer(log(lmf) ~ species * brickRatio * soilType * mycorrhiza + 
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 simulateResiduals(m2, plot = TRUE)
 #full 3w-model
 m3 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^3 + 
-           (1|block), data, REML = FALSE)
+           (1 | block), data, REML = FALSE)
 simulateResiduals(m3, plot = TRUE)
 #3w-model reduced
 m4 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
            species:brickRatio:soilType + species:brickRatio:mycorrhiza + 
-           (1|block), data, REML = FALSE)
+           (1 | block), data, REML = FALSE)
 simulateResiduals(m4, plot = TRUE)
 #2w-model full
 m5 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 + 
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
 m6 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza + 
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 simulateResiduals(m6, plot = TRUE)
 #1w-model full
 m7 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza) + 
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 simulateResiduals(m7, plot = TRUE)
 
 #### b comparison ------------------------------------------------------------
@@ -162,7 +162,7 @@ rm(m1, m2, m3, m5, m6, m7)
 
 #### c model check -----------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
-par(mfrow=c(2,2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "brickRatio",
               simulationOutput$scaledResiduals, data$brickRatio)
@@ -178,7 +178,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 ### Model output -------------------------------------------------------------
 m4 <- lmer(log(lmf) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m4)
 #R2m = 0.654, R2c = 0.654
 VarCorr(m4)

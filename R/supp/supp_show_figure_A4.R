@@ -1,7 +1,7 @@
-# Show Figure of all traits ~ soilType:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure A4 ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 

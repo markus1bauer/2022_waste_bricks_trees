@@ -1,7 +1,7 @@
-# Model for experiment mycorrhiza and soil type and root tissue density ####
+# Waste bricks for tree substrates
+# Model root tissue density ~ soil type * mycorrhiza ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -33,10 +33,10 @@ data <- read_csv("data_processed_brickRatio.csv",
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza =
-                            col_factor(levels = c("Control","Mycorrhiza")),
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(levels = c("Acid")),
                           acidbrickRatioTreat = col_factor()
                         )
@@ -114,14 +114,17 @@ par(mfrow = c(2, 2))
 dotchart((data$rtd), groups = factor(data$species), main = "Cleveland dotplot")
 dotchart((data$rtd),
          groups = factor(data$brickRatio), main = "Cleveland dotplot")
-dotchart((data$rtd), groups = factor(data$soilType), main = "Cleveland dotplot")
+dotchart((data$rtd),
+         groups = factor(data$soilType), main = "Cleveland dotplot")
 dotchart((data$rtd),
          groups = factor(data$mycorrhiza), main = "Cleveland dotplot")
 dotchart((data$rtd), groups = factor(data$block), main = "Cleveland dotplot")
 par(mfrow = c(1, 2))
-boxplot(data$rtd);boxplot(1 / data$rtd);
+boxplot(data$rtd)
+boxplot(1 / data$rtd);
 identify(rep(1, length(data$rtd)), data$rtd, labels = c(data$plot))
-plot(table((data$rtd)), type = "h", xlab = "Observed values", ylab = "Frequency")
+plot(table((data$rtd)), type = "h",
+     xlab = "Observed values", ylab = "Frequency")
 ggplot(data, aes(rtd)) + geom_density()
 ggplot(data, aes((1 / rtd))) + geom_density()
 
@@ -139,40 +142,40 @@ isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 3w-model
 m3 <- lmer((1 / rtd) ~ (species + brickRatio + soilType + mycorrhiza)^3 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #3w-model reduced
 m4 <- lmer((1 / rtd) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 #2w-model full
 m5 <- lmer((1 / rtd) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m5)
 simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
 m6 <- lmer((1 / rtd) ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m6)
 simulateResiduals(m6, plot = TRUE)
 #1w-model full
 m7 <- lmer((1 / rtd) ~ (species + brickRatio + soilType + mycorrhiza) +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m7)
 simulateResiduals(m7, plot = TRUE)
 
 #### b comparison ------------------------------------------------------------
-anova(m2,m3,m4,m5,m6,m7)
+anova(m2, m3, m4, m5, m6, m7)
 # --> m7 BUT use m4 because of 3-fold interaction
-rm(m1,m2,m3,m5,m6,m7)
+rm(m1, m2, m3, m5, m6, m7)
 
 #### c model check -----------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
-par(mfrow = c(2, 2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "brickRatio",
@@ -189,7 +192,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 ### Model output -------------------------------------------------------------
 m4 <- lmer((1 / rtd) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m4)
 #R2m = 0.129, R2c = 0.227
 VarCorr(m4)

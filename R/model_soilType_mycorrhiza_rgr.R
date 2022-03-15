@@ -1,7 +1,7 @@
-# Model for experiment brick ratio and relative growth rate ####
+# Waste bricks for tree substrates
+# Model relative growth rate ~ soil type * mycorrhiza ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -36,10 +36,10 @@ data <- read_csv("data_processed_brickRatio.csv",
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza =
-                            col_factor(levels = c("Control","Mycorrhiza")),
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(),
                           acidbrickRatioTreat = col_factor()
                           )
@@ -92,7 +92,7 @@ ggplot(data,aes(soilType, rgr13, color = mycorrhiza)) + facet_grid(~species) +
   geom_boxplot() + geom_quasirandom(dodge.width = .7)
 #4way
 ggplot(data,aes(soilType, rgr13, color = brickRatio, shape = mycorrhiza)) +
-  facet_grid(~species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
+  facet_grid(~ species) + geom_boxplot() + geom_quasirandom(dodge.width = .7)
 # interactions with block:
 ggplot(data,aes(brickRatio, rgr13, color = species)) + geom_boxplot() +
   facet_wrap(~block) + geom_quasirandom(dodge.width = .7)
@@ -128,33 +128,33 @@ ggplot(data, aes(log(rgr13))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure
-m1 <- lmer(rgr13 ~ species * brickRatio + (1|block), data, REML = FALSE)
+m1 <- lmer(rgr13 ~ species * brickRatio + (1 | block), data, REML = FALSE)
 VarCorr(m1)
 #4w-model
 m2 <- lmer(rgr13 ~ species * brickRatio * soilType * mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 3w-model
 m3 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^3 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #3w-model reduced
 m4 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 #2w-model full
 m5 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m5)
 simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
 m6 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m6)
 simulateResiduals(m6, plot = TRUE)
 
@@ -181,7 +181,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 ### Model output ------------------------------------------------------------
 m4 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m4)
 #R2m = 0.286, R2c = 0.337
 VarCorr(m4)

@@ -1,7 +1,7 @@
-# Show Figure leaf mass fraction  ~ mycorrhiza:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure A4 E ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 

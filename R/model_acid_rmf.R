@@ -1,7 +1,7 @@
-# Model for experiment acid and root mass fraction ####
+# Waste bricks for tree substrates
+# Model acid-treatment ~ root mass fraction ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -33,12 +33,12 @@ setwd(here("data", "processed"))
                           species = col_factor(),
                           mycorrhiza = col_factor(),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
-                          acid = col_factor(levels = c("Control","Acid")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
+                          acid = col_factor(levels = c("Control", "Acid")),
                           acidbrickRatioTreat =
                             col_factor(
-                              levels = c("Control_30","Acid_5","Acid_30")
+                              levels = c("Control_30", "Acid_5", "Acid_30")
                               )
                         )
                    ) %>%
@@ -107,7 +107,7 @@ ggplot(data, aes(log(rmf))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure --> no random factor needed
-m1 <- lmer(rmf ~ species * acidbrickRatioTreat + (1|block),
+m1 <- lmer(rmf ~ species * acidbrickRatioTreat + (1 | block),
            data, REML = FALSE)
 VarCorr(m1)
 #3w-model
@@ -127,7 +127,7 @@ rm(m1,m2,m3)
 
 #### c model check -----------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
-par(mfrow=c(2,2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",

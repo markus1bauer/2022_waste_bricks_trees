@@ -1,7 +1,7 @@
-# Model for experiment acid and absorptive vs. transportive fine-root ratio ####
+# Waste bricks for tree substrates
+# Model acid-treatment ~ absorptive-transport fine roots ratio####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -34,12 +34,12 @@ setwd(here("data", "processed"))
                           species = col_factor(),
                           mycorrhiza = col_factor(),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
-                          acid = col_factor(levels = c("Control","Acid")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
+                          acid = col_factor(levels = c("Control", "Acid")),
                           acidbrickRatioTreat =
                             col_factor(
-                              levels = c("Control_30","Acid_5","Acid_30")
+                              levels = c("Control_30", "Acid_5", "Acid_30")
                               )
                         )
                    ) %>%
@@ -98,8 +98,8 @@ dotchart((data$abstransRatio),
          groups = factor(data$acidbrickRatioTreat), main = "Cleveland dotplot")
 dotchart((data$abstransRatio),
          groups = factor(data$block), main = "Cleveland dotplot")
-par(mfrow = c(1, 1));
-boxplot(data$abstransRatio);
+par(mfrow = c(1, 1))
+boxplot(data$abstransRatio)
 identify(rep(1, length(data$abstransRatio)),
          data$abstransRatio, labels = c(data$plot))
 data <- filter(data, abstransRatio < 6)
@@ -113,23 +113,23 @@ ggplot(data, aes(sqrt(abstransRatio))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure --> no random factor needed
-m1 <- lmer(log(abstransRatio) ~ species * acidbrickRatioTreat + (1|block),
+m1 <- lmer(log(abstransRatio) ~ species * acidbrickRatioTreat + (1 | block),
            data, REML = FALSE)
 VarCorr(m1)
 #full-model
 m2 <- lmer(log(abstransRatio) ~ species * soilType * acidbrickRatioTreat +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 2w-model
 m3 <- lmer(log(abstransRatio) ~ (species + soilType + acidbrickRatioTreat)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #2w-model reduced
 m4 <- lmer(log(abstransRatio) ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 
@@ -145,7 +145,7 @@ par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",
-              simulationOutput$scaledResiduals,data$soilType)
+              simulationOutput$scaledResiduals, data$soilType)
 plotResiduals(main = "acidbrickRatioTreat",
               simulationOutput$scaledResiduals, data$acidbrickRatioTreat)
 plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)

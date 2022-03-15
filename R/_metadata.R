@@ -1,6 +1,7 @@
-# Prepare Metadata ####
+# Waste bricks for tree substrates
+# Write metadata for this project ####
 # Markus Bauer
-
+# 2022-03-15
 
 ### Packages ###
 library(here)
@@ -18,7 +19,7 @@ rm(list = ls())
 
 creator <- eml$creator(
   individualName = eml$individualName(
-    givenName = "Markus", 
+    givenName = "Markus",
     surName = "Bauer"),
   electronicMailAddress = "markusbauer@mailbox.org"
 )
@@ -30,7 +31,7 @@ address <- list(
   postalCode = "85354",
   country = "Germany")
 
-contact <- 
+contact <-
   list(
     individualName = creator$individualName,
     electronicMailAddress = creator$electronicMailAddress,
@@ -76,7 +77,7 @@ coverage <- set_coverage(
       Species = "platanoides"
     )),
   geographicDescription = geographicDescription,
-  west = 11.68919 , east = 11.68919,
+  west = 11.68919, east = 11.68919,
   north = 48.40523, south = 48.40523,
   altitudeMin = 484, altitudeMaximum = 484,
   altitudeUnits = "meter"

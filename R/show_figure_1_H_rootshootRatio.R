@@ -1,7 +1,7 @@
-# Show Figure root-shoot ratio  ~ soilType:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure 1H ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -47,7 +47,7 @@ data <- read_csv("data_processed_brickRatio.csv",
 m4 <- lmer(log(rootshootRatio) ~
              (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 
 
 

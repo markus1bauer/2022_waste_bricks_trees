@@ -1,4 +1,7 @@
-# Show Figure Specific leaf area  ~ mycorrhiza:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure A4 C ####
+# Markus Bauer
+# 2022-03-15
 
 
 
@@ -44,7 +47,7 @@ data <- read_csv("data_processed_brickRatio.csv",
 #### Chosen model ###
 m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block/plot), data, REML = FALSE)
+             (1 | block/plot), data, REML = FALSE)
 
 
 

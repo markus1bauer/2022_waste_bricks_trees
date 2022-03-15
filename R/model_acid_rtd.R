@@ -1,7 +1,7 @@
-# Model for experiment acid and root tissue density ####
+# Waste bricks for tree substrates
+# Model acid-treatment ~ root tissue density####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -33,12 +33,12 @@ data <- read_csv2("data_processed_acid.csv",
                           species = col_factor(),
                           mycorrhiza = col_factor(),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
-                          acid = col_factor(levels = c("Control","Acid")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
+                          acid = col_factor(levels = c("Control", "Acid")),
                           acidbrickRatioTreat =
                             col_factor(
-                              levels = c("Control_30","Acid_5","Acid_30")
+                              levels = c("Control_30", "Acid_5", "Acid_30")
                               ),
                           comment = col_factor()
                         )
@@ -107,23 +107,23 @@ ggplot(data, aes((1/rtd))) + geom_density()
 
 #### a models ---------------------------------------------------------------
 #random structure
-m1 <- lmer((1 / rtd) ~ species * acidbrickRatioTreat + (1|block),
+m1 <- lmer((1 / rtd) ~ species * acidbrickRatioTreat + (1 | block),
            data, REML = FALSE)
 VarCorr(m1)
 #3w-model
 m2 <- lmer((1/rtd) ~ species * soilType * acidbrickRatioTreat +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 2w-model
 m3 <- lmer((1 / rtd) ~ (species + soilType + acidbrickRatioTreat)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #2w-model reduced
 m4 <- lmer((1 / rtd) ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 
@@ -134,7 +134,7 @@ rm(m1, m2, m4)
 
 #### c model check ----------------------------------------------------------
 simulationOutput <- simulateResiduals(m3, plot = TRUE)
-par(mfrow = c(2, 2));
+par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "soilType",
@@ -148,7 +148,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 
 ### Model output ------------------------------------------------------------
 m3 <- lmer((1 / rtd) ~ (species + soilType + acidbrickRatioTreat)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m3)
 #R2m = 0.124, R2c = 0.210
 VarCorr(m3)

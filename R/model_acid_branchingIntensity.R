@@ -1,7 +1,7 @@
-# Model for experiment acid and specific root length ####
+# Waste bricks for tree substrates
+# Model acid-treatment ~ branching intensity ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -33,12 +33,12 @@ data <- read_csv2("data_processed_acid.csv",
                           species = col_factor(),
                           mycorrhiza = col_factor(),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
-                          acid = col_factor(levels = c("Control","Acid")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
+                          acid = col_factor(levels = c("Control", "Acid")),
                           acidbrickRatioTreat =
                             col_factor(
-                              levels = c("Control_30","Acid_5","Acid_30")
+                              levels = c("Control_30", "Acid_5", "Acid_30")
                               )
                         )
                   ) %>%
@@ -107,25 +107,25 @@ ggplot(data, aes(log(branchingIntensity))) + geom_density()
 #### a models ----------------------------------------------------------------
 #random structure
 m1 <- lmer(log(branchingIntensity) ~ species * acidbrickRatioTreat +
-             (1|block),
+             (1 | block),
            data, REML = FALSE)
 VarCorr(m1)
 #3w-model
 m2 <- lmer(log(branchingIntensity) ~ species * soilType * acidbrickRatioTreat +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 2w-model
 m3 <- lmer(log(branchingIntensity) ~
              (species + soilType + acidbrickRatioTreat)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #2w-model reduced
 m4 <- lmer(log(branchingIntensity) ~
              species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 
@@ -151,7 +151,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 ### Model output -------------------------------------------------------------
 m3 <- lmer(log(branchingIntensity) ~
              (species + soilType + acidbrickRatioTreat)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m3)
 # R2m = 0.701, R2c = 0.755
 VarCorr(m3)

@@ -1,7 +1,7 @@
-# Model for experiment mycorrhiza and soil type and specific leaf area ####
+# Waste bricks for tree substrates
+# Model specific leaf area ~ soil type * mycorrhiza ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -36,10 +36,10 @@ setwd(here("data", "processed"))
                           date3 = col_date(),
                           species = col_factor(),
                           mycorrhiza =
-                            col_factor(levels = c("Control","Mycorrhiza")),
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(levels = c("Acid")),
                           acidbrickRatioTreat = col_factor()
                         )
@@ -60,12 +60,12 @@ setwd(here("data", "processed"))
 
 #### a Graphs ----------------------------------------------------------------
 #simple effects:
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(sla ~ species, data)
 plot(sla ~ brickRatio, data)
 plot(sla ~ soilType, data)
 plot(sla ~ mycorrhiza, data)
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(sla ~ block, data)
 #2way (brickRatio:species):
 ggplot(data, aes(species, sla, color = brickRatio)) + geom_boxplot() +
@@ -110,7 +110,7 @@ ggplot(data,aes(block, sla, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? ---------------------------
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 dotchart((data$sla), groups = factor(data$species), main = "Cleveland dotplot")
 dotchart((data$sla),
          groups = factor(data$brickRatio), main = "Cleveland dotplot")
@@ -118,7 +118,7 @@ dotchart((data$sla), groups = factor(data$soilType), main = "Cleveland dotplot")
 dotchart((data$sla),
          groups = factor(data$mycorrhiza), main = "Cleveland dotplot")
 dotchart((data$sla), groups = factor(data$block), main = "Cleveland dotplot")
-par(mfrow=c(1,1))
+par(mfrow = c(1, 1))
 boxplot(data$sla)
 plot(table((data$sla)),
      type = "h", xlab = "Observed values", ylab = "Frequency")
@@ -130,28 +130,28 @@ ggplot(data, aes(log(sla))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure
-m1 <- lmer(log(sla) ~ species * brickRatio + (1|block/plot),
+m1 <- lmer(log(sla) ~ species * brickRatio + (1 | block/plot),
            data, REML = FALSE)
 VarCorr(m1)
 #4w-model
 m2 <- lmer(log(sla) ~ species * brickRatio * soilType * mycorrhiza +
-             (1|block/plot), data, REML = FALSE)
+             (1 | block/plot), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 3w-model
 m3 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^3 +
-             (1|block/plot), data, REML = FALSE)
+             (1 | block/plot), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #3w-model reduced
 m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block/plot), data, REML = FALSE)
+             (1 | block/plot), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 #2w-model full
 m5 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-             (1|block/plot), data, REML = FALSE)
+             (1 | block/plot), data, REML = FALSE)
 isSingular(m5)
 simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
@@ -167,13 +167,13 @@ isSingular(m7)
 simulateResiduals(m7, plot = TRUE);
 
 #### b comparison ------------------------------------------------------------
-anova(m2,m3,m4,m5,m6,m7)
+anova(m2, m3, m4, m5, m6, m7)
 # --> m7 BUT use m4 because of 3-fold interaction
-rm(m1,m2,m3,m5,m6)
+rm(m1, m2, m3, m5, m6)
 
 #### c model check -----------------------------------------------------------
-simulationOutput <- simulateResiduals(m4, plot = T)
-par(mfrow=c(2,2));
+simulationOutput <- simulateResiduals(m4, plot = TRUE)
+par(mfrow = c(2, 2));
 plotResiduals(main = "species", simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "brickRatio",
               simulationOutput$scaledResiduals, data$brickRatio)

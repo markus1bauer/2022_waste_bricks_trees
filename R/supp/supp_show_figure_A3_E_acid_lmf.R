@@ -1,4 +1,7 @@
-# Show Figure leaf mass fraction ~ acid:brickRatio:species ####
+# Waste bricks for tree substrates
+# Show Figure A3 E ####
+# Markus Bauer
+# 2022-03-15
 
 
 
@@ -30,12 +33,12 @@ setwd(here("data", "processed"))
                        species = col_factor(),
                        mycorrhiza = col_factor(),
                        substrate = col_factor(),
-                       soilType = col_factor(levels = c("poor","rich")),
-                       brickRatio = col_factor(levels = c("5","30")),
-                       acid = col_factor(levels = c("Control","Acid")),
+                       soilType = col_factor(levels = c("poor", "rich")),
+                       brickRatio = col_factor(levels = c("5", "30")),
+                       acid = col_factor(levels = c("Control", "Acid")),
                        acidbrickRatioTreat =
                          col_factor(
-                           levels = c("Control_30","Acid_5","Acid_30")
+                           levels = c("Control_30", "Acid_5", "Acid_30")
                            )
                      )
                    ) %>%

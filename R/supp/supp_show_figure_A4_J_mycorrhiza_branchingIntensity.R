@@ -1,7 +1,7 @@
-# Show Figure specific root length  ~ mycorrhiza:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure A4 J ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -32,10 +32,10 @@ data <- read_csv2("data_processed_brickRatio.csv",
                       replanted = col_factor(),
                       species = col_factor(),
                       mycorrhiza =
-                        col_factor(levels = c("Control","Mycorrhiza")),
+                        col_factor(levels = c("Control", "Mycorrhiza")),
                       substrate = col_factor(),
-                      soilType = col_factor(levels = c("poor","rich")),
-                      brickRatio = col_factor(levels = c("5","30")),
+                      soilType = col_factor(levels = c("poor", "rich")),
+                      brickRatio = col_factor(levels = c("5", "30")),
                       acid = col_factor(),
                       acidbrickRatioTreat = col_factor()
                     )

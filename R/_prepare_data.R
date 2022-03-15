@@ -1,5 +1,5 @@
 # Waste bricks for tree substrates
-# Prepare species, sites, and traits data ####
+# Prepare data for models and plots ####
 # Markus Bauer
 # 2022-03-15
 
@@ -33,40 +33,45 @@ setwd(here("data", "raw"))
                          date3 = col_date(),
                          replanted = "f",
                          species = "f",
-                         mycorrhiza = col_factor(levels = c("Control","Mycorrhiza")),
+                         mycorrhiza =
+                           col_factor(levels = c("Control", "Mycorrhiza")),
                          substrate = "f",
                          soilType = "f",
-                         brickRatio = col_factor(levels = c("5","30")),
-                         acid = col_factor(levels = c("Control","Acid")),
+                         brickRatio = col_factor(levels = c("5", "30")),
+                         acid = col_factor(levels = c("Control", "Acid")),
                          comment = "f"
-                         )        
-))
-vis_miss(data, cluster = F, sort_miss = T)
+                         )
+                  )
+ )
+vis_miss(data, cluster = FALSE, sort_miss = TRUE)
 
 
 ### 2 Create variables ######################################################
 
 
 ### a Dummies for confidence interval ---------------------------------------
-data$conf.low <- c(1:100);
-data$conf.high <- c(1:100)
+data <- data %>%
+  mutate(conf.low = c(1:100),
+         conf.high = c(1:100)) %>%
 
 ### b Growing periods -------------------------------------------------------
-data$dateDiff13 <- as.numeric(data$date3 - data$date1)
-data$dateDiff12 <- as.numeric(data$date2 - data$date1)
-data$dateDiff23 <- as.numeric(data$date3 - data$date2)
+data <- data %>%
+  mutate(dateDiff13 = as.numeric(data$date3 - data$date1),
+         dateDiff12 = as.numeric(data$date2 - data$date1),
+         dateDiff23 = as.numeric(data$date3 - data$date2))
 
 ### c Factor: combination of acid and brickRatio ----------------------------
 data <- data %>%
   unite("acidbrickRatioTreat", acid, brickRatio, sep = "_", remove = FALSE)
 
 ### d Relative growth rates according toKramer-Walter & Laughlin 2017 Plant Soil
-data$rgr13 <- (log(data$diameter3 * data$height3) -
-                 log(data$diameter1 * data$height1)) / data$dateDiff13
-data$rgr12 <- (log(data$diameter3 * data$height3) -
-                 log(data$diameter1 * data$height1)) / data$dateDiff12
-data$rgr23 <- (log(data$diameter3 * data$height3) -
-                 log(data$diameter1 * data$height1)) / data$dateDiff23
+data <- data %>%
+  mutate(rgr13 = (log(data$diameter3 * data$height3) -
+                    log(data$diameter1 * data$height1)) / data$dateDiff13,
+         rgr12 = (log(data$diameter3 * data$height3) -
+                    log(data$diameter1 * data$height1)) / data$dateDiff12,
+         rgr23 = (log(data$diameter3 * data$height3) -
+                    log(data$diameter1 * data$height1)) / data$dateDiff23)
 
 ### e Further functional traits ----------------------------------------------
 data <- data %>%
@@ -84,7 +89,7 @@ data <- data %>%
   mutate(rootMass =
            transportfinerootMass + absorptivefinerootMass + restrootMass,
          abstransRatio = absorptivefinerootMass / transportfinerootMass,
-         srl = (rootLength/100) / absorptivefinerootMass,
+         srl = (rootLength / 100) / absorptivefinerootMass,
          rtd = rootVolume / absorptivefinerootMass,
          branchingIntensity = rootTips / rootLength)  %>%
   mutate(rmf = rootMass / (rootMass + leafMass + stemMass),
@@ -104,7 +109,7 @@ data <- data %>%
 data1 <- filter(data, acid != "Control")
 
 ### Create data frame for acid:soilType --------------------------------------
-data2 <- filter(data, mycorrhiza != "Mycorrhiza");
+data2 <- filter(data, mycorrhiza != "Mycorrhiza")
 
 ### Check missingness --------------------------------------------------------
 miss_var_summary(data1)

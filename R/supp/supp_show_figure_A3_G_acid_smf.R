@@ -1,4 +1,7 @@
-# Show Figure stem mass fraction ~ acid:brickRatio:species ####
+# Waste bricks for tree substrates
+# Show Figure A3 G ####
+# Markus Bauer
+# 2022-03-15
 
 
 
@@ -20,7 +23,8 @@ rm(list = c("data", "meandata", "pd", "pdata", "m4"))
 setwd(here("data", "processed"))
 
 ### Load data ###
-(data <- read_csv("data_processed_acid.csv", col_names = T, na = "na", col_types = 
+(data <- read_csv("data_processed_acid.csv",
+                  col_names = TRUE, na = "na", col_types =
                      cols(
                        .default = col_double(),
                        plot = col_factor(),
@@ -39,11 +43,13 @@ setwd(here("data", "processed"))
                      )
                    ) %>%
     select(smf, plot, block, species, acidbrickRatioTreat, soilType,
-           conf.low, conf.high))
-data$acidbrickRatioTreat <- dplyr::recode(data$acidbrickRatioTreat,
-                                          "Control_30" = "Control 30% bricks",
-                                          "Acid_5" = "Acid 5% bricks",
-                                          "Acid_30" = "Acid 30% bricks")
+           conf.low, conf.high) %>%
+    mutate(acidbrickRatioTreat =
+             recode(acidbrickRatioTreat,
+                    "Control_30" = "Control 30% bricks",
+                    "Acid_5" = "Acid 5% bricks",
+                    "Acid_30" = "Acid 30% bricks"))
+  )
 
 #### Chosen model ###
 m4 <- lm(smf ~ species + soilType + acidbrickRatioTreat +

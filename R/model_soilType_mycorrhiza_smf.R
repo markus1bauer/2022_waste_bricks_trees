@@ -1,7 +1,7 @@
-# Model for experiment mycorrhiza and soil type and stem mass fraction ####
+# Waste bricks for tree substrates
+# Model stem mass fraction ~ soil type * mycorrhiza ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -33,10 +33,10 @@ setwd(here("data", "processed"))
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza =
-                            col_factor(levels = c("Control","Mycorrhiza")),
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(levels = c("Acid")),
                           acidbrickRatioTreat = col_factor()
                         )
@@ -55,12 +55,12 @@ setwd(here("data", "processed"))
 
 #### a Graphs ----------------------------------------------------------------
 #simple effects:
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(smf ~ species, data)
 plot(smf ~ brickRatio, data)
 plot(smf ~ soilType, data)
 plot(smf ~ mycorrhiza, data)
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(smf ~ block, data)
 #2way (brickRatio:species):
 ggplot(data, aes(species, smf, color = brickRatio)) + geom_boxplot() +
@@ -105,15 +105,19 @@ ggplot(data,aes(block, smf, color = mycorrhiza)) + geom_boxplot() +
   geom_quasirandom(dodge.width = .7)
 
 ##### b Outliers, zero-inflation, transformations? ---------------------------
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 dotchart((data$smf), groups = factor(data$species), main = "Cleveland dotplot")
-dotchart((data$smf), groups = factor(data$brickRatio), main = "Cleveland dotplot")
-dotchart((data$smf), groups = factor(data$soilType), main = "Cleveland dotplot")
-dotchart((data$smf), groups = factor(data$mycorrhiza), main = "Cleveland dotplot")
+dotchart((data$smf),
+         groups = factor(data$brickRatio), main = "Cleveland dotplot")
+dotchart((data$smf),
+         groups = factor(data$soilType), main = "Cleveland dotplot")
+dotchart((data$smf),
+         groups = factor(data$mycorrhiza), main = "Cleveland dotplot")
 dotchart((data$smf), groups = factor(data$block), main = "Cleveland dotplot")
-par(mfrow=c(1,1));
-boxplot(data$smf);#identify(rep(1, length(data$smf)), data$smf, labels = c(data$no))
-plot(table((data$smf)), type = "h", xlab = "Observed values", ylab = "Frequency")
+par(mfrow = c(1, 1))
+boxplot(data$smf)
+plot(table((data$smf)), type = "h",
+     xlab = "Observed values", ylab = "Frequency")
 ggplot(data, aes(smf)) + geom_density()
 ggplot(data, aes(log(smf))) + geom_density()
 
@@ -122,49 +126,49 @@ ggplot(data, aes(log(smf))) + geom_density()
 
 #### a models ----------------------------------------------------------------
 #random structure
-m1 <- lmer(smf ~ species * brickRatio + (1|block), data, REML = FALSE)
+m1 <- lmer(smf ~ species * brickRatio + (1 | block), data, REML = FALSE)
 VarCorr(m1)
 #4w-model
 m2 <- lmer(smf ~ species * brickRatio * soilType * mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 3w-model
 m3 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza)^3 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #3w-model reduced
 m4 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 #2w-model full
 m5 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m5)
 simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
 m6 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m6)
 simulateResiduals(m6, plot = TRUE)
 #1w-model full
 m7 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza) +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m7)
 simulateResiduals(m7, plot = TRUE)
 
 #### b comparison ------------------------------------------------------------
-anova(m2,m3,m4,m5,m6,m7)
+anova(m2, m3, m4, m5, m6, m7)
 # --> m7 BUT use m4 because of 3-fold interaction
-rm(m1,m2,m3,m5,m6,m7)
+rm(m1, m2, m3, m5, m6, m7)
 
 #### c model check -----------------------------------------------------------
 simulationOutput <- simulateResiduals(m4, plot = TRUE)
-par(mfrow=c(2,2))
+par(mfrow = c(2, 2))
 plotResiduals(main = "species",
               simulationOutput$scaledResiduals, data$species)
 plotResiduals(main = "brickRatio",
@@ -181,7 +185,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 ### Model output -------------------------------------------------------------
 m4 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = F)
+             (1 | block), data, REML = F)
 MuMIn::r.squaredGLMM(m4)
 #R2m = 0.474, R2c = 0.525
 VarCorr(m4)

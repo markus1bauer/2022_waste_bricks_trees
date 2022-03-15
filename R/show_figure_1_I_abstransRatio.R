@@ -1,7 +1,7 @@
-# Show Figure absorptive vs. transportive fine-root ratio ~ soilType:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure 1I ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -32,10 +32,10 @@ data <- read_csv("data_processed_brickRatio.csv",
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza =
-                            col_factor(levels = c("Control","Mycorrhiza")),
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(),
                           acidbrickRatioTreat = col_factor()
                         )
@@ -48,7 +48,7 @@ data <- read_csv("data_processed_brickRatio.csv",
 #### Chosen model ###
 m4 <- lmer(log(abstransRatio + 1) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 
 
 

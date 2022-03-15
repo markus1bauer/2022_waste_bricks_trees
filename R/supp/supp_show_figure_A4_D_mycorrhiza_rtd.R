@@ -1,4 +1,7 @@
-# Show Figure root tissue density  ~ mycorrhiza:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure A4 D ####
+# Markus Bauer
+# 2022-03-15
 
 
 

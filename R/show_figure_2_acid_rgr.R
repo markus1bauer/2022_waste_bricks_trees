@@ -1,7 +1,7 @@
-# Show Figure relative growth rate ~ acid:brickRatio:species ####
+# Waste bricks for tree substrates
+# Show Figure 2 ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -33,12 +33,12 @@ setwd(here("data", "processed"))
                           species = col_factor(),
                           mycorrhiza = col_factor(),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
-                          acid = col_factor(levels = c("Control","Acid")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
+                          acid = col_factor(levels = c("Control", "Acid")),
                           acidbrickRatioTreat =
                             col_factor(
-                              levels = c("Control_30","Acid_5","Acid_30"))
+                              levels = c("Control_30", "Acid_5", "Acid_30"))
                         )
                   ) %>%
     select(rgr13, plot, block, species, acidbrickRatioTreat, soilType,
@@ -52,7 +52,7 @@ data$acidbrickRatioTreat <- dplyr::recode(data$acidbrickRatioTreat,
 #### Chosen model ###
 m4 <- lmer((rgr13) ~ species + soilType + acidbrickRatioTreat +
              acidbrickRatioTreat:species + acidbrickRatioTreat:soilType +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 
 
 

@@ -1,7 +1,7 @@
-# Show Figure specific root length  ~ mycorrhiza:species:brickRatio ####
+# Waste bricks for tree substrates
+# Show Figure A4 B ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -48,7 +48,7 @@ data <- read_csv2("data_processed_brickRatio.csv",
 #### Chosen model ###
 m4 <- lmer(log(srl) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 
 
 

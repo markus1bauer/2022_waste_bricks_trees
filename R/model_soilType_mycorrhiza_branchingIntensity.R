@@ -1,7 +1,7 @@
-# Model for experiment mycorrhiza and soil type and specific root length ####
+# Waste bricks for tree substrates
+# Model branching intensity ~ soil type * mycorrhiza ####
 # Markus Bauer
-# Citation: Markus Bauer, Martin Krause, Valentin Heizinger & Johannes Kollmann  (2021) ...
-# DOI: ...
+# 2022-03-15
 
 
 
@@ -33,10 +33,10 @@ setwd(here("data", "processed"))
                           replanted = col_factor(),
                           species = col_factor(),
                           mycorrhiza =
-                            col_factor(levels = c("Control","Mycorrhiza")),
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
-                          soilType = col_factor(levels = c("poor","rich")),
-                          brickRatio = col_factor(levels = c("5","30")),
+                          soilType = col_factor(levels = c("poor", "rich")),
+                          brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(levels = c("Acid")),
                           acidbrickRatioTreat = col_factor()
                         )
@@ -120,7 +120,7 @@ dotchart((data$branchingIntensity),
          groups = factor(data$mycorrhiza), main = "Cleveland dotplot")
 dotchart((data$branchingIntensity),
          groups = factor(data$block), main = "Cleveland dotplot")
-par(mfrow=c(1, 1))
+par(mfrow = c(1, 1))
 boxplot(data$branchingIntensity)
 plot(table((data$branchingIntensity)),
      type = "h", xlab = "Observed values", ylab = "Frequency")
@@ -132,45 +132,45 @@ ggplot(data, aes(log(branchingIntensity))) + geom_density()
 
 #### a models ---------------------------------------------------------------
 #random structure
-m1 <- lmer(log(branchingIntensity) ~ species * brickRatio + (1|block),
+m1 <- lmer(log(branchingIntensity) ~ species * brickRatio + (1 | block),
            data, REML = FALSE)
 VarCorr(m1)
 #full-model
 m2 <- lmer(log(branchingIntensity) ~
              species * brickRatio * soilType * mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m2)
 simulateResiduals(m2, plot = TRUE)
 #full 3w-model
 m3 <- lmer(log(branchingIntensity) ~
              (species + brickRatio + soilType + mycorrhiza)^3 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m3)
 simulateResiduals(m3, plot = TRUE)
 #3w-model reduced
 m4 <- lmer(log(branchingIntensity) ~
              (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m4)
 simulateResiduals(m4, plot = TRUE)
 #2w-model full
 m5 <- lmer(log(branchingIntensity) ~
              (species + brickRatio + soilType + mycorrhiza)^2 +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m5)
 simulateResiduals(m5, plot = TRUE)
 #2w-model reduces
 m6 <- lmer(log(branchingIntensity) ~
              (species + brickRatio + soilType + mycorrhiza) +
              species:brickRatio + species:soilType + species:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m6)
 simulateResiduals(m6, plot = TRUE)
 #1w-model full
 m7 <- lmer(log(branchingIntensity) ~
              (species + brickRatio + soilType + mycorrhiza) +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 isSingular(m7)
 simulateResiduals(m7, plot = TRUE)
 
@@ -198,7 +198,7 @@ plotResiduals(main = "block", simulationOutput$scaledResiduals, data$block)
 m4 <- lmer(log(branchingIntensity) ~
              (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = FALSE)
+             (1 | block), data, REML = FALSE)
 MuMIn::r.squaredGLMM(m4)
 #R2m = 0.575, R2c = 0.612
 VarCorr(m4)
