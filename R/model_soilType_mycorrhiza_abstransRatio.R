@@ -5,20 +5,23 @@
 
 
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# A Preparation ################################################################################################################
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# A Preparation ##############################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 ### Packages ###
+library(here)
 library(tidyverse)
 library(ggbeeswarm)
+library(lme4)
 library(lmerTest)
 library(DHARMa)
 library(emmeans)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2020_waste_bricks_trees/data/processed")
+setwd(here("data", "processed"))
 
 ### Load data ###
 (data <- read_csv2("data_processed_brickRatio.csv", col_names = T, na = "na", col_types = 

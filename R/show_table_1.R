@@ -5,11 +5,13 @@
 
 
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# A Preparation ################################################################################################################
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# A Preparation ##############################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 ### Packages ###
+library(here)
 library(tidyverse)
 library(gt)
 library(webshot)
@@ -18,7 +20,7 @@ library(officer)
 
 ### Start ###
 rm(list = ls())
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/tables")
+setwd(here("outputs", "tables"))
 
 ### Load data ###
 data <- c()
@@ -38,9 +40,9 @@ data <- as_tibble(data)
 
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plot with gt ################################################################################################################
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# B Plot with gt #############################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 (table1 <- data %>%
@@ -48,7 +50,8 @@ data <- as_tibble(data)
     opt_table_lines(
       extent = "none"
       ) %>%
-    tab_options( #general settings
+   #general settings
+    tab_options(
       table.font.style = "Arial",
       table.font.size = px(12),
       table.font.color = "black",
@@ -64,25 +67,28 @@ data <- as_tibble(data)
       table_body.border.bottom.width = px(2),
       table_body.border.top.width = px(1)
       ) %>%
-    tab_style( #general alignments
+   #general alignments
+    tab_style(
       style = cell_text(
         v_align = "top",
         align = "center"
         ),
       locations = cells_column_labels(
-        columns = T
+        columns = TRUE
         )
     ) %>%
-    tab_style( #general alignments
+   #general alignments
+    tab_style(
       style = cell_text(
         align = "center",
         v_align = "middle"
       ),
       locations = cells_body(
-        columns = T
+        columns = TRUE
       )
     ) %>%
-   tab_style( #general alignments
+   #general alignments
+   tab_style(
      style = cell_text(
        align = "left"
      ),
@@ -90,7 +96,8 @@ data <- as_tibble(data)
        columns = "substrate"
      )
    ) %>%
-   tab_style( #general alignments
+   #general alignments
+   tab_style(
       style = cell_text(
         align = "left"
         ),
@@ -98,7 +105,8 @@ data <- as_tibble(data)
           columns = "substrate"
           )
       ) %>%
-   tab_header( #heading
+   #heading
+   tab_header(
      title = "Table 1"
    ) %>%
    tab_style(
@@ -107,7 +115,8 @@ data <- as_tibble(data)
      ),
      locations = cells_title()
    ) %>%
-   tab_spanner( #spanners
+   #spanners
+   tab_spanner(
      label = "Treatments",
      columns = vars(
        brickRatio, acid, soilFertility
@@ -125,12 +134,13 @@ data <- as_tibble(data)
        pH, C, P, K, Mg
      )
    ) %>%
-   tab_style( #styles of spanners
+   #styles of spanners
+   tab_style(
      style = cell_text(
        weight = "bold"
      ),
      locations = cells_column_spanners(
-       spanners = T
+       spanners = TRUE
      )
    ) %>%
    tab_style(
@@ -141,10 +151,11 @@ data <- as_tibble(data)
        weight = px(1)
      ),
      locations = cells_column_spanners(
-       spanners = T
+       spanners = TRUE
      )
    ) %>%
-   cols_label( #column labels
+   #column labels
+   cols_label(
       substrate = md("**Substrate**"), 
       soilFertility = md("**Fertility**"), 
       brickRatio = md("**Brick ratio**<br/>[vol%]"), 
@@ -158,7 +169,8 @@ data <- as_tibble(data)
       K = md("**K<sub>2</sub>O**<br/>[mg 100 g<sup>-1</sup>]"),
       Mg = md("**Mg<sup>2+</sup>**<br/>[mg 100 g<sup>-1</sup>]")
       ) %>%
-   tab_source_note( #footnote
+   #footnote
+   tab_source_note(
      source_note = "Bauer, Heizinger, Kollmann (20xx): Ecological application of waste bricks: No negative effects of brick-augmented substrates on urban tree growth. - Journal. DOI: xxx"
    )
 )
@@ -169,9 +181,9 @@ gtsave(table1, "table_1.png")
 
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# C Plot with flextable ################################################################################################################
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# C Plot with flextable ######################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 (table1flextable <- data %>%
@@ -224,5 +236,5 @@ gtsave(table1, "table_1.png")
 )
 
 ### Save ###
-path <- "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/tables/table_1.docx"
+path <- here("outputs", "tables", "table_1.docx")
 save_as_docx(table1flextable, path = path)

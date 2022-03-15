@@ -5,11 +5,13 @@
 
 
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# A Preparation ################################################################################################################
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# A Preparation ##############################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 ### Packages ###
+library(here)
 library(tidyverse)
 library(ggbeeswarm)
 library(lme4)
@@ -18,36 +20,40 @@ library(ggeffects)
 
 ### Start ###
 rm(list = c("data", "meandata", "pd", "pdata", "m4"))
-setwd("Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/data/processed")
+setwd(here("data", "processed"))
 
 ### Load data ###
-data <- read_csv2("data_processed_brickRatio.csv", col_names = T, na = "na", col_types = 
+data <- read_csv("data_processed_brickRatio.csv",
+                  col_names = TRUE, na = "na", col_types =
                         cols(
                           .default = col_double(),
                           plot = col_factor(),
                           block = col_factor(),
                           replanted = col_factor(),
                           species = col_factor(),
-                          mycorrhiza = col_factor(levels = c("Control", "Mycorrhiza")),
+                          mycorrhiza =
+                            col_factor(levels = c("Control", "Mycorrhiza")),
                           substrate = col_factor(),
                           soilType = col_factor(levels = c("poor", "rich")),
                           brickRatio = col_factor(levels = c("5", "30")),
                           acid = col_factor(),
                           acidbrickRatioTreat = col_factor()
-                        )        
-)
-(data <- select(data, smf, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high))
+                        )
+                  ) %>%
+  select(smf, plot, block, species, brickRatio, soilType, mycorrhiza, conf.low, conf.high)
 
 #### Chosen model ###
 m4 <- lmer(smf ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1|block), data, REML = F)
+             (1|block), data, REML = FALSE)
 
 
 
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plot ################################################################################################################
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# B Plot #####################################################################
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 themeMB <- function(){
   theme(
     panel.background = element_rect(fill = "white"),
@@ -64,11 +70,16 @@ themeMB <- function(){
 }
 
 ### brickRatio:soilType ###
-pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"), type = "fe")
-pdata <- rename(pdata, smf = predicted, soilType = x, brickRatio = group, species = facet)
+pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"),
+                   type = "fe")
+pdata <- pdata %>%
+  rename(smf = predicted, soilType = x, brickRatio = group, species = facet)
 meandata <- filter(pdata, soilType == "poor" & brickRatio == "5")
 pd <- position_dodge(.6)
-(smf <- ggplot(pdata, aes(soilType, smf, shape = brickRatio, ymin = conf.low, ymax = conf.high))+
+
+### plot ###
+(smf <- ggplot(pdata, aes(soilType, smf, shape = brickRatio,
+                          ymin = conf.low, ymax = conf.high))+
   geom_quasirandom(data = data, aes(soilType, smf), 
                    color = "grey70", dodge.width = .6, size = .7)+
   geom_hline(aes(yintercept = smf), meandata, 
@@ -83,7 +94,9 @@ pd <- position_dodge(.6)
   annotate("text", label = "n.s.", x = 2.2, y = 0.5) +
   scale_y_continuous(limits = c(0.15, 0.5), breaks = seq(-100, 100, 0.1)) +
   scale_shape_manual(values = c(1, 16)) +
-  labs(x = "Soil fertility", y = expression(Stem~mass~fraction~"["*g~g^-1*"]"), shape = "Brick ratio [%]", color = "") +
+  labs(x = "Soil fertility",
+       y = expression(Stem~mass~fraction~"["*g~g^-1*"]"),
+       shape = "Brick ratio [%]", color = "") +
   themeMB() +
   theme(strip.text = element_blank(), 
         strip.background = element_blank(),
@@ -92,5 +105,6 @@ pd <- position_dodge(.6)
         legend.position = "none")
 )
 
-#ggsave("figure_1_G_smf_(800dpi_12x7cm).tiff",
- #      dpi = 800, width = 12, height = 7, units = "cm", path = "Z:/Documents/0_Ziegelprojekt/3_Aufnahmen_und_Ergebnisse/2021_waste_bricks_trees/outputs/figures")
+ggsave("figure_1_G_smf_(800dpi_12x7cm).tiff",
+       dpi = 800, width = 12, height = 7, units = "cm",
+       path = here("outputs", "figures"))
