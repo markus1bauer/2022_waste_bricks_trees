@@ -24,7 +24,7 @@ rm(list = ls())
 setwd(here("data", "processed"))
 
 ### Load data ###
-(data <- read_csv("data_processed_brickRatio.csv",
+data <- read_csv("data_processed_brickRatio.csv",
                    col_names = TRUE, na = "na", col_types =
                         cols(
                           .default = col_double(),
@@ -45,7 +45,6 @@ setwd(here("data", "processed"))
            mycorrhiza) %>%
 #Exclude 2 outlier
     filter(srl > -1000)
-  )
 
 
 

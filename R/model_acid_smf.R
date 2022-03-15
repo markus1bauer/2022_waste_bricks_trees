@@ -23,7 +23,7 @@ rm(list = ls())
 setwd(here("data", "processed"))
 
 ### Load data ###
-(data <- read_csv2("data_processed_acid.csv",
+(data <- read_csv("data_processed_acid.csv",
                    col_names = TRUE, na = "na", col_types =
                         cols(
                           .default = col_double(),

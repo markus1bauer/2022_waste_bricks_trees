@@ -31,9 +31,6 @@ setwd(here("data", "processed"))
                           plot = col_factor(),
                           block = col_factor(),
                           replanted = col_factor(),
-                          date1 = col_date(),
-                          date2 = col_date(),
-                          date3 = col_date(),
                           species = col_factor(),
                           mycorrhiza =
                             col_factor(levels = c("Control", "Mycorrhiza")),
