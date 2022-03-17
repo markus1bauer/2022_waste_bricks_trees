@@ -32,6 +32,6 @@ rm(list = c("data", "meandata", "pd", "pdata", "m4"))
   plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")") +
   theme(plot.tag = element_text(size = 10))
 
-ggsave("figure_a4_300dpi_17x22.5cm.tiff",
+ggsave("supp_figure_a4_300dpi_17x22.5cm.tiff",
        dpi = 300, width = 17, height = 22.5, units = "cm",
-       path = here("outputs", "figures", "supp"))
+       path = here("outputs", "figures"))

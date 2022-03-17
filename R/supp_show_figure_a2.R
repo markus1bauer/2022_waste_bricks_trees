@@ -19,7 +19,7 @@ rm(list = ls())
 setwd(here("data", "processed"))
 
 ### Load data ###
-edata <- read_table2("supp_data_processed_acid.txt",
+edata <- read_csv("supp_data_processed_acid.csv",
                      col_names = TRUE, na = "na", col_types =
                        cols(
                          .default = col_double(),
@@ -58,7 +58,7 @@ ggplot(edata, aes(x = grainSize, y = grainSizeCum,
   geom_line(size = .8) +
   scale_color_manual(
     values = c(
-      "red4", "green4", "red4", "red", "green", "red", "black", "black"
+      "brown3", "blue", "brown3", "coral", "cyan", "coral", "black", "black"
       )
     ) +
   scale_linetype_manual(
@@ -70,6 +70,7 @@ ggplot(edata, aes(x = grainSize, y = grainSizeCum,
   labs(x = "Grain size [mm]", y = "Cumulative ratio [wt%]",
        linetype = "", color = "") +
   themeMB()
-ggsave("figure_a2_800dpi_16x10cm.tiff",
+
+ggsave("supp_figure_a2_800dpi_16x10cm.tiff",
       dpi = 800, width = 16, height = 10, units = "cm",
-      path = here("outputs", "figures", "supp"))
+      path = here("outputs", "figures"))

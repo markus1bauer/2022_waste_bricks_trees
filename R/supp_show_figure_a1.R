@@ -19,7 +19,7 @@ rm(list = ls())
 setwd(here("data", "processed"))
 
 ### Load data ###
-edata <- read_table2("supp_data_processed_brickRatio.txt",
+edata <- read_csv("supp_data_processed_brickRatio.csv",
                      col_names = TRUE, na = "na", col_types =
                        cols(
                          .default = col_double(),
@@ -57,7 +57,7 @@ ggplot(edata, aes(x = grainSize, y = grainSizeCum,
   geom_line(size = .8) +
   scale_color_manual(
     values = c(
-      "red4", "green4", "red", "green", "black", "black"
+      "brown3", "blue", "coral", "cyan", "black", "black"
       )
     ) +
   scale_linetype_manual(
@@ -70,6 +70,6 @@ ggplot(edata, aes(x = grainSize, y = grainSizeCum,
        linetype = "", color = "") +
   themeMB()
 
-ggsave("figure_a1_800dpi_16x10cm.tiff",
+ggsave("supp_figure_a1_800dpi_16x10cm.tiff",
       dpi = 800, width = 16, height = 10, units = "cm",
-      path = here("outputs", "figures", "supp"))
+      path = here("outputs", "figures"))

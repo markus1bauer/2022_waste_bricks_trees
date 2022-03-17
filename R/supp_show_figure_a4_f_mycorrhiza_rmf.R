@@ -105,7 +105,3 @@ pd <- position_dodge(.6)
           axis.text.x = element_blank(),
           legend.position = "none")
 )
-
-ggsave("figure_a4_f_rmf_800dpi_12x6cm.tiff",
-       dpi = 800, width = 12, height = 6, units = "cm",
-       path = here("outputs", "figures", "supp"))

@@ -144,7 +144,3 @@ ann_text4 <- data.frame(acidbrickRatioTreat = "Acid 30% bricks",
           legend.text = element_text(size = 10),
           legend.position = "bottom")
   )
-
-ggsave("figure_a3_i_abstransRatio_800dpi_8x8cm.tiff",
-       dpi = 800, width = 8, height = 8, units = "cm",
-       path = here("outputs", "figures", "supp"))
