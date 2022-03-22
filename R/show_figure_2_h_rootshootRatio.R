@@ -1,5 +1,5 @@
 # Waste bricks for tree substrates
-# Show Figure 1A ####
+# Show Figure 2H ####
 # Markus Bauer
 # 2022-03-15
 
@@ -40,11 +40,12 @@ data <- read_csv("data_processed_brickRatio.csv",
                           acidbrickRatioTreat = col_factor()
                         )
                   ) %>%
-  select(rgr13, plot, block, species, brickRatio, soilType, mycorrhiza,
+  select(rootshootRatio, plot, block, species, brickRatio, soilType, mycorrhiza,
          conf.low, conf.high)
 
 #### Chosen model ###
-m4 <- lmer(rgr13 ~ (species + brickRatio + soilType + mycorrhiza)^2 +
+m4 <- lmer(log(rootshootRatio) ~
+             (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
              (1 | block), data, REML = FALSE)
 
@@ -59,11 +60,10 @@ themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
-    strip.text = element_text(size = 10),
-    axis.text.y = element_text(angle = 90, hjust = 0.5),
     axis.line.y = element_line(),
     axis.line.x = element_blank(),
     axis.ticks.x = element_blank(),
+    axis.text.y = element_text(angle = 90, hjust = 0.5),
     legend.key = element_rect(fill = "white"),
     legend.position = "right",
     legend.margin = margin(0, 0, 0, 0, "cm"),
@@ -75,16 +75,18 @@ themeMB <- function() {
 pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"),
                    type = "fe")
 pdata <- pdata %>%
-  rename(rgr13 = predicted, soilType = x, brickRatio = group, species = facet)
+  rename(rootshootRatio = predicted, soilType = x, brickRatio = group,
+         species = facet)
 meandata <- filter(pdata, soilType == "poor" & brickRatio == "5")
 pd <- position_dodge(.6)
 
 ### plot ###
-(rgr13 <- ggplot(pdata, aes(soilType, rgr13, shape = brickRatio,
-                            ymin = conf.low, ymax = conf.high)) +
-  geom_quasirandom(data = data, aes(soilType, rgr13),
+(rootshootRatio <- ggplot(pdata,
+                          aes(soilType, rootshootRatio, shape = brickRatio,
+                              ymin = conf.low, ymax = conf.high)) +
+  geom_quasirandom(data = data, aes(soilType, rootshootRatio),
                    color = "grey70", dodge.width = .6, size = 0.7) +
-  geom_hline(aes(yintercept = rgr13), meandata,
+  geom_hline(aes(yintercept = rootshootRatio), meandata,
              color = "grey70", size = .25) +
   geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
@@ -93,18 +95,20 @@ pd <- position_dodge(.6)
   geom_errorbar(position = pd, width = 0.0, size = 0.4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
-  annotate("text", label = "n.s.", x = 2.2, y = 0.0028) +
-  scale_y_continuous(limits = c(0, 0.003), breaks = seq(-100, 100, 0.001)) +
+  annotate("text", label = "n.s.", x = 2.2, y = 2.06) +
+  scale_y_continuous(limits = c(0.5, 2.06), breaks = seq(-100, 100, 0.5)) +
   scale_shape_manual(values = c(1, 16)) +
-  labs(x = "Soil fertility", y = expression(paste("Relative growth rate")),
+  labs(x = "Soil fertility",
+       y = expression("Root-to-shoot ratio [" * g~g^-1 * "]"),
        shape = "Brick ratio [%]", color = "") +
   themeMB() +
-  theme(axis.title.x = element_blank(),
+  theme(strip.text = element_blank(),
+        strip.background = element_blank(),
+        axis.title.x = element_blank(),
         axis.text.x = element_blank(),
-        legend.direction = "horizontal",
-        legend.position = c(0.3, 0.03))
+        legend.position = "none")
 )
 
-ggsave("figure_1_a_rgr_800dpi_12x7cm.tiff",
+ggsave("figure_2_h_rootshootRatio_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))

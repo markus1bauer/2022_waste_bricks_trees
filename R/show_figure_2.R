@@ -1,5 +1,5 @@
 # Waste bricks for tree substrates
-# Show Figure 1 ####
+# Show Figure 2 ####
 # Markus Bauer
 # 2022-03-15
 
@@ -30,6 +30,6 @@ rm(list = c("data", "meandata", "pd", "pdata", "m4"))
   (abstransRatio | branchingIntensity) +
   plot_annotation(tag_levels = "A", tag_prefix = "(", tag_suffix = ")") +
   theme(plot.tag = element_text(size = 10))
-ggsave("figure_1_(300dpi_17x22.5cm).tiff",
+ggsave("figure_2_300dpi_17x22.5cm.tiff",
       dpi = 300, width = 17, height = 22.5, units = "cm",
       path = here("outputs", "figures"))

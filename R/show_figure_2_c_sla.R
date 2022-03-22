@@ -1,5 +1,5 @@
 # Waste bricks for tree substrates
-# Show Figure 1B ####
+# Show Figure 2C ####
 # Markus Bauer
 # 2022-03-15
 
@@ -40,28 +40,27 @@ data <- read_csv("data_processed_brickRatio.csv",
                           acidbrickRatioTreat = col_factor()
                         )
                   ) %>%
-  select(srl, plot, block, species, brickRatio, soilType, mycorrhiza,
-         conf.low, conf.high) %>%
-#Exclude 2 outlier
-  filter(srl > -1000)
+  gather("leaf", "sla", sla1, sla2, sla3, factor_key = TRUE) %>%
+  select(leaf, sla, plot, block, species, brickRatio, soilType, mycorrhiza,
+         conf.low, conf.high)
 
 #### Chosen model ###
-m4 <- lmer(log(srl) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
+m4 <- lmer(log(sla) ~ (species + brickRatio + soilType + mycorrhiza)^2 +
              species:brickRatio:soilType + species:brickRatio:mycorrhiza +
-             (1 | block), data, REML = FALSE)
+             (1 | block / plot), data, REML = FALSE)
 
 
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# B Plotten ##################################################################
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# B Plot ####################################################################
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 themeMB <- function() {
   theme(
     panel.background = element_rect(fill = "white"),
     text  = element_text(size = 8, color = "black"),
-    strip.text = element_text(size = 10),
+    strip.text = element_text(size = 11),
     axis.line.y = element_line(),
     axis.line.x = element_blank(),
     axis.ticks.x = element_blank(),
@@ -73,20 +72,20 @@ themeMB <- function() {
   )
 }
 
-### soilType:brickRatio ###
+### brickRatio:soilType ###
 pdata <- ggemmeans(m4, terms = c("soilType", "brickRatio", "species"),
                    type = "fe")
 pdata <- pdata %>%
-  rename(srl = predicted, soilType = x, brickRatio = group, species = facet)
+  rename(sla = predicted, soilType = x, brickRatio = group, species = facet)
 meandata <- filter(pdata, soilType == "poor" & brickRatio == "5")
 pd <- position_dodge(.6)
 
 ### plot ###
-(srl <- ggplot(pdata, aes(soilType, srl, shape = brickRatio,
+(sla <- ggplot(pdata, aes(soilType, sla, shape = brickRatio,
                           ymin = conf.low, ymax = conf.high)) +
-  geom_quasirandom(data = data, aes(soilType, srl),
+  geom_quasirandom(data = data, aes(soilType, sla),
                    color = "grey70", dodge.width = .6, size = .7) +
-  geom_hline(aes(yintercept = srl), meandata,
+  geom_hline(aes(yintercept = sla), meandata,
              color = "grey70", size = .25) +
   geom_hline(aes(yintercept = conf.low), meandata,
              color = "grey70", linetype = "dashed", size = .25) +
@@ -95,18 +94,20 @@ pd <- position_dodge(.6)
   geom_errorbar(position = pd, width = .0, size = .4) +
   geom_point(position = pd, size = 2.5) +
   facet_grid(~ species) +
-  annotate("text", label = "n.s.", x = 2.2, y = 150) +
-  scale_y_continuous(limits = c(0, 150), breaks = seq(-100, 150, 25)) +
+  annotate("text", label = "n.s.", x = 2.2, y = 270) +
+  scale_y_continuous(limits = c(120, 270), breaks = seq(-100, 270, 50)) +
   scale_shape_manual(values = c(1, 16)) +
   labs(x = "Soil fertility",
-       y = expression(Specific~root~length[1-3]~"[" * m~g^-1 * "]"),
+       y = expression(Specific~leaf~area~"[" * cm^2~g^-1 * "]"),
        shape = "Brick ratio [%]", color = "") +
   themeMB() +
-  theme(axis.title.x = element_blank(),
+  theme(strip.text = element_blank(),
+        strip.background = element_blank(),
+        axis.title.x = element_blank(),
         axis.text.x = element_blank(),
         legend.position = "none")
 )
 
-ggsave("figure_1_b_srl_800dpi_12x7cm.tiff",
+ggsave("figure_2_c_sla_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))

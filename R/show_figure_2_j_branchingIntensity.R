@@ -1,5 +1,5 @@
 # Waste bricks for tree substrates
-# Show Figure 1J ####
+# Show Figure 2J ####
 # Markus Bauer
 # 2022-03-15
 
@@ -111,6 +111,6 @@ pd <- position_dodge(.6)
         legend.position = "none")
 )
 
-ggsave("figure_1_j_branchingIntensity_800dpi_12x7cm.tiff",
+ggsave("figure_2_j_branchingIntensity_800dpi_12x7cm.tiff",
        dpi = 800, width = 12, height = 7, units = "cm",
        path = here("outputs", "figures"))
