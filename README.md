@@ -44,15 +44,13 @@ When using the __data available__ in this repository, please cite the original p
 
 Contact markus1.bauer@tum.de for any further information.  
 
-**Citation:**
-
 __Publication__
 
 > Bauer M, Krause M, Heizinger V and Kollmann J (under review) Ecological application of waste bricks: brick-augmented substrates have no adverse effects on urban trees. https://doi.org/10.xxx
 
 __Dataset__
 
-> Markus Bauer, Martin Krause, Valentin Heizinger, & Johannes Kollmann. (2022). Data and code for Bauer et al. (under review): Testing brick substrates for trees (v1.0.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6390129
+> Bauer M, Krause M, Heizinger V & Kollmann J (2022) Data and code for Bauer et al. (under review): Testing brick substrates for trees (v1.0.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6390129
 
 ***
 
