@@ -1,4 +1,4 @@
-﻿grainSize,substrate,ratio,grainSizeCum,substrateAbb
+grainSize,substrate,ratio,grainSizeCum,substrateAbb
 0.002,substrate_1,3.2,3.2,Rich_30%_bricks_Acid
 0.063,substrate_1,10.6,13.8,Rich_30%_bricks_Acid
 0.2,substrate_1,8.2,22,Rich_30%_bricks_Acid
@@ -6,7 +6,7 @@
 2,substrate_1,5.9,45.2,Rich_30%_bricks_Acid
 4,substrate_1,10.7,55.9,Rich_30%_bricks_Acid
 8,substrate_1,11.6,67.5,Rich_30%_bricks_Acid
-16,substrate_1,27.4,94.9,Rich_30%_bricks_Acid
+16,substrate_1,27.4,94.89999999999999,Rich_30%_bricks_Acid
 25,substrate_1,5.1,100,Rich_30%_bricks_Acid
 31.5,substrate_1,0,100,Rich_30%_bricks_Acid
 0.002,substrate_2,3.9,3.9,Rich_5%_bricks_Acid
@@ -26,7 +26,7 @@
 2,substrate_3,6.5,43.4,Rich_30%_bricks_Control
 4,substrate_3,11.5,54.9,Rich_30%_bricks_Control
 8,substrate_3,16.6,71.5,Rich_30%_bricks_Control
-16,substrate_3,23.1,94.6,Rich_30%_bricks_Control
+16,substrate_3,23.1,94.60000000000001,Rich_30%_bricks_Control
 25,substrate_3,5.4,100,Rich_30%_bricks_Control
 31.5,substrate_3,0,100,Rich_30%_bricks_Control
 0.002,substrate_4,1.2,1.2,Poor_30%_bricks_Acid
@@ -57,7 +57,7 @@
 4,substrate_6,10.1,31.5,Poor_30%_bricks_Control
 8,substrate_6,18.5,50,Poor_30%_bricks_Control
 16,substrate_6,33.2,83.2,Poor_30%_bricks_Control
-25,substrate_6,14.9,98.1,Poor_30%_bricks_Control
+25,substrate_6,14.9,98.10000000000001,Poor_30%_bricks_Control
 31.5,substrate_6,1.9,100,Poor_30%_bricks_Control
 0.002,limit_max,8,8,limit_max
 0.063,limit_max,17,25,limit_max
@@ -78,4 +78,4 @@
 8,limit_min,14,65,limit_min
 16,limit_min,15,80,limit_min
 25,limit_min,8,88,limit_min
-31.5,limit_min,15,100,limit_min
+31.5,limit_min,15,103,limit_min

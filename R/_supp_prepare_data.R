@@ -14,7 +14,7 @@ rm(list = ls())
 setwd(here("data", "raw"))
 
 ### Load data ###
-edata <- read_table2("supp_data_raw.txt",
+data <- read_csv("supp_data_raw.csv",
                      col_names = TRUE, na = "na", col_types =
                        cols(
                          .default = "d"
@@ -25,7 +25,7 @@ edata <- read_table2("supp_data_raw.txt",
   mutate(grainSizeCum = cumsum(ratio))
 
 ### Create data frame for experiment 1 ---------------------------------------
-edata1 <- edata %>%
+data1 <- data %>%
   filter(substrate != "substrate_3" & substrate != "substrate_6") %>%
   mutate(substrateAbb =
            recode(substrate,
@@ -35,7 +35,7 @@ edata1 <- edata %>%
                   "substrate_5" = "Poor_5%_bricks"))
 
 ### Create data frame for experiment 2 ---------------------------------------
-edata <- edata %>%
+data2 <- data %>%
   mutate(substrateAbb =
            recode(substrate,
                   "substrate_1" = "Rich_30%_bricks_Acid",
@@ -46,7 +46,7 @@ edata <- edata %>%
                   "substrate_6" = "Poor_30%_bricks_Control"))
 
 ### Save processed data-------------------------------------------------------
-write.table(edata1, sep = "\t", row.names = FALSE,
-            here("data", "processed", "supp_data_processed_brickRatio.txt"))
-write.table(edata, sep = "\t", row.names = FALSE,
-            here("data", "processed", "supp_data_processed_acid.txt"))
+write_csv(data1,
+          here("data", "processed", "supp_data_processed_brickRatio.csv"))
+write_csv(data2,
+          here("data", "processed", "supp_data_processed_acid.csv"))

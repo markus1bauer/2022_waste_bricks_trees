@@ -1,6 +1,0 @@
-﻿Variable,Definition,Source,Unit,Type,Value,"Comment	"
-grainSize,grain size,NA,NA,numeric,31.5 = 31.5-25.5mm 25 = 25-16.5mm etc,NA
-substrate,substrate type,NA,NA,factor,NA,NA
-ratio,ratio of grain size of the whole grain size distribution,NA,NA,numeric,NA,NA
-grainSizeCum,cumulative ratio of grain size of the whole grain size distribution,NA,NA,numeric,NA,NA
-substrateAbb,abbreviation of substrate contents,NA,NA,factor,NA,NA

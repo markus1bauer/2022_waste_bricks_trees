@@ -1,4 +1,4 @@
-﻿grainSize,substrate,ratio,grainSizeCum,substrateAbb
+grainSize,substrate,ratio,grainSizeCum,substrateAbb
 0.002,substrate_1,3.2,3.2,Rich_30%_bricks
 0.063,substrate_1,10.6,13.8,Rich_30%_bricks
 0.2,substrate_1,8.2,22,Rich_30%_bricks
@@ -6,7 +6,7 @@
 2,substrate_1,5.9,45.2,Rich_30%_bricks
 4,substrate_1,10.7,55.9,Rich_30%_bricks
 8,substrate_1,11.6,67.5,Rich_30%_bricks
-16,substrate_1,27.4,94.9,Rich_30%_bricks
+16,substrate_1,27.4,94.89999999999999,Rich_30%_bricks
 25,substrate_1,5.1,100,Rich_30%_bricks
 31.5,substrate_1,0,100,Rich_30%_bricks
 0.002,substrate_2,3.9,3.9,Rich_5%_bricks

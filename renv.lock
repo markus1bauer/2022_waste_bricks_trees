@@ -352,6 +352,7 @@
         "maptools",
         "mgcv",
         "nlme",
+        "nnet",
         "pbkrtest",
         "quantreg"
       ]
@@ -716,6 +717,14 @@
         "iterators"
       ]
     },
+    "foreign": {
+      "Package": "foreign",
+      "Version": "0.8-82",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "32b25c97ce306a760c4d9f787991b5d9",
+      "Requirements": []
+    },
     "fs": {
       "Package": "fs",
       "Version": "1.5.2",
@@ -1078,10 +1087,10 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.37",
+      "Version": "1.38",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a4ec675eb332a33fe7b7fe26f70e1f98",
+      "Hash": "10b3dc3c6acb925910edda5d0543b3a2",
       "Requirements": [
         "evaluate",
         "highr",
@@ -1203,6 +1212,7 @@
       "Repository": "CRAN",
       "Hash": "bce4aa20c50cf15aaf3e7070b115d060",
       "Requirements": [
+        "foreign",
         "lattice",
         "sp"
       ]
@@ -1312,6 +1322,14 @@
       "Requirements": [
         "testthat"
       ]
+    },
+    "nnet": {
+      "Package": "nnet",
+      "Version": "7.3-17",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "cb1d8d9f300a7e536b89c8a88c53f610",
+      "Requirements": []
     },
     "norm": {
       "Package": "norm",

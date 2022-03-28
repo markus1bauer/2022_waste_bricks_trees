@@ -19,7 +19,7 @@ rm(list = ls())
 setwd(here("data", "processed"))
 
 ### Load data ###
-edata <- read_csv("supp_data_processed_brickRatio.csv",
+data <- read_csv("supp_data_processed_brickRatio.csv",
                      col_names = TRUE, na = "na", col_types =
                        cols(
                          .default = col_double(),
@@ -52,7 +52,7 @@ themeMB <- function() {
 }
 
 
-ggplot(edata, aes(x = grainSize, y = grainSizeCum,
+ggplot(data, aes(x = grainSize, y = grainSizeCum,
                   color = substrateAbb, linetype = substrateAbb)) +
   geom_line(size = .8) +
   scale_color_manual(

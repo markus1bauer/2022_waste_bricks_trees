@@ -17,28 +17,87 @@ rm(list = ls())
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-creator <- eml$creator(
-  individualName = eml$individualName(
-    givenName = "Markus",
-    surName = "Bauer"),
-  electronicMailAddress = "markusbauer@mailbox.org"
-)
 
-address <- list(
+address_tum <- list(
   deliveryPoint = "Emil-Ramann-Strasse 6",
   city = "Freising",
   administrativeArea = "Bayern",
   postalCode = "85354",
-  country = "Germany")
+  country = "Germany"
+)
+
+address_uw <- list(
+  deliveryPoint = "Hermann-Hesse-Strasse 1",
+  city = "Pfaffenhofen a.d.Ilm",
+  administrativeArea = "Bayern",
+  postalCode = "85276",
+  country = "Germany"
+)
+
+address_lb <- list(
+  deliveryPoint = "Ziegeleistrasse 15",
+  city = "Vatersdorf",
+  administrativeArea = "Bayern",
+  postalCode = "84172",
+  country = "Germany"
+)
+
+creator <- eml$creator(
+  individualName = eml$individualName(
+    givenName = "Markus",
+    surName = "Bauer"
+  ),
+  positionName = "PhD student",
+  organizationName = "Technical University of Munich",
+  address = address_tum,
+  electronicMailAddress = "markus1.bauer@tum.de",
+  phone = "0049-152-56391781",
+  id = "https://orcid.org/0000-0001-5372-4174"
+)
+
+associatedParty <- list(
+  
+  eml$associatedParty(
+    individualName = eml$individualName(
+      givenName = "Martin",
+      surName = "Krause"
+    ),
+    role = "Researcher",
+    electronicMailAddress = "mek187@hotmail.de"
+  ),
+  
+  eml$associatedParty(
+    individualName = eml$individualName(
+      givenName = "Valentin",
+      surName = "Heizinger"
+    ),
+    role = "Researcher",
+    organizationName = "Leipfinger-Bader",
+    electronicMailAddress = "valentin.heizinger@leipfinger-bader.de"
+  ),
+  
+  eml$associatedParty(
+    individualName = eml$individualName(
+      givenName = "Johannes",
+      surName = "Kollmann"
+    ),
+    role = "Professor",
+    organizationName = "Technical University of Munich",
+    address = address,
+    electronicMailAddress = "johannes.kollmann@tum.de",
+    phone = "0049-8161-714144",
+    id = "https://orcid.org/0000-0002-4990-3636"
+  )
+)
 
 contact <-
   list(
     individualName = creator$individualName,
     electronicMailAddress = creator$electronicMailAddress,
-    address = address,
+    address = address_tum,
     organizationName = "Technical University of Munich",
-    phone = "0049-152-56391781"
-    )
+    onlineUrl = "DOI address to the database"
+  )
 
 
 
@@ -47,7 +106,11 @@ contact <-
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-abstract <- "Coming up"
+abstract <- "This study focuses on potential effects of brick-based substrates
+on survival, growth and functional traits of two urban trees (Acer platanoides,
+Tilia cordata). We compared the effects of brick quantity (5% vs. 30%),
+pre-treatment with phosphoric acid, nutrient-poor vs. -rich soil,
+and mycorrhiza inoculation upon saplings in two greenhouse experiments."
 
 keywordSet <- list(
     keywordThesaurus = "LTER controlled vocabulary",
@@ -57,7 +120,7 @@ keywordSet <- list(
     )
 )
 
-geographicDescription <- "Greenhouse in D?rnast near Freising"
+geographicDescription <- "Greenhouse in Duernast near Freising"
 
 coverage <- set_coverage(
   begin = "2018-11-01", end = "2020-07-31",
@@ -91,7 +154,7 @@ coverage <- set_coverage(
 
 
 dataset <- list(
-    title = "Coming up",
+    title = "Ecological application of waste bricks: brick-augmented substrates have no adverse effects on urban trees",
     creator = creator,
     pubDate = "2021",
     language = "English",
