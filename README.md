@@ -52,7 +52,7 @@ Contact markus1.bauer@tum.de for any further information.
 
 __Dataset DOI__
 
-[![DOI](https://zenodo.org/???)](https://doi.org/????/zenodo.???) following via Zenodo
+[![DOI](https://zenodo.org/badge/275841272.svg)](https://zenodo.org/badge/latestdoi/275841272)
 
 ***
 
