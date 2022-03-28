@@ -53,3 +53,11 @@ Contact markus1.bauer@tum.de for any further information.
 __Dataset DOI__
 
 [![DOI](https://zenodo.org/???)](https://doi.org/????/zenodo.???) following via Zenodo
+
+***
+
+__Package versioning__
+
+The current state of the project is saved as `2022_waste_bricks_trees/renv.lock`.
+
+You can restore this state by executing `renv::restore()`.
