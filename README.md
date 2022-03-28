@@ -19,8 +19,9 @@ _Markus Bauer <a href="https://orcid.org/0000-0001-5372-4174"><img src="https://
     * The images of the grain size distribution (.tiff)
     
 3. __Outputs__: the folder `outputs` contains  
-    * The figures (.tiff) generated.
-    * The tables (.html/.png) generated.
+    * The `figures` (.tiff) generated.
+    * The `tables` (.html/.png) generated.
+    * The ANOVA tables in `statistics`
     
 4. __R__: the folder `R` contains  
     * Scripts (.R) to generate all figures used in the manuscript and in the supporting information.
