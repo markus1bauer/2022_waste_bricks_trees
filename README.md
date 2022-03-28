@@ -13,7 +13,7 @@ _Markus Bauer <a href="https://orcid.org/0000-0001-5372-4174"><img src="https://
 ## Content of the repository
 
 1. __Data__: the folder `data` contains  
-    * The raw and processed data files of the first and second sub-experiment with the dependent metadata files (.csv) 
+    * The raw and processed data files of both experiments with the dependent metadata files (.csv) 
 
 2. __Images__: the folder `images` contains 
     * The images of the grain size distribution (.tiff)
