@@ -58,6 +58,6 @@ __Dataset DOI__
 
 __Package versioning__
 
-The current state of the project is saved in `2022_waste_bricks_trees/renv.lock`.
+The used versions of R and the packages are saved in `2022_waste_bricks_trees/renv.lock`.
 
 You can restore this state by executing `renv::restore()`.
