@@ -27,6 +27,14 @@ _Markus Bauer <a href="https://orcid.org/0000-0001-5372-4174"><img src="https://
     
 ***
 
+__Package versioning__
+
+The used versions of R and the packages are saved in `2022_waste_bricks_trees/renv.lock`.
+
+You can restore this state by executing `renv::restore()`.
+
+***
+
 [![CC BY 4.0][cc-by-shield]][cc-by]
 
 This work is licensed under a
@@ -51,11 +59,3 @@ __Publication__
 __Dataset__
 
 > Bauer M, Krause M, Heizinger V & Kollmann J (2022) Data and code for Bauer et al. (under review): Testing brick substrates for trees (v1.0.0) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.6390129
-
-***
-
-__Package versioning__
-
-The used versions of R and the packages are saved in `2022_waste_bricks_trees/renv.lock`.
-
-You can restore this state by executing `renv::restore()`.
