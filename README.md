@@ -46,7 +46,7 @@ Contact markus1.bauer@tum.de for any further information.
 
 **Citation:**
 
-> Bauer M, Krause M, Heizinger V and Kollmann J (submitted) Ecological application of waste bricks: brick-augmented substrates have no adverse effects on urban trees. https://doi.org/10.xxx
+> Bauer M, Krause M, Heizinger V and Kollmann J (under review) Ecological application of waste bricks: brick-augmented substrates have no adverse effects on urban trees. https://doi.org/10.xxx
 
 ***
 
