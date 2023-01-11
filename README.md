@@ -4,9 +4,10 @@ _Markus Bauer <a href="https://orcid.org/0000-0001-5372-4174"><img src="https://
 
 ***
 
-**Journal**: [XXX](https://www.???.??)
 
-**DOI**: [https://doi.org/???](https://doi.org/???)
+[![DOI:10.XXX](http://img.shields.io/badge/DOI-10.14471/2018.38.006-informational.svg)](https://doi.org/10.XXX)
+
+**Journal**: [XXX](https://www.???.??)
 
 **Supporting information**: [link](https://www.???.org/supplementarydata.pdf)
 
