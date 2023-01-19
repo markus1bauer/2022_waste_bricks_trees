@@ -1,15 +1,15 @@
-# Testing waste bricks as growing substrate for urban trees
+# Data and code for Bauer et al. (2023) Trees
 
 _Markus Bauer <a href="https://orcid.org/0000-0001-5372-4174"><img src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height = "16"></a>, Martin Krause, Valentin Heizinger and Johannes Kollmann <a href="https://orcid.org/0000-0002-4990-3636"><img src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height = "16"></a>_  
 
-***
+Data and code for:
 
+Bauer M, Krause M, Heizinger V and Kollmann J (2023) Ecological application of waste bricks: brick-augmented substrates have no adverse effects on urban trees. &ndash; _Trees_.
 
 [![DOI:10.XXX](http://img.shields.io/badge/DOI-10.XXX-informational.svg)](https://doi.org/10.XXX)
 
-**Journal**: [XXX](https://www.???.??)
-
-**Supporting information**: [link](https://www.???.org/supplementarydata.pdf)
+<br>
+<br>
 
 ## Content of the repository
 
@@ -31,7 +31,7 @@ _Markus Bauer <a href="https://orcid.org/0000-0001-5372-4174"><img src="https://
 
 __Package versioning__
 
-The used versions of R and the packages are saved in `2022_waste_bricks_trees/renv.lock`.
+The used versions of R and the packages are saved in `2023_waste_bricks_trees/renv.lock`.
 
 You can restore this state by executing `renv::restore()`.
 
@@ -49,10 +49,10 @@ When using the __data available__ in this repository, please cite the original p
 
 __Publication__
 
-> Bauer M, Krause M, Heizinger V and Kollmann J (under review) Ecological application of waste bricks: brick-augmented substrates have no adverse effects on urban trees. &ndash; [DOI: XXX](https://doi.org/10.xxx)
+> Bauer M, Krause M, Heizinger V and Kollmann J (2023) Ecological application of waste bricks: brick-augmented substrates have no adverse effects on urban trees. &ndash; _Trees_ [DOI: XXX](https://doi.org/10.xxx)
 
 __Dataset__
 
-> Bauer M, Krause M, Heizinger V & Kollmann J (2022) Data and code for Bauer et al. (under review): Testing brick substrates for trees (v1.0.0) [Data set]. &ndash;  *Zenodo*. [DOI: 10.5281/zenodo.6390129](https://doi.org/10.5281/zenodo.6390129)
+> Bauer M, Krause M, Heizinger V & Kollmann J (2022) Data and code for Bauer et al. (under review): Testing brick substrates for trees (v1.0.0) [Data set]. &ndash;  _Zenodo_. [DOI: 10.5281/zenodo.6390129](https://doi.org/10.5281/zenodo.6390129)
 
 Contact markus1.bauer@tum.de for any further information.  
