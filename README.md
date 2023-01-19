@@ -24,10 +24,8 @@ Bauer M, Krause M, Heizinger V and Kollmann J (2023) Ecological application of w
     
 4. __R__: the folder `R` contains  
     * Scripts (.R) to generate all figures used in the manuscript and in the supporting information.
-    
-***
 
-__Package versioning__
+#### Package versioning
 
 The used versions of R and the packages are saved in `2023_waste_bricks_trees/renv.lock`.
 
