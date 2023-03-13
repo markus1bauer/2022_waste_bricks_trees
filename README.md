@@ -49,6 +49,6 @@ __Publication__
 
 __Dataset__
 
-> Bauer M, Krause M, Heizinger V & Kollmann J (2022) Data and code for Bauer et al. (under review): Testing brick substrates for trees (v1.0.0) [Data set]. &ndash;  _Zenodo_. [DOI: 10.5281/zenodo.6390129](https://doi.org/10.5281/zenodo.6390129)
+> Bauer M, Krause M, Heizinger V & Kollmann J (2022) Data and code for Bauer et al. (2023): Testing brick substrates for trees (v1.0.0) [Data set]. &ndash;  _Zenodo_. [DOI: 10.5281/zenodo.6390129](https://doi.org/10.5281/zenodo.6390129)
 
 Contact markus1.bauer@tum.de for any further information.  
